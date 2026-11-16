@@ -547,6 +547,8 @@
   </div>
 
   <script>
+    const API_BASE = 'https://bant-app-paim.onrender.com';
+
     const $ = id => document.getElementById(id);
     let leadsCache = [];
     const countryNames = {
@@ -558,7 +560,7 @@
     };
 
     async function api(url, opts = {}) {
-      const r = await fetch(url, {
+      const r = await fetch(API_BASE + url, {
         headers: {
           'Content-Type': 'application/json',
           ...(opts.headers || {})
@@ -692,7 +694,7 @@
       if (e.key === 'Enter') filter();
     });
 
-    $('exportBtn').onclick = () => location.href = '/api/export';
+    $('exportBtn').onclick = () => location.href = API_BASE + '/api/export';
 
     $('importBtn').onclick = () => $('csvFile').click();
 
