@@ -1,256 +1,764 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<!doctype html>
+<html lang="pt-BR">
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!--[if gte mso 9]>
-    <xml>
-      <o:OfficeDocumentSettings>
-        <o:AllowPNG/>
-        <o:PixelsPerInch>96</o:PixelsPerInch>
-      </o:OfficeDocumentSettings>
-    </xml>
-    <![endif]-->
-    <title>Bertolini - Eficiência Logística</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Radar BSA | Inteligência de Mercado</title>
+  <style>
+    :root {
+      --bg: #09111f;
+      --panel: #101c2d;
+      --panel2: #15243a;
+      --line: #263750;
+      --txt: #eef4fc;
+      --muted: #9aabc1;
+      --gold: #d6ad62;
+      --green: #4bc69b;
+      --blue: #72aaf0;
+      --amber: #e9b75e;
+      --red: #ef8585;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(1000px 500px at 80% -20%, #1a3150 0%, transparent 60%), var(--bg);
+      color: var(--txt);
+      font: 14px/1.5 Inter, system-ui, -apple-system, Segoe UI, Arial;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .wrap {
+      max-width: 1500px;
+      margin: auto;
+      padding: 24px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 13px;
+      align-items: center;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f0d08e, #9b7437);
+      display: grid;
+      place-items: center;
+      color: #101827;
+      font-weight: 900;
+      font-size: 21px;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 10px;
+      letter-spacing: 2px;
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      font-size: 21px;
+      margin: 2px 0;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .small {
+      font-size: 12px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: #17263b;
+      color: var(--txt);
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      border-color: var(--gold);
+    }
+
+    .btn.primary {
+      background: var(--gold);
+      color: #101827;
+      border-color: var(--gold);
+      font-weight: 800;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .panel,
+    .stat {
+      background: linear-gradient(180deg, #122036, #0f1a2a);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+    }
+
+    .stat {
+      padding: 16px;
+    }
+
+    .stat .n {
+      font-size: 28px;
+      font-weight: 800;
+      margin-top: 5px;
+    }
+
+    .panel {
+      padding: 17px;
+      margin-bottom: 14px;
+    }
+
+    .panel h2 {
+      font-size: 15px;
+      margin: 0 0 12px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .field {
+      background: #0b1727;
+      border: 1px solid var(--line);
+      color: var(--txt);
+      border-radius: 9px;
+      padding: 10px 11px;
+      min-height: 40px;
+    }
+
+    .toolbar .field {
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .countries {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .country {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #0d1929;
+      border: 1px solid var(--line);
+      padding: 7px 10px;
+      border-radius: 9px;
+      color: var(--muted);
+    }
+
+    .country input {
+      accent-color: var(--gold);
+    }
+
+    .tablewrap {
+      overflow: auto;
+    }
+
+    .lead {
+      border-top: 1px solid var(--line);
+      padding: 15px 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 120px;
+      gap: 14px;
+    }
+
+    .lead:first-child {
+      border-top: 0;
+    }
+
+    .lead h3 {
+      margin: 0 0 6px;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .lead p {
+      margin: 5px 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .leadmeta {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      padding: 3px 7px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .tag.a {
+      color: var(--green);
+      border-color: #2b6b59;
+    }
+
+    .tag.b {
+      color: var(--amber);
+      border-color: #6d5830;
+    }
+
+    .tag.c {
+      color: #aab7c8;
+    }
+
+    .score {
+      text-align: right;
+    }
+
+    .score strong {
+      font-size: 24px;
+    }
+
+    .links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .links a {
+      color: #9cc7ff;
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 35px;
+      color: var(--muted);
+    }
+
+    .notice {
+      border: 1px solid #6b5732;
+      background: #2b2418;
+      color: #ead4a8;
+      border-radius: 11px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      font-size: 12px;
+    }
+
+    .status {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: #030813c9;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 5;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .dialog {
+      width: min(720px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      background: #101d30;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .formgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .formgrid label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .formgrid input,
+    .formgrid textarea,
+    .formgrid select {
+      width: 100%;
+      margin-top: 5px;
+    }
+
+    .formgrid textarea {
+      min-height: 85px;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 11px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    @media (max-width: 850px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .wrap {
+        padding: 14px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .lead {
+        grid-template-columns: 1fr;
+      }
+
+      .score {
+        text-align: left;
+      }
+
+      .formgrid {
+        grid-template-columns: 1fr;
+      }
+
+      .wide {
+        grid-column: auto;
+      }
+    }
+  </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f4f6f8; font-family: Arial, Helvetica, sans-serif; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
 
-    <!-- CONTAINER PRINCIPAL -->
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f6f8; table-layout: fixed;">
-        <tr>
-            <td align="center" style="padding: 20px 0;">
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">B</div>
+        <div>
+          <div class="eyebrow">BERTOLINI SISTEMAS DE ARMAZENAGEM</div>
+          <h1>RADAR BSA <span class="muted">/ Inteligência de Mercado</span></h1>
+          <div class="muted small">Monitoramento de investimentos, expansão e potenciais compradores</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="exportBtn">Exportar backup</button>
+        <button class="btn" id="importBtn">Importar CNPJs CSV</button>
+        <button class="btn primary" id="searchBtn">⌕ Pesquisar agora</button>
+        <input id="csvFile" type="file" accept=".csv,text/csv" hidden>
+      </div>
+    </header>
 
-                <!-- TABELA CENTRAL DE 600px -->
-                <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-collapse: collapse; width: 600px; margin: 0 auto; border: 1px solid #dcdcdc; border-radius: 4px; overflow: hidden;">
-                    
-                    <!-- CABEÇALHO / LOGO -->
-                    <tr>
-                        <td align="left" bgcolor="#06418a" style="padding: 25px 30px; background-color: #06418a;">
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                <tr>
-                                    <td>
-                                        <h1 style="color: #ffffff; font-size: 22px; font-weight: bold; margin: 0; letter-spacing: 1px; font-family: Arial, sans-serif;">BERTOLINI</h1>
-                                        <span style="color: #F8820A; font-size: 11px; text-transform: uppercase; font-weight: bold; letter-spacing: 1.5px; font-family: Arial, sans-serif;">Sistemas de Armazenagem & Automação</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+    <div class="notice">
+      <b>Transparência dos dados:</b> esta versão pesquisa notícias públicas via Google News RSS sem chave de API. Pontuação é um indicador de triagem, não confirmação de intenção de compra. Contatos e dados cadastrais não são inventados; precisam ser verificados nas fontes originais.
+    </div>
 
-                    <!-- BANDEIRA DE IMPACTO (TÍTULO PRINCIPAL) -->
-                    <tr>
-                        <td style="padding: 35px 30px 20px 30px; color: #06418a; font-family: Arial, sans-serif;">
-                            <h2 style="font-size: 20px; font-weight: bold; margin: 0 0 15px 0; line-height: 1.3;">
-                                Eficiência logística para sustentar o próximo ciclo de crescimento
-                            </h2>
-                            <p style="margin: 0; font-size: 15px; color: #333333; line-height: 1.6;">
-                                Olá, estimado cliente!
-                            </p>
-                            <p style="margin: 15px 0 0 0; font-size: 15px; color: #333333; line-height: 1.6;">
-                                Na Bertolini, acreditamos que a melhor solução nasce de um diagnóstico claro da operação. Antes de definir tecnologia, buscamos compreender volumes, perfil de pedidos, deslocamentos, produtividade, sazonalidade, sistemas e objetivos de crescimento.
-                            </p>
-                        </td>
-                    </tr>
+    <section class="grid">
+      <div class="stat">
+        <div class="muted small">Sinais encontrados</div>
+        <div class="n" id="total">0</div>
+        <div class="muted small">Registros no radar</div>
+      </div>
+      <div class="stat">
+        <div class="muted small">Prioridade A</div>
+        <div class="n" id="priorityA">0</div>
+        <div class="muted small">Investigar primeiro</div>
+      </div>
+      <div class="stat">
+        <div class="muted small">Empresas identificadas</div>
+        <div class="n" id="companies">0</div>
+        <div class="muted small">Nome extraído do título; validar</div>
+      </div>
+      <div class="stat">
+        <div class="muted small">Última atualização</div>
+        <div class="n" style="font-size:17px" id="lastRun">—</div>
+        <div class="muted small" id="lastRunDetail">Aguardando pesquisa</div>
+      </div>
+    </section>
 
-                    <!-- SEÇÃO: ONDE PODEMOS GERAR VALOR -->
-                    <tr>
-                        <td style="padding: 10px 30px 20px 30px;">
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8f9fa; border-left: 4px solid #F8820A; border-radius: 2px;">
-                                <tr>
-                                    <td style="padding: 20px;">
-                                        <h3 style="color: #06418a; font-size: 16px; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px;">Onde podemos gerar valor</h3>
-                                        
-                                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                            <tr>
-                                                <td style="padding-bottom: 10px; font-size: 14px; color: #333333; line-height: 1.5;">
-                                                    <strong style="color: #06418a;">• Produtividade operacional:</strong> reduzir deslocamentos, esperas e atividades sem valor agregado.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding-bottom: 10px; font-size: 14px; color: #333333; line-height: 1.5;">
-                                                    <strong style="color: #06418a;">• Capacidade e escalabilidade:</strong> preparar a operação para crescimento, picos de demanda e sazonalidade.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding-bottom: 10px; font-size: 14px; color: #333333; line-height: 1.5;">
-                                                    <strong style="color: #06418a;">• Melhor uso da área:</strong> avaliar alternativas para ampliar capacidade e eficiência no espaço disponível.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding-bottom: 10px; font-size: 14px; color: #333333; line-height: 1.5;">
-                                                    <strong style="color: #06418a;">• Acuracidade e serviço:</strong> apoiar fluxos mais consistentes, com foco em precisão e velocidade de atendimento.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding-bottom: 10px; font-size: 14px; color: #333333; line-height: 1.5;">
-                                                    <strong style="color: #06418a;">• Ergonomia no picking:</strong> reduzir caminhadas e tornar a operação mais fluida para as equipes.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size: 14px; color: #333333; line-height: 1.5;">
-                                                    <strong style="color: #06418a;">• Integração de sistemas:</strong> considerar WMS, ERP e demais interfaces desde a avaliação inicial.
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+    <section class="panel">
+      <h2>Configurar pesquisa</h2>
+      <div class="muted small">Brasil é priorizado. Os países LATAM podem ser ligados ou desligados conforme a estratégia.</div>
+      <div class="countries">
+        <label class="country"><input type="checkbox" value="BR" checked> 🇧🇷 Brasil</label>
+        <label class="country"><input type="checkbox" value="CL" checked> 🇨🇱 Chile</label>
+        <label class="country"><input type="checkbox" value="AR" checked> 🇦🇷 Argentina</label>
+        <label class="country"><input type="checkbox" value="PY" checked> 🇵🇾 Paraguai</label>
+        <label class="country"><input type="checkbox" value="UY" checked> 🇺🇾 Uruguai</label>
+      </div>
+      <div class="toolbar">
+        <input class="field" id="query" placeholder="Filtrar empresa, notícia, segmento ou país">
+        <select class="field" id="priorityFilter">
+          <option value="">Todas as prioridades</option>
+          <option value="A">Prioridade A</option>
+          <option value="B">Prioridade B</option>
+          <option value="C">Prioridade C</option>
+        </select>
+        <select class="field" id="countryFilter">
+          <option value="">Todos os países</option>
+          <option value="BR">Brasil</option>
+          <option value="CL">Chile</option>
+          <option value="AR">Argentina</option>
+          <option value="PY">Paraguai</option>
+          <option value="UY">Uruguai</option>
+        </select>
+        <button class="btn" id="filterBtn">Filtrar</button>
+      </div>
+    </section>
 
-                    <!-- SEÇÃO: SOLUÇÕES CONECTADAS (EMPILHADAS: UM ACIMA DO OUTRO) -->
-                    <tr>
-                        <td style="padding: 10px 30px 20px 30px; color: #333333;">
-                            <h3 style="color: #06418a; font-size: 16px; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px;">Soluções conectadas ao desafio da sua operação</h3>
-                            <p style="margin: 0 0 20px 0; font-size: 14px; line-height: 1.6; color: #555555;">
-                                A Bertolini combina conhecimento em sistemas de armazenagem com alternativas de automação intralogística Geek+, buscando aderência ao perfil, ao ritmo e às prioridades de cada operação.
-                            </p>
+    <section class="panel">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+        <h2>Empresas e sinais de mercado</h2>
+        <div class="status">
+          <span class="dot"></span>
+          <span id="apiStatus">Conectando ao backend...</span>
+        </div>
+      </div>
+      <div id="leads">
+        <div class="empty">Carregando registros...</div>
+      </div>
+    </section>
 
-                            <!-- BLOCO 1: SISTEMAS DE ARMAZENAGEM (EM CIMA) -->
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #fdfdfd; border: 1px solid #e5e5e5; border-top: 3px solid #06418a; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
-                                <tr>
-                                    <td>
-                                        <h4 style="color: #06418a; font-size: 15px; margin: 0 0 12px 0; text-transform: uppercase;">Sistemas de Armazenagem</h4>
-                                        <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: #444444; line-height: 1.7;">
-                                            <li style="margin-bottom: 5px;">Porta-Pallets Convencional e Dinâmico</li>
-                                            <li style="margin-bottom: 5px;">Drive-In</li>
-                                            <li style="margin-bottom: 5px;">Push Back</li>
-                                            <li style="margin-bottom: 5px;">Carro Satélite (Shuttle)</li>
-                                            <li style="margin-bottom: 5px;">Flow Rack</li>
-                                            <li style="margin-bottom: 5px;">Mezaninos</li>
-                                            <li style="margin-bottom: 5px;">Cantilever</li>
-                                            <li style="margin-bottom: 5px;">Estantes Industriais</li>
-                                            <li>Projetos orientados ao melhor aproveitamento do espaço</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                            </table>
+    <section class="panel">
+      <h2>Importação de novos CNPJs</h2>
+      <p class="muted small">Importe CSVs de competências diferentes da Receita Federal ou de sua base autorizada. O sistema identifica registros ainda não importados. Para determinar quais CNPJs são realmente novos, compare arquivos de períodos distintos; esta versão não baixa automaticamente os arquivos massivos da Receita.</p>
+      <div id="cnpjStatus" class="muted small">Nenhuma importação realizada nesta sessão.</div>
+    </section>
 
-                            <!-- BLOCO 2: AUTOMAÇÃO INTRALOGÍSTICA & VÍDEO EMBUTIDO DIRETO (EMBAIXO) -->
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #fdfdfd; border: 1px solid #e5e5e5; border-top: 3px solid #F8820A; padding: 20px; border-radius: 4px;">
-                                <tr>
-                                    <td>
-                                        <h4 style="color: #F8820A; font-size: 15px; margin: 0 0 10px 0; text-transform: uppercase;">Automação Intralogística</h4>
-                                        <p style="margin: 0 0 15px 0; font-size: 14px; color: #444444; line-height: 1.6;">
-                                            Alternativas modulares de robótica para apoiar fluxos de movimentação e separação, sempre condicionadas ao diagnóstico e ao estudo técnico da operação.
-                                        </p>
-                                        
-                                        <!-- VÍDEO EMBEDDED DIRETO NA PÁGINA (Sem hiperlink de imagem) -->
-                                        <div style="margin-bottom: 15px; border-radius: 4px; overflow: hidden; background: #000000; border: 1px solid #ddd;">
-                                            <video
-                                                autoplay
-                                                muted
-                                                loop
-                                                playsinline
-                                                preload="auto"
-                                                controls
-                                                style="width:100%; height:auto; display:block;"
-                                            >
-                                                <source src="https://www.geekplus.com/hubfs/NEW%20WEBSITE/HOME%20PAGE/intralogi(1).mp4" type="video/mp4">
-                                                Seu navegador não suporta a reprodução de vídeo.
-                                            </video>
-                                        </div>
+    <div class="footer">
+      RADAR BSA v2.0 · Fontes públicas · Atualização diária programada para 07h (horário local do servidor) · Dados locais exportáveis
+    </div>
+  </main>
 
-                                        <p style="margin: 0; font-size: 12px; color: #666666; text-align: center; font-style: italic;">
-                                            ▶ Operação intralogística automatizada integrada aos projetos Bertolini.
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
+  <div class="modal" id="modal">
+    <div class="dialog">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2 id="modalTitle">Editar empresa</h2>
+        <button class="btn" id="closeModal">Fechar</button>
+      </div>
+      <form id="leadForm">
+        <input type="hidden" id="leadId">
+        <div class="formgrid">
+          <label>Empresa<input class="field" id="company"></label>
+          <label>Site oficial<input class="field" id="website" placeholder="https://"></label>
+          <label>Endereço<input class="field" id="address"></label>
+          <label>Nome do contato<input class="field" id="contactName"></label>
+          <label>Cargo / área<input class="field" id="contactRole"></label>
+          <label>E-mail corporativo<input class="field" id="email" type="email"></label>
+          <label>Telefone institucional<input class="field" id="phone"></label>
+          <label>Status
+            <select class="field" id="leadStatus">
+              <option>Novo</option>
+              <option>Em pesquisa</option>
+              <option>Contato identificado</option>
+              <option>Abordado</option>
+              <option>Qualificado</option>
+              <option>Descartado</option>
+            </select>
+          </label>
+          <label class="wide">Notas de qualificação
+            <textarea class="field" id="notes" placeholder="Projeto, evidência, hipótese de necessidade, próximo passo..."></textarea>
+          </label>
+          <label class="wide">
+            <input type="checkbox" id="verified"> Dados de contato conferidos em fonte pública
+          </label>
+        </div>
+        <div class="actions" style="margin-top:15px">
+          <button class="btn primary" type="submit">Salvar informações</button>
+          <button class="btn" type="button" id="researchCompany">Pesquisar empresa na web</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-                        </td>
-                    </tr>
+  <script>
+    const $ = id => document.getElementById(id);
+    let leadsCache = [];
+    const countryNames = {
+      BR: 'Brasil',
+      CL: 'Chile',
+      AR: 'Argentina',
+      PY: 'Paraguai',
+      UY: 'Uruguai'
+    };
 
-                    <!-- SEÇÃO: COMO AVANÇAMOS (ETAPAS) -->
-                    <tr>
-                        <td style="padding: 10px 30px 20px 30px;">
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8f9fa; border-radius: 4px; border: 1px solid #e9ecef;">
-                                <tr>
-                                    <td style="padding: 20px;">
-                                        <h3 style="color: #06418a; font-size: 16px; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px;">Como avançamos</h3>
-                                        
-                                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                            <tr>
-                                                <td width="25" style="vertical-align: top; font-weight: bold; color: #F8820A; font-size: 14px; padding-bottom: 12px;">1.</td>
-                                                <td style="vertical-align: top; font-size: 14px; color: #333333; padding-bottom: 12px; line-height: 1.5;">
-                                                    <strong style="color: #06418a;">Conversa de descoberta:</strong> entendimento dos objetivos, capacidades, gargalos, sazonalidade e prioridades.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td width="25" style="vertical-align: top; font-weight: bold; color: #F8820A; font-size: 14px; padding-bottom: 12px;">2.</td>
-                                                <td style="vertical-align: top; font-size: 14px; color: #333333; padding-bottom: 12px; line-height: 1.5;">
-                                                    <strong style="color: #06418a;">Diagnóstico técnico:</strong> coleta dos dados mínimos e avaliação dos fluxos, layout e sistemas envolvidos.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td width="25" style="vertical-align: top; font-weight: bold; color: #F8820A; font-size: 14px; padding-bottom: 12px;">3.</td>
-                                                <td style="vertical-align: top; font-size: 14px; color: #333333; padding-bottom: 12px; line-height: 1.5;">
-                                                    <strong style="color: #06418a;">Desenho da solução:</strong> construção de uma alternativa aderente, com premissas e critérios definidos.
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td width="25" style="vertical-align: top; font-weight: bold; color: #F8820A; font-size: 14px;">4.</td>
-                                                <td style="vertical-align: top; font-size: 14px; color: #333333; line-height: 1.5;">
-                                                    <strong style="color: #06418a;">Próximo passo acordado:</strong> visita, estudo de viabilidade ou evolução para proposta, conforme a aderência validada.
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+    async function api(url, opts = {}) {
+      const r = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(opts.headers || {})
+        },
+        ...opts
+      });
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.error || 'Falha na requisição');
+      return j;
+    }
 
-                    <!-- CHAMADA PARA AÇÃO (CTA FINAL) -->
-                    <tr>
-                        <td align="center" style="padding: 10px 30px 25px 30px;">
-                            <p style="font-size: 16px; color: #06418a; font-weight: bold; margin: 0 0 20px 0; text-align: center;">
-                                Vamos conversar sobre produtividade, capacidade e crescimento da sua operação?
-                            </p>
-                            
-                            <!-- BOTÃO PRINCIPAL (VML Outlook Compatible) -->
-                            <div>
-                                <!--[if mso]>
-                                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="mailto:diogo.paim@bertolini.com.br?subject=Reuni%C3%A3o%20-%20Produtividade%20e%20Capacidade%20Log%C3%ADstica" style="height:46px;v-text-anchor:middle;width:280px;" arcsize="8%" stroke="f" fillcolor="#F8820A">
-                                <w:anchorlock/>
-                                <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:15px;font-weight:bold;">Falar com um especialista</center>
-                                </v:roundrect>
-                                <![endif]-->
-                                <a href="mailto:diogo.paim@bertolini.com.br?subject=Reuni%C3%A3o%20-%20Produtividade%20e%20Capacidade%20Log%C3%ADstica" target="_blank" style="background-color:#F8820A; border-radius:4px; color:#ffffff; display:inline-block; font-family:Arial, sans-serif; font-size:15px; font-weight:bold; line-height:46px; text-align:center; text-decoration:none; width:280px; -webkit-text-size-adjust:none; mso-hide:all;">Falar com um especialista</a>
-                            </div>
-                        </td>
-                    </tr>
+    function date(v) {
+      if (!v) return '—';
+      const d = new Date(v);
+      return isNaN(d) ? '—' : d.toLocaleString('pt-BR', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+      });
+    }
 
-                    <!-- ASSINATURA & RODAPÉ INSTITUCIONAL -->
-                    <tr>
-                        <td bgcolor="#f1f3f5" style="padding: 25px 30px; background-color: #f1f3f5; border-top: 1px solid #e5e5e5; color: #555555; font-size: 13px; line-height: 1.5;">
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                <tr>
-                                    <td width="70%" style="vertical-align: top;">
-                                        <p style="margin: 0 0 3px 0; font-size: 15px; font-weight: bold; color: #06418a;">Diogo Paim Gonçalves</p>
-                                        <p style="margin: 0 0 3px 0; color: #444444; font-size: 13px;">Desenvolvimento de Negócios | Bertolini</p>
-                                        <p style="margin: 0 0 10px 0;"><a href="mailto:diogo.paim@bertolini.com.br" style="color: #06418a; text-decoration: underline;">diogo.paim@bertolini.com.br</a></p>
-                                        <p style="margin: 0; font-size: 11px; color: #777777; font-style: italic; line-height: 1.3;">
-                                            Benefícios, ganhos e dimensionamentos dependem da validação de dados e de estudo técnico da operação.
-                                        </p>
-                                    </td>
-                                    <td width="30%" align="right" style="vertical-align: top; font-size: 11px; color: #777777;">
-                                        <p style="margin: 0 0 5px 0; font-weight: bold; color: #06418a;">Bertolini</p>
-                                        <p style="margin: 0 0 8px 0;">Bento Gonçalves - RS</p>
-                                        <p style="margin: 0;"><a href="https://www.bertolini.com.br" target="_blank" style="color: #F8820A; text-decoration: none; font-weight: bold;">www.bertolini.com.br →</a></p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+    function escapeHtml(s = '') {
+      return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[c]));
+    }
 
-                </table>
-                <!-- FIM DA TABELA CENTRAL -->
+    function googleSearch(q) {
+      return 'https://www.google.com/search?q=' + encodeURIComponent(q);
+    }
 
-            </td>
-        </tr>
-    </table>
-    <!-- FIM CONTAINER PRINCIPAL -->
+    function render(rows) {
+      leadsCache = rows;
+      $('total').textContent = rows.length;
+      $('priorityA').textContent = rows.filter(x => x.priority === 'A').length;
+      $('companies').textContent = rows.filter(x => x.company).length;
 
+      if (!rows.length) {
+        $('leads').innerHTML = '<div class="empty">Nenhum registro encontrado. Clique em <b>Pesquisar agora</b> para consultar as fontes públicas.</div>';
+        return;
+      }
+
+      $('leads').innerHTML = rows.map(x => `
+        <article class="lead">
+          <div>
+            <h3>${escapeHtml(x.company || 'Empresa a identificar')} — ${escapeHtml(x.title)}</h3>
+            <p>${escapeHtml(x.countryName || countryNames[x.country] || x.country)} · ${escapeHtml(x.source || 'Fonte pública')} · Publicado: ${date(x.publishedAt)}</p>
+            <p>${escapeHtml((x.description || '').replace(/<[^>]*>/g, ' ').slice(0, 260))}</p>
+            <div class="leadmeta">
+              <span class="tag ${x.priority.toLowerCase()}">Prioridade ${x.priority}</span>
+              <span class="tag">Score ${x.score}/20</span>
+              <span class="tag">${escapeHtml(x.status || 'Novo')}</span>
+              ${x.verified ? '<span class="tag a">Contato verificado</span>' : ''}
+            </div>
+            <div class="links">
+              <a href="${escapeHtml(x.url)}" target="_blank" rel="noopener">Abrir notícia ↗</a>
+              <a href="${googleSearch((x.company || x.title) + ' site oficial contato')}" target="_blank" rel="noopener">Buscar site/contato ↗</a>
+              <a href="${googleSearch('site:linkedin.com/in ' + (x.company || x.title) + ' logística engenharia supply chain')}" target="_blank" rel="noopener">Buscar decisores ↗</a>
+            </div>
+          </div>
+          <div class="score">
+            <strong>${x.score}</strong>
+            <div class="muted small">/ 20 pontos</div>
+            <button class="btn" style="margin-top:10px" onclick="editLead('${x.id}')">Abrir ficha</button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    async function load() {
+      try {
+        const [l, s] = await Promise.all([api('/api/leads'), api('/api/status')]);
+        leadsCache = l.leads;
+        $('apiStatus').textContent = 'Backend conectado · armazenamento ' + (s.storage || 'local');
+        $('lastRun').textContent = s.lastRun ? date(s.lastRun.finishedAt) : '—';
+        $('lastRunDetail').textContent = s.lastRun
+          ? `${s.lastRun.added} novos · ${s.lastRun.queriesRun} consultas`
+          : 'Aguardando primeira busca';
+        render(l.leads);
+      } catch (e) {
+        $('apiStatus').textContent = 'Backend indisponível: ' + e.message;
+        $('leads').innerHTML = '<div class="empty">Inicie o servidor Node.js para ativar as pesquisas e salvar os dados.</div>';
+      }
+    }
+
+    async function filter() {
+      const q = $('query').value;
+      const priority = $('priorityFilter').value;
+      const country = $('countryFilter').value;
+      const params = new URLSearchParams();
+
+      if (q) params.set('q', q);
+      if (priority) params.set('priority', priority);
+      if (country) params.set('country', country);
+
+      const data = await api('/api/leads?' + params.toString());
+      render(data.leads);
+    }
+
+    $('searchBtn').onclick = async () => {
+      const countries = [...document.querySelectorAll('.country input:checked')].map(x => x.value);
+      if (!countries.length) return alert('Selecione pelo menos um país.');
+
+      $('searchBtn').disabled = true;
+      $('searchBtn').textContent = 'Pesquisando...';
+
+      try {
+        const r = await api('/api/search', {
+          method: 'POST',
+          body: JSON.stringify({ countries })
+        });
+        alert(
+          `Pesquisa concluída.\nNotícias encontradas: ${r.run.found}\nNovos registros: ${r.run.added}\nConsultas: ${r.run.queriesRun}` +
+          (r.run.errors.length ? '\nAvisos: ' + r.run.errors.join('; ') : '')
+        );
+        await load();
+      } catch (e) {
+        alert('Não foi possível concluir a pesquisa: ' + e.message);
+      } finally {
+        $('searchBtn').disabled = false;
+        $('searchBtn').textContent = '⌕ Pesquisar agora';
+      }
+    };
+
+    $('filterBtn').onclick = filter;
+
+    $('query').addEventListener('keydown', e => {
+      if (e.key === 'Enter') filter();
+    });
+
+    $('exportBtn').onclick = () => location.href = '/api/export';
+
+    $('importBtn').onclick = () => $('csvFile').click();
+
+    $('csvFile').onchange = async e => {
+      const f = e.target.files[0];
+      if (!f) return;
+
+      try {
+        const csv = await f.text();
+        const r = await api('/api/import/cnpj', {
+          method: 'POST',
+          body: JSON.stringify({ csv })
+        });
+        $('cnpjStatus').textContent = `Importação concluída: ${r.added} novos registros adicionados de ${r.rowsRead} linhas. Total armazenado: ${r.total}.`;
+        alert($('cnpjStatus').textContent);
+      } catch (err) {
+        alert(err.message);
+      }
+      e.target.value = '';
+    };
+
+    window.editLead = id => {
+      const x = leadsCache.find(a => a.id === id);
+      if (!x) return;
+
+      $('leadId').value = id;
+      for (const k of ['company', 'website', 'address', 'contactName', 'contactRole', 'email', 'phone', 'notes']) {
+        $(k).value = x[k] || '';
+      }
+      $('leadStatus').value = x.status || 'Novo';
+      $('verified').checked = !!x.verified;
+      $('modal').classList.add('open');
+    };
+
+    $('closeModal').onclick = () => $('modal').classList.remove('open');
+
+    $('leadForm').onsubmit = async e => {
+      e.preventDefault();
+      const id = $('leadId').value;
+      const body = {};
+
+      for (const k of ['company', 'website', 'address', 'contactName', 'contactRole', 'email', 'phone', 'notes']) {
+        body[k] = $(k).value;
+      }
+      body.status = $('leadStatus').value;
+      body.verified = $('verified').checked;
+
+      try {
+        await api('/api/leads/' + id, {
+          method: 'PATCH',
+          body: JSON.stringify(body)
+        });
+        $('modal').classList.remove('open');
+        await load();
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    $('researchCompany').onclick = () => {
+      const q = $('company').value || leadsCache.find(x => x.id === $('leadId').value)?.title || '';
+      window.open(googleSearch(q + ' site oficial contato telefone'), '_blank', 'noopener');
+    };
+
+    load();
+  </script>
 </body>
+
 </html>
