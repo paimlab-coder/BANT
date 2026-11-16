@@ -1,0 +1,51 @@
+{
+  "leads": [],
+  "runs": [
+    {
+      "id": "b405c6a2-6e6b-4ed1-baca-ddaa57c621f6",
+      "startedAt": "2026-11-16T20:38:11.048Z",
+      "finishedAt": "2026-11-16T20:38:16.176Z",
+      "countries": [
+        "BR"
+      ],
+      "queriesRun": 3,
+      "found": 0,
+      "added": 0,
+      "updated": 0,
+      "errors": [
+        "Brasil: fetch failed",
+        "Brasil: fetch failed",
+        "Brasil: fetch failed"
+      ]
+    }
+  ],
+  "settings": {
+    "dailyEnabled": true,
+    "dailyHour": 7,
+    "countries": [
+      "BR",
+      "CL",
+      "AR",
+      "PY",
+      "UY"
+    ]
+  },
+  "importedCnpjs": [],
+  "lastRun": {
+    "id": "b405c6a2-6e6b-4ed1-baca-ddaa57c621f6",
+    "startedAt": "2026-11-16T20:38:11.048Z",
+    "finishedAt": "2026-11-16T20:38:16.176Z",
+    "countries": [
+      "BR"
+    ],
+    "queriesRun": 3,
+    "found": 0,
+    "added": 0,
+    "updated": 0,
+    "errors": [
+      "Brasil: fetch failed",
+      "Brasil: fetch failed",
+      "Brasil: fetch failed"
+    ]
+  }
+}
