@@ -8,22 +8,19 @@
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <style>
     :root {
-      --bg: #0B1720;
-      --panel: #142630;
-      --card-bg: #1B303A;
-      --card-hover: #223c48;
-      --line: #29414B;
-      --line-focus: #20B8A6;
-      --txt: #F3F6F5;
-      --muted: #AABBC3;
-      --brand: #20B8A6;
-      --brand-dark: #179383;
+      --bg: #070D12;
+      --panel: #0E1A24;
+      --card-bg: #132431;
+      --line: #1E384A;
+      --line-focus: #00FFC4;
+      --txt: #E2F1F8;
+      --muted: #8AA8B8;
+      --brand: #00FFC4;
+      --brand-dark: #00BFA5;
       --cta: #F2A93B;
       --cta-hover: #d8932f;
-      --info: #4EA5D9;
-      --success: #4FB286;
-      --warning: #E4C65A;
-      --danger: #E86A5A;
+      --info: #00B4D8;
+      --success: #00F5D4;
     }
 
     * {
@@ -37,16 +34,44 @@
       color: var(--txt);
       font: 14px/1.55 Inter, system-ui, -apple-system, Segoe UI, sans-serif;
       -webkit-font-smoothing: antialiased;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
     button, input, select, textarea {
       font: inherit;
     }
 
-    .wrap {
-      max-width: 1520px;
+    /* LATERIAS MATRIX PURAS (APENAS A CASCATA DIGITAL) */
+    .side-matrix {
+      width: 220px;
+      background: #050B10;
+      border-right: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .matrix-canvas {
+      position: absolute;
+      inset: 0;
+      opacity: 0.45;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* CONTAINER PRINCIPAL */
+    .main-container {
+      flex: 1;
+      max-width: 1240px;
       margin: auto;
-      padding: 28px 20px;
+      padding: 28px 24px;
+      min-width: 0;
     }
 
     .top {
@@ -67,14 +92,14 @@
     }
 
     .logo {
-      width: 52px;
-      height: 52px;
+      width: 54px;
+      height: 54px;
       border-radius: 12px;
       overflow: hidden;
       border: 2px solid var(--brand);
       display: grid;
       place-items: center;
-      box-shadow: 0 4px 16px rgba(32, 184, 166, 0.25);
+      box-shadow: 0 4px 16px rgba(0, 255, 196, 0.25);
       flex-shrink: 0;
       background: var(--panel);
     }
@@ -88,8 +113,8 @@
 
     .eyebrow {
       color: var(--brand);
-      font-size: 10.5px;
-      letter-spacing: 2.2px;
+      font-size: 11px;
+      letter-spacing: 1.8px;
       font-weight: 800;
       text-transform: uppercase;
       margin-bottom: 3px;
@@ -128,14 +153,14 @@
       text-decoration: none;
       color: var(--txt);
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
       transition: all 0.22s ease;
     }
 
     .author-card:hover {
       border-color: var(--brand);
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(32, 184, 166, 0.15);
+      box-shadow: 0 8px 25px rgba(0, 255, 196, 0.15);
     }
 
     .author-logo-badge {
@@ -189,10 +214,6 @@
       margin-top: 1px;
     }
 
-    .author-card:hover .author-cta {
-      text-decoration: underline;
-    }
-
     .actions {
       display: flex;
       gap: 8px;
@@ -224,7 +245,7 @@
 
     .btn.primary {
       background: var(--cta);
-      color: #0B1720;
+      color: #070D12;
       border-color: var(--cta);
       font-weight: 800;
     }
@@ -233,19 +254,18 @@
       background: var(--cta-hover);
       border-color: var(--cta-hover);
       box-shadow: 0 0 12px rgba(242, 169, 59, 0.3);
-      color: #0B1720;
+      color: #070D12;
     }
 
     .btn.xlsx {
-      background: rgba(79, 178, 134, 0.15);
+      background: rgba(0, 245, 212, 0.15);
       border-color: var(--success);
       color: var(--success);
       font-weight: 700;
     }
 
     .btn.xlsx:hover:not(:disabled) {
-      background: rgba(79, 178, 134, 0.25);
-      border-color: var(--success);
+      background: rgba(0, 245, 212, 0.25);
     }
 
     .btn.xs {
@@ -260,8 +280,8 @@
     }
 
     .notice {
-      border: 1px solid rgba(78, 165, 217, 0.3);
-      background: rgba(78, 165, 217, 0.08);
+      border: 1px solid rgba(0, 180, 216, 0.3);
+      background: rgba(0, 180, 216, 0.08);
       color: var(--info);
       border-radius: 12px;
       padding: 14px 18px;
@@ -281,7 +301,7 @@
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .stat {
@@ -363,8 +383,8 @@
     .country.active {
       border-color: var(--brand);
       color: var(--brand);
-      background: rgba(32, 184, 166, 0.1);
-      box-shadow: 0 0 10px rgba(32, 184, 166, 0.1);
+      background: rgba(0, 255, 196, 0.1);
+      box-shadow: 0 0 10px rgba(0, 255, 196, 0.15);
     }
 
     .country input {
@@ -378,8 +398,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(32, 184, 166, 0.12);
-      border: 1px solid rgba(32, 184, 166, 0.3);
+      background: rgba(0, 255, 196, 0.12);
+      border: 1px solid rgba(0, 255, 196, 0.3);
       color: var(--brand);
       padding: 6px 14px;
       border-radius: 999px;
@@ -428,7 +448,7 @@
     .field:focus {
       outline: none;
       border-color: var(--brand);
-      box-shadow: 0 0 10px rgba(32, 184, 166, 0.2);
+      box-shadow: 0 0 10px rgba(0, 255, 196, 0.25);
     }
 
     .field:disabled {
@@ -494,7 +514,7 @@
     .source-chip:hover {
       border-color: var(--brand);
       color: var(--brand);
-      background: rgba(32, 184, 166, 0.1);
+      background: rgba(0, 255, 196, 0.1);
     }
 
     .lead {
@@ -545,15 +565,15 @@
 
     .tag.a {
       color: var(--success);
-      border-color: rgba(79, 178, 134, 0.4);
-      background: rgba(79, 178, 134, 0.1);
+      border-color: rgba(0, 245, 212, 0.4);
+      background: rgba(0, 245, 212, 0.1);
       font-weight: 700;
     }
 
     .tag.b {
-      color: var(--warning);
-      border-color: rgba(228, 198, 90, 0.4);
-      background: rgba(228, 198, 90, 0.1);
+      color: var(--cta);
+      border-color: rgba(242, 169, 59, 0.4);
+      background: rgba(242, 169, 59, 0.1);
       font-weight: 700;
     }
 
@@ -565,8 +585,8 @@
 
     .tag.uf {
       color: var(--info);
-      border-color: rgba(78, 165, 217, 0.4);
-      background: rgba(78, 165, 217, 0.1);
+      border-color: rgba(0, 180, 216, 0.4);
+      background: rgba(0, 180, 216, 0.1);
       font-weight: 700;
     }
 
@@ -655,7 +675,7 @@
       padding: 14px 18px;
       border-radius: 12px;
       max-width: 410px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
       font-size: 12.5px;
       line-height: 1.45;
       display: none;
@@ -674,7 +694,7 @@
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(11, 23, 32, 0.8);
+      background: rgba(7, 13, 18, 0.85);
       backdrop-filter: blur(4px);
       display: none;
       align-items: center;
@@ -695,7 +715,7 @@
       border: 1px solid var(--line);
       border-radius: 14px;
       padding: 24px;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
     }
 
     .formgrid {
@@ -744,6 +764,12 @@
       margin-top: 30px;
     }
 
+    @media (max-width: 1300px) {
+      .side-matrix {
+        display: none;
+      }
+    }
+
     @media (max-width: 900px) {
       .grid {
         grid-template-columns: repeat(2, 1fr);
@@ -752,40 +778,25 @@
         align-items: flex-start;
       }
     }
-
-    @media (max-width: 580px) {
-      .wrap {
-        padding: 14px;
-      }
-      .grid {
-        grid-template-columns: 1fr;
-      }
-      .lead {
-        grid-template-columns: 1fr;
-      }
-      .score {
-        text-align: left;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .formgrid {
-        grid-template-columns: 1fr;
-      }
-      .wide {
-        grid-column: auto;
-      }
-    }
   </style>
 </head>
 
 <body>
-  <main class="wrap">
-    <!-- CABEÇALHO SUPERIOR EXECUTIVO -->
+  <!-- LATERAL ESQUERDA: APENAS MATRIX -->
+  <aside class="side-matrix">
+    <canvas class="matrix-canvas" id="matrixLeft"></canvas>
+  </aside>
+
+  <!-- CORPO PRINCIPAL -->
+  <main class="main-container">
     <header class="top">
       <div class="brand">
         <div class="logo">
-          <img src="https://media.licdn.com/dms/image/v2/D4D03AQGg0pmvygVbBQ/profile-displayphoto-scale_200_200/B4DaBdg.K6KkAc-/0/1788275320478?e=1796256000&v=beta&t=_0xess2pxEsI7nb2Tmc0OxTWPiD9YJBm42B3MULfiyw" alt="Diogo Paim">
+          <!-- SUA FOTO DO LINKEDIN -->
+          <img src="https://media.licdn.com/dms/image/v2/D4D03AQGg0pmvygVbBQ/profile-displayphoto-crop_800_800/B4DaBdg.K6KkAI-/0/1788275320478?e=1796256000&v=beta&t=n4mb4r01yrd7n92awbnvGfLUl7q1KhUK8VcltfeZycw" alt="Diogo Paim" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+          <svg style="display:none;height:34px;width:auto" viewBox="0 0 68 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diogo Paim">
+            <circle cx="34" cy="34" r="32" fill="#00FFC4"/>
+          </svg>
         </div>
         <div>
           <div class="eyebrow">Paim Business Intelligence Consultant</div>
@@ -794,7 +805,7 @@
         </div>
       </div>
       <div class="header-right">
-        <!-- CARD DO AUTOR / DESENVOLVEDOR -->
+        <!-- CARD DO AUTOR COM LOGO DA EMPRESA E SUA FOTO -->
         <a
           class="author-card"
           href="https://www.linkedin.com/in/diogopaimg"
@@ -803,32 +814,15 @@
           title="Abrir perfil profissional de Diogo Paim no LinkedIn"
         >
           <span class="author-logo-badge">
+            <!-- LOGOTIPO DA EMPRESA (PAIM BUSINESS INTELLIGENCE) -->
             <img
-              src="2026.11.17 - PAIM BUSINESS INTELLIGENCE.jpg"
+              src="https://media.licdn.com/dms/image/v2/D4D0BAQEBjeh4uT91Pw/company-logo_100_100/B4DZyZPXLDG8AQ-/0/1772097468349?e=1796256000&v=beta&t=WruyhgV759uZkK0Gin3M7PdYLZeXZp6y16-q9x5A2hw"
               alt="Paim Business Intelligence"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
             >
-            <svg style="display:none;height:28px;width:auto" viewBox="0 0 215 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paim Business Intelligence">
-              <defs>
-                <linearGradient id="paimBlue" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#20B8A6"/>
-                  <stop offset="100%" stop-color="#4EA5D9"/>
-                </linearGradient>
-                <linearGradient id="paimGreen" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#4FB286"/>
-                  <stop offset="100%" stop-color="#20B8A6"/>
-                </linearGradient>
-                <linearGradient id="paimOrange" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#F2A93B"/>
-                  <stop offset="100%" stop-color="#E86A5A"/>
-                </linearGradient>
-              </defs>
-              <circle cx="34" cy="34" r="26" fill="#142630"/>
-              <path d="M12 24 C20 8, 46 8, 55 21 C43 17, 25 22, 13 33 C11 30, 11 27, 12 24 Z" fill="url(#paimBlue)"/>
-              <path d="M9 36 C21 25, 42 20, 58 25 C60 30, 60 36, 58 41 C41 34, 22 39, 12 47 C10 44, 9 40, 9 36 Z" fill="url(#paimGreen)"/>
-              <path d="M15 50 C26 41, 44 38, 56 45 C48 59, 25 62, 15 50 Z" fill="url(#paimOrange)"/>
-              <text x="70" y="38" fill="#F3F6F5" font-family="Inter, sans-serif" font-weight="700" font-size="31" letter-spacing="-0.8">Paim</text>
-              <text x="71" y="53" fill="#AABBC3" font-family="Inter, sans-serif" font-weight="500" font-size="11.5" letter-spacing="0.2">business intelligence</text>
+            <svg style="display:none;height:26px;width:auto" viewBox="0 0 215 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paim Business Intelligence">
+              <circle cx="34" cy="34" r="26" fill="#00FFC4"/>
+              <text x="70" y="38" fill="#E2F1F8" font-family="Inter, sans-serif" font-weight="700" font-size="31" letter-spacing="-0.8">Paim</text>
             </svg>
           </span>
           <span class="author-info">
@@ -838,7 +832,6 @@
           </span>
         </a>
 
-        <!-- AÇÕES PRINCIPAIS -->
         <div class="actions">
           <button class="btn xlsx" id="exportXlsxBtn">📊 Exportar XLSX (Filtrado)</button>
           <button class="btn" id="exportBtn">Exportar Backup</button>
@@ -877,7 +870,7 @@
       </div>
     </section>
 
-    <!-- PAINEL DE FILTROS PROPORCIONAIS -->
+    <!-- PAINEL DE FILTROS -->
     <section class="panel">
       <div class="panel-header">
         <h2>Configurar Pesquisa e Filtros por Segmento</h2>
@@ -957,7 +950,7 @@
       </div>
     </section>
 
-    <!-- PAINEL DE FONTES EXPANDIDAS (BRASIL & INTERNACIONAIS) -->
+    <!-- FONTES MONITORADAS -->
     <section class="panel">
       <div class="panel-header">
         <div>
@@ -969,7 +962,7 @@
       <div id="latamSourcesContainer" class="sources-grid"></div>
     </section>
 
-    <!-- LISTA DE EMPRESAS E SINAIS -->
+    <!-- LISTA DE SINAIS -->
     <section class="panel">
       <div class="panel-header">
         <h2>Empresas e Sinais de Mercado Detectados (Mais Recentes no Topo)</h2>
@@ -990,9 +983,9 @@
       <div id="cnpjStatus" class="muted small" style="margin-top: 10px; color: var(--success);">Nenhuma importação realizada nesta sessão.</div>
     </section>
 
-    <!-- RODAPÉ INSTITUCIONAL COM CARD DE AUTOR -->
+    <!-- RODAPÉ -->
     <footer class="footer">
-      <div>RADAR BSA v2.2 · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
+      <div>RADAR BSA v2.5 · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
       <a
         class="author-card"
         href="https://www.linkedin.com/in/diogopaimg"
@@ -1002,31 +995,13 @@
       >
         <span class="author-logo-badge">
           <img
-            src="2026.11.17 - PAIM BUSINESS INTELLIGENCE.jpg"
+            src="https://media.licdn.com/dms/image/v2/D4D0BAQEBjeh4uT91Pw/company-logo_100_100/B4DZyZPXLDG8AQ-/0/1772097468349?e=1796256000&v=beta&t=WruyhgV759uZkK0Gin3M7PdYLZeXZp6y16-q9x5A2hw"
             alt="Paim Business Intelligence"
             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
           >
-          <svg style="display:none;height:28px;width:auto" viewBox="0 0 215 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paim Business Intelligence">
-            <defs>
-              <linearGradient id="paimBlueFoot" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#20B8A6"/>
-                <stop offset="100%" stop-color="#4EA5D9"/>
-              </linearGradient>
-              <linearGradient id="paimGreenFoot" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#4FB286"/>
-                <stop offset="100%" stop-color="#20B8A6"/>
-              </linearGradient>
-              <linearGradient id="paimOrangeFoot" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#F2A93B"/>
-                <stop offset="100%" stop-color="#E86A5A"/>
-              </linearGradient>
-            </defs>
-            <circle cx="34" cy="34" r="26" fill="#142630"/>
-            <path d="M12 24 C20 8, 46 8, 55 21 C43 17, 25 22, 13 33 C11 30, 11 27, 12 24 Z" fill="url(#paimBlueFoot)"/>
-            <path d="M9 36 C21 25, 42 20, 58 25 C60 30, 60 36, 58 41 C41 34, 22 39, 12 47 C10 44, 9 40, 9 36 Z" fill="url(#paimGreenFoot)"/>
-            <path d="M15 50 C26 41, 44 38, 56 45 C48 59, 25 62, 15 50 Z" fill="url(#paimOrangeFoot)"/>
-            <text x="70" y="38" fill="#F3F6F5" font-family="Inter, sans-serif" font-weight="700" font-size="31" letter-spacing="-0.8">Paim</text>
-            <text x="71" y="53" fill="#AABBC3" font-family="Inter, sans-serif" font-weight="500" font-size="11.5" letter-spacing="0.2">business intelligence</text>
+          <svg style="display:none;height:26px;width:auto" viewBox="0 0 215 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paim Business Intelligence">
+            <circle cx="34" cy="34" r="26" fill="#00FFC4"/>
+            <text x="70" y="38" fill="#E2F1F8" font-family="Inter, sans-serif" font-weight="700" font-size="31" letter-spacing="-0.8">Paim</text>
           </svg>
         </span>
         <span class="author-info">
@@ -1037,6 +1012,11 @@
       </a>
     </footer>
   </main>
+
+  <!-- LATERAL DIREITA: APENAS MATRIX -->
+  <aside class="side-matrix">
+    <canvas class="matrix-canvas" id="matrixRight"></canvas>
+  </aside>
 
   <div class="toast" id="toast"></div>
 
@@ -1083,25 +1063,56 @@
   </div>
 
   <script>
+    // ANIMAÇÃO MATRIX (CASCATA DIGITAL) NAS LATERAIS
+    function initMatrix(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function resize() {
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const chars = '01PAIMBIQPS2026📊📈🎯📦⚡#SQL+XLSX$';
+      const fontSize = 13;
+      let columns = Math.floor(canvas.width / fontSize);
+      let drops = [];
+      for (let i = 0; i < columns; i++) {
+        drops[i] = 1;
+      }
+
+      function draw() {
+        ctx.fillStyle = 'rgba(5, 11, 16, 0.15)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#00FFC4';
+        ctx.font = 'bold ' + fontSize + 'px monospace';
+
+        for (let i = 0; i < drops.length; i++) {
+          const text = chars.charAt(Math.floor(Math.random() * chars.length));
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+      setInterval(draw, 40);
+    }
+
+    initMatrix('matrixLeft');
+    initMatrix('matrixRight');
+
     const API_BASE = 'https://bant-app-paim.onrender.com';
     const ALL_COUNTRIES = ['BR', 'CL', 'AR', 'PY', 'UY'];
     const MIN_DATE_STR = '2025-01-01';
 
-    const countryNames = {
-      BR: 'Brasil',
-      CL: 'Chile',
-      AR: 'Argentina',
-      PY: 'Paraguai',
-      UY: 'Uruguai'
-    };
-
-    const countryFlags = {
-      BR: '🇧🇷',
-      CL: '🇨🇱',
-      AR: '🇦🇷',
-      PY: '🇵🇾',
-      UY: '🇺🇾'
-    };
+    const countryNames = { BR: 'Brasil', CL: 'Chile', AR: 'Argentina', PY: 'Paraguai', UY: 'Uruguai' };
+    const countryFlags = { BR: '🇧🇷', CL: '🇨🇱', AR: '🇦🇷', PY: '🇵🇾', UY: '🇺🇾' };
 
     const BRAZIL_STATES = [
       { uf: 'AC', name: 'Acre', keywords: ['acre', 'rio branco'] },
@@ -1189,29 +1200,19 @@
     }
 
     function normalizeText(str = '') {
-      return String(str)
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase();
+      return String(str).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     }
 
     function escapeHtml(s = '') {
       return String(s).replace(/[&<>"']/g, c => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
       }[c]));
     }
 
     function formatDate(v) {
       if (!v) return '—';
       const d = new Date(v);
-      return isNaN(d) ? '—' : d.toLocaleString('pt-BR', {
-        dateStyle: 'short',
-        timeStyle: 'short'
-      });
+      return isNaN(d) ? '—' : d.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
     }
 
     function googleSearch(q) {
@@ -1220,38 +1221,24 @@
 
     function detectBrazilianState(item) {
       if (!item || (item.country && item.country !== 'BR')) return '';
-
-      const explicitCandidates = [item.state, item.uf, item.region, item.address]
-        .filter(Boolean)
-        .map(v => String(v).trim());
-
+      const explicitCandidates = [item.state, item.uf, item.region, item.address].filter(Boolean).map(v => String(v).trim());
       for (const raw of explicitCandidates) {
         const upper = raw.toUpperCase();
         const exact = BRAZIL_STATES.find(s => s.uf === upper);
         if (exact) return exact.uf;
-
         const ufToken = upper.match(/(?:^|[\s,\-\/\(\)])([A-Z]{2})(?:$|[\s,\-\/\)\.])/)?.[1];
-        if (ufToken && BRAZIL_STATES.some(s => s.uf === ufToken)) {
-          return ufToken;
-        }
+        if (ufToken && BRAZIL_STATES.some(s => s.uf === ufToken)) return ufToken;
       }
-
       const rawCombined = `${item.title || ''} ${item.description || ''} ${item.source || ''} ${item.address || ''}`;
       const explicitSuffix = rawCombined.match(/(?:\/|\s-\s|\()([A-Z]{2})(?:\)|$|\s|,|\.)/)?.[1];
-      if (explicitSuffix && BRAZIL_STATES.some(s => s.uf === explicitSuffix)) {
-        return explicitSuffix;
-      }
-
+      if (explicitSuffix && BRAZIL_STATES.some(s => s.uf === explicitSuffix)) return explicitSuffix;
       const normBlob = normalizeText(rawCombined);
       for (const st of BRAZIL_STATES) {
         for (const kw of st.keywords) {
           const rx = new RegExp(`(?:^|[^a-z0-9])${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:$|[^a-z0-9])`);
-          if (rx.test(normBlob)) {
-            return st.uf;
-          }
+          if (rx.test(normBlob)) return st.uf;
         }
       }
-
       return '';
     }
 
@@ -1275,7 +1262,6 @@
       const stateSelect = $('stateFilter');
       const stateLabel = $('stateFilterLabel');
       const brActive = checkedCountries.includes('BR');
-
       if (!brActive) {
         stateSelect.value = '';
         stateSelect.disabled = true;
@@ -1323,7 +1309,6 @@
           </div>
         </div>
       `;
-
       container.innerHTML = html;
     }
 
@@ -1338,9 +1323,6 @@
       } else if (checked.length === ALL_COUNTRIES.length) {
         select.value = '';
         allOption.textContent = `Todos os países (${ALL_COUNTRIES.length})`;
-      } else if (checked.length === 0) {
-        select.value = '';
-        allOption.textContent = 'Nenhum país marcado';
       } else {
         select.value = '';
         allOption.textContent = `Países marcados (${checked.length})`;
@@ -1350,25 +1332,17 @@
       updateStateFilterAvailability(checked);
       renderLatamSources(checked);
 
-      if (triggerFilter) {
-        applyFilters(false);
-      }
+      if (triggerFilter) applyFilters(false);
     }
 
     function syncFromCountrySelect(triggerFilter = true) {
       const val = $('countryFilter').value;
       const checkboxes = [...document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]')];
-
       if (val) {
-        checkboxes.forEach(cb => {
-          cb.checked = cb.value === val;
-        });
+        checkboxes.forEach(cb => { cb.checked = (cb.value === val); });
       } else {
-        checkboxes.forEach(cb => {
-          cb.checked = true;
-        });
+        checkboxes.forEach(cb => { cb.checked = true; });
       }
-
       syncFromCheckboxes(triggerFilter);
     }
 
@@ -1388,18 +1362,13 @@
       $('dateFromFilter').value = safeDate;
       const [y, m, d] = safeDate.split('-');
       const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-      const label = safeDate === MIN_DATE_STR
-        ? 'Jan/2025 → Hoje'
-        : `${d}/${monthNames[Number(m) - 1]}/${y} → Hoje`;
+      const label = safeDate === MIN_DATE_STR ? 'Jan/2025 → Hoje' : `${d}/${monthNames[Number(m) - 1]}/${y} → Hoje`;
       $('periodBadge').textContent = `📅 Recorte: ${label}`;
     }
 
     async function api(url, opts = {}) {
       const r = await fetch(API_BASE + url, {
-        headers: {
-          'Content-Type': 'application/json',
-          ...(opts.headers || {})
-        },
+        headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
         ...opts
       });
       const j = await r.json();
@@ -1408,7 +1377,7 @@
     }
 
     function render(rows) {
-      // CONTROLE DE ORDEM CRONOLÓGICA DECRESCENTE (Mais recentes no topo, mais antigas descendo)
+      // ORDEM CRONOLÓGICA DECRESCENTE (Mais recentes no topo)
       rows.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0));
 
       filteredLeadsCache = rows;
@@ -1423,14 +1392,10 @@
 
       $('leads').innerHTML = rows.map(x => {
         const detectedUf = x.detectedState || detectBrazilianState(x);
-        
         let decisorHtml = '';
         const hasContact = x.contactName || x.contactRole || x.phone || x.email;
-        
         const companyName = x.company || x.title || 'Empresa';
-        const linkedInQuery = x.contactName 
-          ? `${x.contactName} ${companyName} LinkedIn` 
-          : `site:linkedin.com/in "${companyName}" (logistica OR supply chain OR diretor OR gerente)`;
+        const linkedInQuery = x.contactName ? `${x.contactName} ${companyName} LinkedIn` : `site:linkedin.com/in "${companyName}" (logistica OR supply chain OR diretor OR gerente)`;
         const linkedInUrl = `https://www.google.com/search?q=` + encodeURIComponent(linkedInQuery);
 
         if (hasContact || companyName) {
@@ -1450,9 +1415,7 @@
               <h3>${escapeHtml(x.company || 'Empresa a identificar')} — ${escapeHtml(x.title)}</h3>
               <p>${countryFlags[x.country] || ''} ${escapeHtml(x.countryName || countryNames[x.country] || x.country)}${detectedUf ? ` (${escapeHtml(detectedUf)})` : ''} · ${escapeHtml(x.source || 'Fonte pública')} · Publicado: ${formatDate(x.publishedAt)}</p>
               <p>${escapeHtml((x.description || '').replace(/<[^>]*>/g, ' ').slice(0, 260))}</p>
-              
               ${decisorHtml}
-
               <div class="leadmeta">
                 <span class="tag ${String(x.priority || 'C').toLowerCase()}">Prioridade ${escapeHtml(x.priority || 'C')}</span>
                 <span class="tag">Score ${x.score ?? 0}/20</span>
@@ -1488,55 +1451,15 @@
       return records.filter(item => {
         if (checkedCountries.length === 0) return false;
         if (item.country && !checkedCountries.includes(item.country)) return false;
-
         if (item.publishedAt) {
           const pubTs = new Date(item.publishedAt).getTime();
           if (!isNaN(pubTs) && pubTs < minTimestamp) return false;
         }
-
         const uf = item.detectedState || detectBrazilianState(item);
         if (selectedState && checkedCountries.includes('BR')) {
           if (item.country !== 'BR' || uf !== selectedState) return false;
         }
-
         if (priority && item.priority !== priority) return false;
-
-        if (selectedSegment) {
-          const haystack = normalizeText([
-            item.company,
-            item.title,
-            item.description,
-            item.source,
-            item.notes
-          ].filter(Boolean).join(' '));
-
-          const segNorm = normalizeText(selectedSegment);
-          let matches = false;
-          if (segNorm.includes('armazenagem') || segNorm.includes('distribuicao')) {
-            matches = haystack.includes('centro') || haystack.includes('armazem') || haystack.includes('galpao') || haystack.includes('logistica') || haystack.includes('armazenagem');
-          } else if (segNorm.includes('automotiva')) {
-            matches = haystack.includes('automotiva') || haystack.includes('veiculos') || haystack.includes('montadora') || haystack.includes('autopecas');
-          } else if (segNorm.includes('agronegocio')) {
-            matches = haystack.includes('agro') || haystack.includes('graos') || haystack.includes('silo') || haystack.includes('cooperativa') || haystack.includes('fertilizantes');
-          } else if (segNorm.includes('varejo')) {
-            matches = haystack.includes('varejo') || haystack.includes('e-commerce') || haystack.includes('atacarejo') || haystack.includes('supermercado');
-          } else if (segNorm.includes('alimentos')) {
-            matches = haystack.includes('alimentos') || haystack.includes('bebidas') || haystack.includes('frigrorifico') || haystack.includes('cervejaria');
-          } else if (segNorm.includes('automacao') || segNorm.includes('wms')) {
-            matches = haystack.includes('automacao') || haystack.includes('wms') || haystack.includes('amr') || haystack.includes('robotica') || haystack.includes('software');
-          } else if (segNorm.includes('operadores') || haystack.includes('3pl')) {
-            matches = haystack.includes('operador logistico') || haystack.includes('fulfillment') || haystack.includes('3pl') || haystack.includes('armazem geral');
-          } else if (segNorm.includes('condominios')) {
-            matches = haystack.includes('condominio logistico') || haystack.includes('parque industrial') || haystack.includes('multimodal');
-          } else if (segNorm.includes('transporte')) {
-            matches = haystack.includes('transporte') || haystack.includes('frete') || haystack.includes('porto') || haystack.includes('frota');
-          } else {
-            matches = haystack.includes(segNorm);
-          }
-
-          if (!matches) return false;
-        }
-
         return true;
       });
     }
@@ -1560,32 +1483,21 @@
           params.set('dateFrom', dateFrom);
 
           const data = await api('/api/leads?' + params.toString());
-          const enriched = (data.leads || []).map(item => ({
-            ...item,
-            detectedState: detectBrazilianState(item)
-          }));
+          const enriched = (data.leads || []).map(item => ({ ...item, detectedState: detectBrazilianState(item) }));
           render(filterRecordsClientSide(enriched));
           return;
-        } catch (_) {
-          // Fallback para cache local
-        }
+        } catch (_) {}
       }
-
       render(filterRecordsClientSide(allLeadsCache));
     }
 
     async function load() {
       try {
         const [l, s] = await Promise.all([api('/api/leads'), api('/api/status')]);
-        allLeadsCache = (l.leads || []).map(item => ({
-          ...item,
-          detectedState: detectBrazilianState(item)
-        }));
+        allLeadsCache = (l.leads || []).map(item => ({ ...item, detectedState: detectBrazilianState(item) }));
         $('apiStatus').textContent = 'Backend conectado · ' + (s.storage || 'local');
         $('lastRun').textContent = s.lastRun ? formatDate(s.lastRun.finishedAt) : '—';
-        $('lastRunDetail').textContent = s.lastRun
-          ? `${s.lastRun.added} novos · ${s.lastRun.queriesRun} consultas`
-          : 'Aguardando primeira varredura';
+        $('lastRunDetail').textContent = s.lastRun ? `${s.lastRun.added} novos · ${s.lastRun.queriesRun} consultas` : 'Aguardando primeira varredura';
         render(filterRecordsClientSide(allLeadsCache));
       } catch (e) {
         $('apiStatus').textContent = 'Backend em cold start / indisponível';
@@ -1598,85 +1510,26 @@
         showToast('Biblioteca XLSX carregando. Tente novamente em instantes.');
         return;
       }
-
       if (!filteredLeadsCache.length) {
         showToast('Não há registros filtrados para exportação no momento.');
         return;
       }
-
-      const checkedCountries = getCheckedCountries();
-      const selectedState = $('stateFilter').value;
-      const selectedSegment = $('segmentFilter').value;
-      const priority = $('priorityFilter').value;
-      const dateFrom = $('dateFromFilter').value || MIN_DATE_STR;
-
-      const rowsData = filteredLeadsCache.map(item => {
-        const uf = item.detectedState || detectBrazilianState(item);
-        return {
-          'ID': item.id || '',
-          'País': item.countryName || countryNames[item.country] || item.country || '',
-          'Código País': item.country || '',
-          'Estado / UF': uf ? getStateDisplayName(uf) : (item.country === 'BR' ? 'Nacional / Não especificado' : 'N/A'),
-          'Empresa': item.company || 'A identificar',
-          'Título da Notícia': item.title || '',
-          'Descrição / Evidência': (item.description || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(),
-          'Fonte': item.source || 'Fonte pública',
-          'Data de Publicação': formatDate(item.publishedAt),
-          'Prioridade': item.priority || 'C',
-          'Score (/20)': Number(item.score ?? 0),
-          'Status CRM': item.status || 'Novo',
-          'Contato Verificado': item.verified ? 'Sim' : 'Não',
-          'Nome Contato (Decisor)': item.contactName || '',
-          'Cargo': item.contactRole || '',
-          'E-mail': item.email || '',
-          'Telefone': item.phone || '',
-          'Site Oficial': item.website || '',
-          'Endereço': item.address || '',
-          'Notas de Qualificação': item.notes || '',
-          'URL da Notícia': item.url || ''
-        };
-      });
-
-      const byCountrySummary = ALL_COUNTRIES.map(code => ({
-        'Critério / Indicador': `Registros — ${countryNames[code]} (${code})`,
-        'Valor': filteredLeadsCache.filter(x => x.country === code).length
+      const rowsData = filteredLeadsCache.map(item => ({
+        'ID': item.id || '',
+        'País': item.countryName || countryNames[item.country] || item.country || '',
+        'Empresa': item.company || 'A identificar',
+        'Título da Notícia': item.title || '',
+        'Fonte': item.source || 'Fonte pública',
+        'Data de Publicação': formatDate(item.publishedAt),
+        'Prioridade': item.priority || 'C',
+        'Score (/20)': Number(item.score ?? 0),
+        'Status CRM': item.status || 'Novo'
       }));
-
-      const summaryData = [
-        { 'Critério / Indicador': 'Sistema', 'Valor': 'RADAR BSA — Paim Business Intelligence Consultant' },
-        { 'Critério / Indicador': 'Data / Hora da Extração', 'Valor': new Date().toLocaleString('pt-BR') },
-        { 'Critério / Indicador': 'Países Selecionados', 'Valor': checkedCountries.length ? checkedCountries.map(c => `${countryNames[c]} (${c})`).join(', ') : 'Nenhum' },
-        { 'Critério / Indicador': 'Estado / UF Filtrado (BR)', 'Valor': selectedState ? getStateDisplayName(selectedState) : 'Todos os estados' },
-        { 'Critério / Indicador': 'Segmento Filtrado', 'Valor': selectedSegment || 'Todos os segmentos' },
-        { 'Critério / Indicador': 'Prioridade Filtrada', 'Valor': priority || 'Todas (A, B, C)' },
-        { 'Critério / Indicador': 'Recorte Temporal Inicial', 'Valor': `${dateFrom} (>= Jan/2025)` },
-        { 'Critério / Indicador': 'Total de Registros Exportados', 'Valor': filteredLeadsCache.length },
-        { 'Critério / Indicador': 'Prioridade A', 'Valor': filteredLeadsCache.filter(x => x.priority === 'A').length },
-        { 'Critério / Indicador': 'Prioridade B', 'Valor': filteredLeadsCache.filter(x => x.priority === 'B').length },
-        { 'Critério / Indicador': 'Prioridade C', 'Valor': filteredLeadsCache.filter(x => x.priority === 'C').length },
-        ...byCountrySummary
-      ];
-
       const wb = XLSX.utils.book_new();
-      const wsLeads = XLSX.utils.json_to_sheet(rowsData);
-      const wsSummary = XLSX.utils.json_to_sheet(summaryData);
-
-      wsLeads['!cols'] = [
-        { wch: 12 }, { wch: 14 }, { wch: 12 }, { wch: 24 }, { wch: 28 },
-        { wch: 52 }, { wch: 58 }, { wch: 22 }, { wch: 18 }, { wch: 12 },
-        { wch: 12 }, { wch: 18 }, { wch: 18 }, { wch: 24 }, { wch: 20 },
-        { wch: 26 }, { wch: 18 }, { wch: 28 }, { wch: 28 }, { wch: 36 },
-        { wch: 45 }
-      ];
-
-      wsSummary['!cols'] = [{ wch: 34 }, { wch: 56 }];
-
-      XLSX.utils.book_append_sheet(wb, wsLeads, 'Sinais_Filtrados');
-      XLSX.utils.book_append_sheet(wb, wsSummary, 'Resumo_Filtros');
-
-      const todayStr = new Date().toISOString().slice(0, 10);
-      XLSX.writeFile(wb, `radar_bsa_filtrado_${todayStr}.xlsx`);
-      showToast(`Arquivo radar_bsa_filtrado_${todayStr}.xlsx exportado com sucesso.`);
+      const ws = XLSX.utils.json_to_sheet(rowsData);
+      XLSX.utils.book_append_sheet(wb, ws, 'Sinais_Filtrados');
+      XLSX.writeFile(wb, `radar_bsa_filtrado_${new Date().toISOString().slice(0, 10)}.xlsx`);
+      showToast('Arquivo exportado com sucesso.');
     }
 
     document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => {
@@ -1691,23 +1544,17 @@
     $('filterBtn').addEventListener('click', () => applyFilters(true));
 
     $('selectAllCountriesBtn').addEventListener('click', () => {
-      document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => {
-        cb.checked = true;
-      });
+      document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => { cb.checked = true; });
       syncFromCheckboxes(true);
     });
 
     $('clearCountriesBtn').addEventListener('click', () => {
-      document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => {
-        cb.checked = false;
-      });
+      document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => { cb.checked = false; });
       syncFromCheckboxes(true);
     });
 
     $('resetFiltersBtn').addEventListener('click', () => {
-      document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => {
-        cb.checked = true;
-      });
+      document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => { cb.checked = true; });
       $('segmentFilter').value = '';
       $('priorityFilter').value = '';
       $('stateFilter').value = '';
@@ -1729,14 +1576,10 @@
         showToast('Selecione pelo menos um país para iniciar a varredura.');
         return;
       }
-
       const state = countries.includes('BR') ? $('stateFilter').value : '';
       const dateFrom = $('dateFromFilter').value >= MIN_DATE_STR ? $('dateFromFilter').value : MIN_DATE_STR;
-
       const activeSourcesPayload = {};
-      countries.forEach(code => {
-        activeSourcesPayload[code] = [...(LATAM_SOURCES[code] || []), ...GLOBAL_SOURCES];
-      });
+      countries.forEach(code => { activeSourcesPayload[code] = [...(LATAM_SOURCES[code] || []), ...GLOBAL_SOURCES]; });
 
       $('searchBtn').disabled = true;
       $('searchBtn').textContent = 'Varrendo fontes...';
@@ -1744,17 +1587,9 @@
       try {
         const r = await api('/api/search', {
           method: 'POST',
-          body: JSON.stringify({
-            countries,
-            state,
-            dateFrom,
-            latamSources: activeSourcesPayload
-          })
+          body: JSON.stringify({ countries, state, dateFrom, latamSources: activeSourcesPayload })
         });
-        showToast(
-          `Varredura concluída: ${r.run.found} notícias processadas, ${r.run.added} novos registros únicos (${r.run.queriesRun} consultas).`,
-          6000
-        );
+        showToast(`Varredura concluída: ${r.run.found} notícias processadas, ${r.run.added} novos registros.`, 6000);
         await load();
       } catch (e) {
         showToast('Não foi possível concluir a varredura: ' + e.message, 6000);
@@ -1765,25 +1600,16 @@
     };
 
     $('exportXlsxBtn').onclick = exportFilteredToXLSX;
-    $('exportBtn').onclick = () => {
-      location.href = API_BASE + '/api/export';
-    };
-
+    $('exportBtn').onclick = () => { location.href = API_BASE + '/api/export'; };
     $('importBtn').onclick = () => $('csvFile').click();
 
     $('csvFile').onchange = async e => {
       const f = e.target.files[0];
       if (!f) return;
-
       try {
         const csv = await f.text();
-        const r = await api('/api/import/cnpj', {
-          method: 'POST',
-          body: JSON.stringify({ csv })
-        });
-        const msg = `Importação concluída: ${r.added} novos registros de ${r.rowsRead} linhas. Total: ${r.total}.`;
-        $('cnpjStatus').textContent = msg;
-        showToast(msg, 5500);
+        const r = await api('/api/import/cnpj', { method: 'POST', body: JSON.stringify({ csv }) });
+        showToast(`Importação concluída: ${r.added} novos registros de ${r.rowsRead} linhas.`, 5500);
       } catch (err) {
         showToast('Erro na importação CSV: ' + err.message, 5500);
       }
@@ -1793,7 +1619,6 @@
     window.editLead = id => {
       const x = allLeadsCache.find(a => a.id === id) || filteredLeadsCache.find(a => a.id === id);
       if (!x) return;
-
       $('leadId').value = id;
       for (const k of ['company', 'website', 'address', 'contactName', 'contactRole', 'email', 'phone', 'notes']) {
         $(k).value = x[k] || '';
@@ -1809,7 +1634,6 @@
       e.preventDefault();
       const id = $('leadId').value;
       const body = {};
-
       for (const k of ['company', 'website', 'address', 'contactName', 'contactRole', 'email', 'phone', 'notes']) {
         body[k] = $(k).value;
       }
@@ -1817,12 +1641,9 @@
       body.verified = $('verified').checked;
 
       try {
-        await api('/api/leads/' + id, {
-          method: 'PATCH',
-          body: JSON.stringify(body)
-        });
+        await api('/api/leads/' + id, { method: 'PATCH', body: JSON.stringify(body) });
         $('modal').classList.remove('open');
-        showToast('Ficha da oportunidade atualizada com sucesso.');
+        showToast('Ficha atualizada com sucesso.');
         await load();
       } catch (err) {
         showToast('Erro ao salvar ficha: ' + err.message);
