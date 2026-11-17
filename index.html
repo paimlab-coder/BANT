@@ -74,32 +74,42 @@
       min-width: 0;
     }
 
-    .top {
+    /* CABEÇALHO EM BLOCO ÚNICO / MINI CAPA DE TEMPLATE */
+    .hero-header {
+      background: linear-gradient(135deg, rgba(14, 26, 36, 0.95) 0%, rgba(19, 36, 49, 0.9) 100%);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 26px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .hero-top-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 20px;
       flex-wrap: wrap;
-      margin-bottom: 26px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--line);
     }
 
     .brand {
       display: flex;
-      gap: 16px;
+      gap: 18px;
       align-items: center;
     }
 
     .logo {
-      width: 54px;
-      height: 54px;
-      border-radius: 12px;
+      width: 64px;
+      height: 64px;
+      border-radius: 14px;
       overflow: hidden;
       border: 2px solid var(--brand);
       display: grid;
       place-items: center;
-      box-shadow: 0 4px 16px rgba(0, 255, 196, 0.25);
+      box-shadow: 0 4px 18px rgba(0, 255, 196, 0.3);
       flex-shrink: 0;
       background: var(--panel);
     }
@@ -113,15 +123,15 @@
 
     .eyebrow {
       color: var(--brand);
-      font-size: 11px;
+      font-size: 11.5px;
       letter-spacing: 1.8px;
       font-weight: 800;
       text-transform: uppercase;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
 
     .brand h1 {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 800;
       letter-spacing: -0.3px;
       color: var(--txt);
@@ -135,21 +145,25 @@
       font-size: 12px;
     }
 
-    .header-right {
+    .hero-actions-row {
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-top: 18px;
+      border-top: 1px solid rgba(30, 56, 74, 0.6);
     }
 
+    /* CARD DO AUTOR COM LOGO LIMPA (SEM "BOLHA") */
     .author-card {
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      background: var(--panel);
+      background: rgba(7, 13, 18, 0.6);
       border: 1px solid var(--line);
       border-radius: 12px;
-      padding: 7px 14px 7px 8px;
+      padding: 6px 14px 6px 8px;
       text-decoration: none;
       color: var(--txt);
       cursor: pointer;
@@ -164,20 +178,19 @@
     }
 
     .author-logo-badge {
-      background: var(--card-bg);
-      border-radius: 8px;
-      padding: 4px 8px;
+      background: transparent;
+      border-radius: 6px;
+      padding: 2px 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 38px;
-      min-width: 90px;
-      box-shadow: inset 0 0 0 1px var(--line);
+      height: 32px;
+      min-width: 80px;
       flex-shrink: 0;
     }
 
     .author-logo-badge img {
-      height: 28px;
+      height: 26px;
       width: auto;
       display: block;
       object-fit: contain;
@@ -191,7 +204,7 @@
     }
 
     .author-role {
-      font-size: 9.5px;
+      font-size: 9px;
       text-transform: uppercase;
       letter-spacing: 0.8px;
       color: var(--muted);
@@ -199,7 +212,7 @@
     }
 
     .author-name {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 800;
       color: var(--txt);
     }
@@ -208,7 +221,7 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--info);
       margin-top: 1px;
@@ -774,7 +787,8 @@
       .grid {
         grid-template-columns: repeat(2, 1fr);
       }
-      .header-right {
+      .hero-actions-row {
+        flex-direction: column;
         align-items: flex-start;
       }
     }
@@ -789,23 +803,25 @@
 
   <!-- CORPO PRINCIPAL -->
   <main class="main-container">
-    <header class="top">
-      <div class="brand">
-        <div class="logo">
-          <!-- SUA FOTO DO LINKEDIN -->
-          <img src="https://media.licdn.com/dms/image/v2/D4D03AQGg0pmvygVbBQ/profile-displayphoto-crop_800_800/B4DaBdg.K6KkAI-/0/1788275320478?e=1796256000&v=beta&t=n4mb4r01yrd7n92awbnvGfLUl7q1KhUK8VcltfeZycw" alt="Diogo Paim" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
-          <svg style="display:none;height:34px;width:auto" viewBox="0 0 68 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diogo Paim">
-            <circle cx="34" cy="34" r="32" fill="#00FFC4"/>
-          </svg>
+    <!-- CABEÇALHO EM BLOCO ÚNICO / MINI CAPA DE TEMPLATE -->
+    <header class="hero-header">
+      <div class="hero-top-row">
+        <div class="brand">
+          <div class="logo">
+            <!-- SUA FOTO DO LINKEDIN -->
+            <img src="https://media.licdn.com/dms/image/v2/D4D03AQGg0pmvygVbBQ/profile-displayphoto-crop_800_800/B4DaBdg.K6KkAI-/0/1788275320478?e=1796256000&v=beta&t=n4mb4r01yrd7n92awbnvGfLUl7q1KhUK8VcltfeZycw" alt="Diogo Paim" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+            <svg style="display:none;height:34px;width:auto" viewBox="0 0 68 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diogo Paim">
+              <circle cx="34" cy="34" r="32" fill="#00FFC4"/>
+            </svg>
+          </div>
+          <div>
+            <div class="eyebrow">Paim Business Intelligence Consultant</div>
+            <h1>RADAR BSA <span class="muted" style="font-weight: 400; font-size: 17px;">/ Inteligência de Mercado LATAM & Global</span></h1>
+            <div class="muted small" style="margin-top: 3px;">Monitoramento executivo de investimentos, expansão fabril e centros de distribuição</div>
+          </div>
         </div>
-        <div>
-          <div class="eyebrow">Paim Business Intelligence Consultant</div>
-          <h1>RADAR BSA <span class="muted" style="font-weight: 400; font-size: 17px;">/ Inteligência de Mercado LATAM & Global</span></h1>
-          <div class="muted small" style="margin-top: 2px;">Monitoramento executivo de investimentos, expansão fabril e centros de distribuição</div>
-        </div>
-      </div>
-      <div class="header-right">
-        <!-- CARD DO AUTOR COM LOGO DA EMPRESA E SUA FOTO -->
+
+        <!-- CARD DO AUTOR COM LOGOTIPO DA EMPRESA (SEM "BOLHA") -->
         <a
           class="author-card"
           href="https://www.linkedin.com/in/diogopaimg"
@@ -831,7 +847,11 @@
             <span class="author-cta">Conheça o Desenvolvedor ↗</span>
           </span>
         </a>
+      </div>
 
+      <!-- BOTÕES DE AÇÃO INTEGRADOS NO BLOCO DA CAPA -->
+      <div class="hero-actions-row">
+        <div class="muted small">Ferramentas de Exportação, Importação e Varredura de Mercado</div>
         <div class="actions">
           <button class="btn xlsx" id="exportXlsxBtn">📊 Exportar XLSX (Filtrado)</button>
           <button class="btn" id="exportBtn">Exportar Backup</button>
@@ -985,7 +1005,7 @@
 
     <!-- RODAPÉ -->
     <footer class="footer">
-      <div>RADAR BSA v2.5 · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
+      <div>RADAR BSA v2.6 · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
       <a
         class="author-card"
         href="https://www.linkedin.com/in/diogopaimg"
