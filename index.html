@@ -431,6 +431,12 @@
       box-shadow: 0 0 10px rgba(32, 184, 166, 0.2);
     }
 
+    .field:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: var(--bg);
+    }
+
     .sources-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
@@ -682,7 +688,7 @@
     }
 
     .dialog {
-      width: min(780px, 100%);
+      width: min(740px, 100%);
       max-height: 90vh;
       overflow: auto;
       background: var(--panel);
@@ -725,14 +731,6 @@
       grid-column: 1 / -1;
     }
 
-    .ai-enrich-box {
-      background: rgba(32, 184, 166, 0.08);
-      border: 1px dashed var(--brand);
-      border-radius: 10px;
-      padding: 14px;
-      margin-top: 14px;
-    }
-
     .footer {
       color: var(--muted);
       font-size: 11.5px;
@@ -744,6 +742,39 @@
       gap: 14px;
       border-top: 1px solid var(--line);
       margin-top: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .header-right {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .wrap {
+        padding: 14px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .lead {
+        grid-template-columns: 1fr;
+      }
+      .score {
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .formgrid {
+        grid-template-columns: 1fr;
+      }
+      .wide {
+        grid-column: auto;
+      }
     }
   </style>
 </head>
@@ -763,9 +794,42 @@
         </div>
       </div>
       <div class="header-right">
-        <a class="author-card" href="https://www.linkedin.com/in/diogopaimg" target="_blank" rel="noopener noreferrer">
+        <!-- CARD DO AUTOR / DESENVOLVEDOR -->
+        <a
+          class="author-card"
+          href="https://www.linkedin.com/in/diogopaimg"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Abrir perfil profissional de Diogo Paim no LinkedIn"
+        >
           <span class="author-logo-badge">
-            <span style="font-size:11px;font-weight:800;color:var(--brand)">Paim BI</span>
+            <img
+              src="2026.11.17 - PAIM BUSINESS INTELLIGENCE.jpg"
+              alt="Paim Business Intelligence"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+            >
+            <svg style="display:none;height:28px;width:auto" viewBox="0 0 215 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paim Business Intelligence">
+              <defs>
+                <linearGradient id="paimBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#20B8A6"/>
+                  <stop offset="100%" stop-color="#4EA5D9"/>
+                </linearGradient>
+                <linearGradient id="paimGreen" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#4FB286"/>
+                  <stop offset="100%" stop-color="#20B8A6"/>
+                </linearGradient>
+                <linearGradient id="paimOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#F2A93B"/>
+                  <stop offset="100%" stop-color="#E86A5A"/>
+                </linearGradient>
+              </defs>
+              <circle cx="34" cy="34" r="26" fill="#142630"/>
+              <path d="M12 24 C20 8, 46 8, 55 21 C43 17, 25 22, 13 33 C11 30, 11 27, 12 24 Z" fill="url(#paimBlue)"/>
+              <path d="M9 36 C21 25, 42 20, 58 25 C60 30, 60 36, 58 41 C41 34, 22 39, 12 47 C10 44, 9 40, 9 36 Z" fill="url(#paimGreen)"/>
+              <path d="M15 50 C26 41, 44 38, 56 45 C48 59, 25 62, 15 50 Z" fill="url(#paimOrange)"/>
+              <text x="70" y="38" fill="#F3F6F5" font-family="Inter, sans-serif" font-weight="700" font-size="31" letter-spacing="-0.8">Paim</text>
+              <text x="71" y="53" fill="#AABBC3" font-family="Inter, sans-serif" font-weight="500" font-size="11.5" letter-spacing="0.2">business intelligence</text>
+            </svg>
           </span>
           <span class="author-info">
             <span class="author-role">Autoria & Arquitetura BI</span>
@@ -773,15 +837,20 @@
             <span class="author-cta">Conheça o Desenvolvedor ↗</span>
           </span>
         </a>
+
+        <!-- AÇÕES PRINCIPAIS -->
         <div class="actions">
           <button class="btn xlsx" id="exportXlsxBtn">📊 Exportar XLSX (Filtrado)</button>
+          <button class="btn" id="exportBtn">Exportar Backup</button>
+          <button class="btn" id="importBtn">Importar CNPJs</button>
           <button class="btn primary" id="searchBtn">⌕ Pesquisar Novas Fontes</button>
+          <input id="csvFile" type="file" accept=".csv,text/csv" hidden>
         </div>
       </div>
     </header>
 
     <div class="notice">
-      <b>Modo Cronológico & Relevância:</b> Listagem organizada do evento mais recente para o mais antigo (a partir de 01/01/2025). Filtre por prioridade (A, B, C) para focar nas melhores oportunidades.
+      <b>Transparência Operacional Paim BI:</b> Varredura com mais de 15 fontes especializadas de supply chain e intralogística (IMAM, MundoLogística, Logweb, Tecnologística, Logistics Business, Inbound Logistics, FreightWaves, etc.), aplicando paginação profunda, remoção rigorosa de duplicatas e recorte temporal a partir de <b>01/01/2025</b>.
     </div>
 
     <!-- CARDS DE KPIS -->
@@ -789,7 +858,7 @@
       <div class="stat">
         <div class="muted small">Sinais Encontrados</div>
         <div class="n" id="total">0</div>
-        <div class="muted small">No recorte ativo</div>
+        <div class="muted small">Registros no recorte ativo</div>
       </div>
       <div class="stat">
         <div class="muted small">Prioridade A</div>
@@ -808,40 +877,76 @@
       </div>
     </section>
 
-    <!-- BARRA DE FILTROS -->
+    <!-- PAINEL DE FILTROS PROPORCIONAIS -->
     <section class="panel">
       <div class="panel-header">
-        <h2>Filtros e Segmentação Comercial</h2>
+        <h2>Configurar Pesquisa e Filtros por Segmento</h2>
         <span class="period-pill" id="periodBadge">📅 Recorte: Jan/2025 → Hoje</span>
       </div>
+      <div class="muted small">Selecione o segmento e os países para refinar a inteligência comercial de armazenagem e intralogística.</div>
+
+      <div class="countries-bar">
+        <div class="countries" id="countriesCheckboxes">
+          <label class="country active"><input type="checkbox" value="BR" checked> 🇧🇷 Brasil</label>
+          <label class="country active"><input type="checkbox" value="CL" checked> 🇨🇱 Chile</label>
+          <label class="country active"><input type="checkbox" value="AR" checked> 🇦🇷 Argentina</label>
+          <label class="country active"><input type="checkbox" value="PY" checked> 🇵🇾 Paraguai</label>
+          <label class="country active"><input type="checkbox" value="UY" checked> 🇺🇾 Uruguai</label>
+        </div>
+        <div class="actions">
+          <button class="btn xs" type="button" id="selectAllCountriesBtn">Selecionar Todos</button>
+          <button class="btn xs" type="button" id="clearCountriesBtn">Limpar Países</button>
+          <button class="btn xs" type="button" id="resetFiltersBtn">Resetar Filtros</button>
+        </div>
+      </div>
+
       <div class="toolbar">
         <div class="field-group wide-field">
-          <label class="field-label" for="segmentFilter">Segmento Alvo</label>
+          <label class="field-label" for="segmentFilter">Segmento / Categoria Alvo</label>
           <select class="field" id="segmentFilter">
             <option value="">Todos os segmentos</option>
             <option value="Armazenagem e Centros de Distribuição">📦 Armazenagem e Centros de Distribuição</option>
-            <option value="Operador logístico">🏢 Operador logístico / 3PL</option>
-            <option value="Automação e WMS">🤖 Automação e WMS</option>
-            <option value="Condomínios Logísticos">🏗️ Condomínios Logísticos e Parques</option>
-            <option value="Agronegócio">🌾 Agronegócio e Silos</option>
-            <option value="Alimentos e Bebidas">🍷 Alimentos e Bebidas</option>
-            <option value="Autopeças e Metalúrgica">🚗 Autopeças e Metalúrgica</option>
-            <option value="E-commerce e Varejo">🛒 E-commerce e Varejo</option>
+            <option value="Movimentação e Automação de Armazéns (AMR, WMS)">🤖 Automação e WMS (Logistics Business / Tecnologística)</option>
+            <option value="Operadores Logísticos e Fulfillment (3PL)">🏢 Operadores Logísticos e 3PL (MundoLogística / Supply Chain World)</option>
+            <option value="Condomínios Logísticos, Parques e Infraestrutura">🏗️ Condomínios Logísticos e Parques (Logweb)</option>
+            <option value="Transporte, Frete e Comércio Exterior">🚚 Transporte, Portos e Frete (FreightWaves / Modal News)</option>
+            <option value="Indústria Automotiva e Autopeças">🚗 Indústria Automotiva</option>
+            <option value="Agronegócio e Insumos (Silos e Armazéns)">🌾 Agronegócio e Insumos</option>
+            <option value="Alimentos, Bebidas e Varejo">🍷 Alimentos, Bebidas e E-commerce</option>
           </select>
         </div>
 
         <div class="field-group">
-          <label class="field-label" for="priorityFilter">Prioridade (Relevância)</label>
+          <label class="field-label" for="countryFilter">País (Sincronizado)</label>
+          <select class="field" id="countryFilter">
+            <option value="">Todos os países (5)</option>
+            <option value="BR">🇧🇷 Brasil</option>
+            <option value="CL">🇨🇱 Chile</option>
+            <option value="AR">🇦🇷 Argentina</option>
+            <option value="PY">🇵🇾 Paraguai</option>
+            <option value="UY">🇺🇾 Uruguai</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="stateFilter" id="stateFilterLabel">Estado Brasileiro (UF)</label>
+          <select class="field" id="stateFilter" title="Filtrar por Unidade Federativa do Brasil">
+            <option value="">Todos os estados (BR)</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="priorityFilter">Prioridade</label>
           <select class="field" id="priorityFilter">
-            <option value="">Todas as prioridades (A, B, C)</option>
-            <option value="A">Prioridade A (Alta relevância)</option>
-            <option value="B">Prioridade B (Média)</option>
-            <option value="C">Prioridade C (Monitoramento)</option>
+            <option value="">Todas as prioridades</option>
+            <option value="A">Prioridade A</option>
+            <option value="B">Prioridade B</option>
+            <option value="C">Prioridade C</option>
           </select>
         </div>
 
         <div class="field-group">
-          <label class="field-label" for="dateFromFilter">A partir de</label>
+          <label class="field-label" for="dateFromFilter">A partir de (Jan/2025+)</label>
           <input class="field" type="date" id="dateFromFilter" value="2025-01-01" min="2025-01-01">
         </div>
 
@@ -852,25 +957,94 @@
       </div>
     </section>
 
+    <!-- PAINEL DE FONTES EXPANDIDAS (BRASIL & INTERNACIONAIS) -->
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Fontes Conceituadas Monitoradas (Nacionais & Globais)</h2>
+          <div class="muted small">Varredura paginada profunda em portais especializados de intralogística, supply chain, WMS, robótica e transporte.</div>
+        </div>
+        <button class="btn xs" type="button" id="toggleSourcesBtn">Ocultar Fontes</button>
+      </div>
+      <div id="latamSourcesContainer" class="sources-grid"></div>
+    </section>
+
     <!-- LISTA DE EMPRESAS E SINAIS -->
     <section class="panel">
       <div class="panel-header">
-        <h2>Sinais de Mercado (Mais Recentes no Topo)</h2>
-        <span id="apiStatus" class="muted small">Conectado</span>
+        <h2>Empresas e Sinais de Mercado Detectados (Mais Recentes no Topo)</h2>
+        <div class="status" style="display: flex; align-items: center; gap: 8px;">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block;"></span>
+          <span id="apiStatus" class="muted small">Conectando ao backend...</span>
+        </div>
       </div>
       <div id="leads">
         <div class="empty">Carregando registros...</div>
       </div>
     </section>
+
+    <!-- IMPORTAÇÃO DE CNPJS -->
+    <section class="panel">
+      <h2>Importação de Bases de CNPJs (CSV)</h2>
+      <p class="muted small" style="margin-top: 4px;">Importe bases de dados empresariais da Receita Federal ou carteiras autorizadas para cruzamento analítico com os sinais de expansão capturados.</p>
+      <div id="cnpjStatus" class="muted small" style="margin-top: 10px; color: var(--success);">Nenhuma importação realizada nesta sessão.</div>
+    </section>
+
+    <!-- RODAPÉ INSTITUCIONAL COM CARD DE AUTOR -->
+    <footer class="footer">
+      <div>RADAR BSA v2.2 · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
+      <a
+        class="author-card"
+        href="https://www.linkedin.com/in/diogopaimg"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Abrir perfil profissional de Diogo Paim no LinkedIn"
+      >
+        <span class="author-logo-badge">
+          <img
+            src="2026.11.17 - PAIM BUSINESS INTELLIGENCE.jpg"
+            alt="Paim Business Intelligence"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          >
+          <svg style="display:none;height:28px;width:auto" viewBox="0 0 215 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paim Business Intelligence">
+            <defs>
+              <linearGradient id="paimBlueFoot" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#20B8A6"/>
+                <stop offset="100%" stop-color="#4EA5D9"/>
+              </linearGradient>
+              <linearGradient id="paimGreenFoot" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#4FB286"/>
+                <stop offset="100%" stop-color="#20B8A6"/>
+              </linearGradient>
+              <linearGradient id="paimOrangeFoot" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#F2A93B"/>
+                <stop offset="100%" stop-color="#E86A5A"/>
+              </linearGradient>
+            </defs>
+            <circle cx="34" cy="34" r="26" fill="#142630"/>
+            <path d="M12 24 C20 8, 46 8, 55 21 C43 17, 25 22, 13 33 C11 30, 11 27, 12 24 Z" fill="url(#paimBlueFoot)"/>
+            <path d="M9 36 C21 25, 42 20, 58 25 C60 30, 60 36, 58 41 C41 34, 22 39, 12 47 C10 44, 9 40, 9 36 Z" fill="url(#paimGreenFoot)"/>
+            <path d="M15 50 C26 41, 44 38, 56 45 C48 59, 25 62, 15 50 Z" fill="url(#paimOrangeFoot)"/>
+            <text x="70" y="38" fill="#F3F6F5" font-family="Inter, sans-serif" font-weight="700" font-size="31" letter-spacing="-0.8">Paim</text>
+            <text x="71" y="53" fill="#AABBC3" font-family="Inter, sans-serif" font-weight="500" font-size="11.5" letter-spacing="0.2">business intelligence</text>
+          </svg>
+        </span>
+        <span class="author-info">
+          <span class="author-role">Desenvolvido por</span>
+          <span class="author-name">Diogo Paim — Paim Business Intelligence</span>
+          <span class="author-cta">Conheça o Desenvolvedor ↗</span>
+        </span>
+      </a>
+    </footer>
   </main>
 
   <div class="toast" id="toast"></div>
 
-  <!-- MODAL DE FICHA -->
+  <!-- MODAL DE EDIÇÃO DE LEAD -->
   <div class="modal" id="modal">
     <div class="dialog">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <h2>Ficha Executiva & Decisor</h2>
+        <h2 style="font-size: 18px; color: var(--txt);">Ficha Executiva da Oportunidade</h2>
         <button class="btn xs" id="closeModal">Fechar ✕</button>
       </div>
       <form id="leadForm">
@@ -878,18 +1052,30 @@
         <div class="formgrid">
           <label>Empresa<input class="field" id="company"></label>
           <label>Site Oficial<input class="field" id="website" placeholder="https://"></label>
-          <label>Nome do Decisor<input class="field" id="contactName"></label>
-          <label>Cargo<input class="field" id="contactRole"></label>
-          <div class="ai-enrich-box wide">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <span style="font-weight: 700; color: var(--brand); font-size: 13px;">⚡ Sugestão de Decisor (IA)</span>
-              <button class="btn xs primary" type="button" id="triggerAiEnrichment">Atribuir Cargo Padrão</button>
-            </div>
-            <p class="muted small" id="aiSuggestionText">Diretor de Supply Chain, Head de Logística ou Gerente de Operações.</p>
-          </div>
-          <label class="wide">Notas<textarea class="field" id="notes"></textarea></label>
+          <label>Endereço / Local<input class="field" id="address"></label>
+          <label>Nome do Contato<input class="field" id="contactName"></label>
+          <label>Cargo / Área<input class="field" id="contactRole"></label>
+          <label>E-mail Corporativo<input class="field" id="email" type="email"></label>
+          <label>Telefone Institucional<input class="field" id="phone"></label>
+          <label>Status Comercial
+            <select class="field" id="leadStatus">
+              <option>Novo</option>
+              <option>Em pesquisa</option>
+              <option>Contato identificado</option>
+              <option>Abordado</option>
+              <option>Qualificado</option>
+              <option>Descartado</option>
+            </select>
+          </label>
+          <label class="wide">Notas de Qualificação & Hipótese de Armazenagem
+            <textarea class="field" id="notes" placeholder="Projeto, evidência, necessidade de porta-paletes/automação, próximo passo..."></textarea>
+          </label>
+          <label class="wide" style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+            <input type="checkbox" id="verified" style="width:16px; height:16px; accent-color:var(--success);"> Dados de contato conferidos em fonte pública
+          </label>
         </div>
         <div class="actions" style="margin-top:20px; justify-content:flex-end;">
+          <button class="btn" type="button" id="researchCompany">Pesquisar Empresa na Web</button>
           <button class="btn primary" type="submit">Salvar Informações</button>
         </div>
       </form>
@@ -898,33 +1084,331 @@
 
   <script>
     const API_BASE = 'https://bant-app-paim.onrender.com';
+    const ALL_COUNTRIES = ['BR', 'CL', 'AR', 'PY', 'UY'];
     const MIN_DATE_STR = '2025-01-01';
+
+    const countryNames = {
+      BR: 'Brasil',
+      CL: 'Chile',
+      AR: 'Argentina',
+      PY: 'Paraguai',
+      UY: 'Uruguai'
+    };
+
+    const countryFlags = {
+      BR: '🇧🇷',
+      CL: '🇨🇱',
+      AR: '🇦🇷',
+      PY: '🇵🇾',
+      UY: '🇺🇾'
+    };
+
+    const BRAZIL_STATES = [
+      { uf: 'AC', name: 'Acre', keywords: ['acre', 'rio branco'] },
+      { uf: 'AL', name: 'Alagoas', keywords: ['alagoas', 'maceio'] },
+      { uf: 'AP', name: 'Amapa', label: 'Amapá', keywords: ['amapa', 'macapa'] },
+      { uf: 'AM', name: 'Amazonas', keywords: ['amazonas', 'manaus', 'polo industrial de manaus'] },
+      { uf: 'BA', name: 'Bahia', keywords: ['bahia', 'salvador', 'feira de santana', 'camacari', 'lauro de freitas', 'simoes filho'] },
+      { uf: 'CE', name: 'Ceara', label: 'Ceará', keywords: ['ceara', 'fortaleza', 'itaitinga', 'maracanau', 'pecem', 'juazeiro do norte'] },
+      { uf: 'DF', name: 'Distrito Federal', keywords: ['distrito federal', 'brasilia', 'santa maria df', 'gama'] },
+      { uf: 'ES', name: 'Espirito Santo', label: 'Espírito Santo', keywords: ['espirito santo', 'vitoria', 'viana', 'serra es', 'cariacica', 'vila velha', 'linhares'] },
+      { uf: 'GO', name: 'Goias', label: 'Goiás', keywords: ['goias', 'goiania', 'anapolis', 'aparecida de goiania', 'hidrolandia', 'rio verde'] },
+      { uf: 'MA', name: 'Maranhao', label: 'Maranhão', keywords: ['maranhao', 'sao luis', 'imperatriz', 'itaqui'] },
+      { uf: 'MT', name: 'Mato Grosso', keywords: ['mato grosso', 'cuiaba', 'varzea grande', 'rondonopolis', 'sinop', 'sorriso'] },
+      { uf: 'MS', name: 'Mato Grosso do Sul', keywords: ['mato grosso do sul', 'campo grande', 'tres lagoas', 'dourados'] },
+      { uf: 'MG', name: 'Minas Gerais', keywords: ['minas gerais', 'belo horizonte', 'betim', 'contagem', 'uberlandia', 'uberaba', 'juiz de fora', 'extrema', 'pouso alegre', 'sete lagoas', 'ipatinga'] },
+      { uf: 'PA', name: 'Para', label: 'Pará', keywords: ['para', 'belem', 'ananindeua', 'maraba', 'parauapebas', 'barcarena'] },
+      { uf: 'PB', name: 'Paraiba', label: 'Paraíba', keywords: ['paraiba', 'joao pessoa', 'campina grande', 'bayeux', 'cabedelo'] },
+      { uf: 'PR', name: 'Parana', label: 'Paraná', keywords: ['parana', 'curitiba', 'londrina', 'maringa', 'cascavel', 'foz do iguacu', 'sao jose dos pinhais', 'paranagua', 'ponta grossa'] },
+      { uf: 'PE', name: 'Pernambuco', keywords: ['pernambuco', 'recife', 'cabo de santo agostinho', 'suape', 'jaboatao', 'caruaru', 'petrolina', 'goiana'] },
+      { uf: 'PI', name: 'Piaui', label: 'Piauí', keywords: ['piaui', 'teresina', 'parnaiba'] },
+      { uf: 'RJ', name: 'Rio de Janeiro', keywords: ['rio de janeiro', 'sao joao de meriti', 'duque de caxias', 'nova iguacu', 'macae', 'volta redonda', 'resende', 'itaguai', 'niteroi', 'sao goncalo'] },
+      { uf: 'RN', name: 'Rio Grande do Norte', keywords: ['rio grande do norte', 'natal', 'mossoro', 'parnamirim'] },
+      { uf: 'RS', name: 'Rio Grande do Sul', keywords: ['rio grande do sul', 'porto alegre', 'bento goncalves', 'caxias do sul', 'canoas', 'nova santa rita', 'gravatai', 'rio grande', 'passo fundo', 'pelotas'] },
+      { uf: 'RO', name: 'Rondonia', label: 'Rondônia', keywords: ['rondonia', 'porto velho', 'ji-parana'] },
+      { uf: 'RR', name: 'Roraima', keywords: ['roraima', 'boa vista'] },
+      { uf: 'SC', name: 'Santa Catarina', keywords: ['santa catarina', 'florianopolis', 'joinville', 'itajai', 'navegantes', 'blumenau', 'sao jose sc', 'chapeco', 'jaragua do sul', 'criciuma'] },
+      { uf: 'SP', name: 'Sao Paulo', label: 'São Paulo', keywords: ['sao paulo', 'cajamar', 'campinas', 'jundiai', 'guarulhos', 'santos', 'ribeirao preto', 'sorocaba', 'sao jose dos campos', 'taubate', 'embu das artes', 'barueri', 'osasco', 'sao bernardo', 'santo andre', 'indaiatuba', 'piracicaba', 'bauru', 'sao jose do rio preto'] },
+      { uf: 'SE', name: 'Sergipe', keywords: ['sergipe', 'aracaju', 'nossa senhora do socorro'] },
+      { uf: 'TO', name: 'Tocantins', keywords: ['tocantins', 'palmas', 'araguaina'] }
+    ];
+
+    const LATAM_SOURCES = {
+      BR: [
+        { name: 'Revista Logística & Supply Chain (IMAM)', sector: 'Armazenagem, Movimentação & Operadores', url: 'https://revistalogistica.com.br' },
+        { name: 'MundoLogística', sector: 'Armazenagem, Distribuição & E-commerce', url: 'https://revistamundologistica.com.br' },
+        { name: 'Logweb', sector: 'Supply Chain, Condomínios Logísticos & Portos', url: 'https://www.logweb.com.br' },
+        { name: 'Tecnologística (Painel Logístico)', sector: 'Armazenagem & Automação', url: 'https://www.tecnologistica.com.br' },
+        { name: 'Modal News', sector: 'Transporte, Comércio Exterior & Tecnologia', url: 'https://modalnews.com.br' },
+        { name: 'Valor Econômico', sector: 'Economia & Indústria', url: 'https://valor.globo.com' },
+        { name: 'InfoMoney', sector: 'Corporativo & Expansão', url: 'https://www.infomoney.com.br' }
+      ],
+      CL: [
+        { name: 'Diario Financiero', sector: 'Inversiones & Empresas', url: 'https://www.df.cl' },
+        { name: 'La Tercera Pulso', sector: 'Negocios & Industria', url: 'https://www.latercera.com/canal/pulso/' },
+        { name: 'PortalPortuario', sector: 'Puertos & Comercio Exterior', url: 'https://portalportuario.cl' },
+        { name: 'MundoMarítimo', sector: 'Logística & Cadena de Suministro', url: 'https://www.mundomaritimo.cl' }
+      ],
+      AR: [
+        { name: 'El Cronista', sector: 'Economía & Negocios', url: 'https://www.cronista.com' },
+        { name: 'Ámbito Financiero', sector: 'Industria & Inversiones', url: 'https://www.ambito.com' },
+        { name: 'Énfasis Logística', sector: 'Almacenamiento & Supply Chain', url: 'https://www.enfasis.com/logistica/' }
+      ],
+      PY: [
+        { name: 'Última Hora', sector: 'Economía & Negocios', url: 'https://www.ultimahora.com/economia' },
+        { name: 'ABC Color Economía', sector: 'Industria & Maquila', url: 'https://www.abc.com.py/economia/' },
+        { name: '5Días', sector: 'Finanzas, Logística & Comercio', url: 'https://www.5dias.com.py' }
+      ],
+      UY: [
+        { name: 'El Observador', sector: 'Economía & Empresas', url: 'https://www.elobservador.com.uy/economia' },
+        { name: 'El País Uruguay Negocios', sector: 'Inversiones & Zonas Francas', url: 'https://www.elpais.com.uy/negocios' },
+        { name: 'Transporte Carretero', sector: 'Logística & Carga Uruguay', url: 'https://transportecarretero.com.uy' }
+      ]
+    };
+
+    const GLOBAL_SOURCES = [
+      { name: 'Logistics Insights Magazine', sector: 'Logística Global & Armazenagem', url: 'https://logisticsinsightsmag.com' },
+      { name: 'Supply Chain World', sector: '3PL, Fulfillment & Materiais', url: 'https://scw-mag.com' },
+      { name: 'Logistics Business', sector: 'Automação de Armazéns, AMRs & Fulfillment', url: 'https://logisticsbusiness.com' },
+      { name: 'Inbound Logistics', sector: 'WMS, Armazenagem & 3PL', url: 'https://www.inboundlogistics.com' },
+      { name: 'FreightWaves', sector: 'Transporte, Frete & Portos', url: 'https://www.freightwaves.com' },
+      { name: 'Supply Chain Digital', sector: 'IA, Tecnologia & Supply Chain', url: 'https://www.supplychaindigital.com' }
+    ];
+
     const $ = id => document.getElementById(id);
     let allLeadsCache = [];
     let filteredLeadsCache = [];
+    let toastTimer = null;
 
-    function showToast(msg) {
+    function showToast(msg, duration = 4500) {
       const el = $('toast');
       el.textContent = msg;
       el.classList.add('show');
-      setTimeout(() => el.classList.remove('show'), 4000);
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), duration);
+    }
+
+    function normalizeText(str = '') {
+      return String(str)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+    }
+
+    function escapeHtml(s = '') {
+      return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[c]));
     }
 
     function formatDate(v) {
       if (!v) return '—';
       const d = new Date(v);
-      return isNaN(d) ? '—' : d.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+      return isNaN(d) ? '—' : d.toLocaleString('pt-BR', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+      });
+    }
+
+    function googleSearch(q) {
+      return 'https://www.google.com/search?q=' + encodeURIComponent(q);
+    }
+
+    function detectBrazilianState(item) {
+      if (!item || (item.country && item.country !== 'BR')) return '';
+
+      const explicitCandidates = [item.state, item.uf, item.region, item.address]
+        .filter(Boolean)
+        .map(v => String(v).trim());
+
+      for (const raw of explicitCandidates) {
+        const upper = raw.toUpperCase();
+        const exact = BRAZIL_STATES.find(s => s.uf === upper);
+        if (exact) return exact.uf;
+
+        const ufToken = upper.match(/(?:^|[\s,\-\/\(\)])([A-Z]{2})(?:$|[\s,\-\/\)\.])/)?.[1];
+        if (ufToken && BRAZIL_STATES.some(s => s.uf === ufToken)) {
+          return ufToken;
+        }
+      }
+
+      const rawCombined = `${item.title || ''} ${item.description || ''} ${item.source || ''} ${item.address || ''}`;
+      const explicitSuffix = rawCombined.match(/(?:\/|\s-\s|\()([A-Z]{2})(?:\)|$|\s|,|\.)/)?.[1];
+      if (explicitSuffix && BRAZIL_STATES.some(s => s.uf === explicitSuffix)) {
+        return explicitSuffix;
+      }
+
+      const normBlob = normalizeText(rawCombined);
+      for (const st of BRAZIL_STATES) {
+        for (const kw of st.keywords) {
+          const rx = new RegExp(`(?:^|[^a-z0-9])${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:$|[^a-z0-9])`);
+          if (rx.test(normBlob)) {
+            return st.uf;
+          }
+        }
+      }
+
+      return '';
+    }
+
+    function getStateDisplayName(uf) {
+      const found = BRAZIL_STATES.find(s => s.uf === uf);
+      return found ? `${found.uf} — ${found.label || found.name}` : uf;
+    }
+
+    function getCheckedCountries() {
+      return [...document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]:checked')].map(el => el.value);
+    }
+
+    function updateCountryLabelsVisual() {
+      document.querySelectorAll('#countriesCheckboxes .country').forEach(label => {
+        const cb = label.querySelector('input[type="checkbox"]');
+        label.classList.toggle('active', cb.checked);
+      });
+    }
+
+    function updateStateFilterAvailability(checkedCountries) {
+      const stateSelect = $('stateFilter');
+      const stateLabel = $('stateFilterLabel');
+      const brActive = checkedCountries.includes('BR');
+
+      if (!brActive) {
+        stateSelect.value = '';
+        stateSelect.disabled = true;
+        stateLabel.textContent = 'Estado BR (Disponível com Brasil ativo)';
+      } else {
+        stateSelect.disabled = false;
+        stateLabel.textContent = 'Estado Brasileiro (UF)';
+      }
+    }
+
+    function renderLatamSources(activeCountries) {
+      const container = $('latamSourcesContainer');
+      let html = ALL_COUNTRIES.map(code => {
+        const isActive = activeCountries.includes(code);
+        const sources = LATAM_SOURCES[code] || [];
+        return `
+          <div class="source-card ${isActive ? 'active-country' : 'dimmed'}">
+            <div class="source-card-head">
+              <span>${countryFlags[code]} ${countryNames[code]} (${code})</span>
+              <span class="tag ${isActive ? 'a' : ''}">${isActive ? 'Ativo' : 'Inativo'}</span>
+            </div>
+            <div class="source-list">
+              ${sources.map(src => `
+                <a class="source-chip" href="${escapeHtml(src.url)}" target="_blank" rel="noopener" title="${escapeHtml(src.sector)}">
+                  ${escapeHtml(src.name)} ↗
+                </a>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      html += `
+        <div class="source-card active-country">
+          <div class="source-card-head">
+            <span>🌐 Fontes Globais (Supply Chain & Tech)</span>
+            <span class="tag a">Ativo</span>
+          </div>
+          <div class="source-list">
+            ${GLOBAL_SOURCES.map(src => `
+              <a class="source-chip" href="${escapeHtml(src.url)}" target="_blank" rel="noopener" title="${escapeHtml(src.sector)}">
+                ${escapeHtml(src.name)} ↗
+              </a>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function syncFromCheckboxes(triggerFilter = true) {
+      const checked = getCheckedCountries();
+      const select = $('countryFilter');
+      const allOption = select.querySelector('option[value=""]');
+
+      if (checked.length === 1) {
+        select.value = checked[0];
+        allOption.textContent = `Todos os países (${ALL_COUNTRIES.length})`;
+      } else if (checked.length === ALL_COUNTRIES.length) {
+        select.value = '';
+        allOption.textContent = `Todos os países (${ALL_COUNTRIES.length})`;
+      } else if (checked.length === 0) {
+        select.value = '';
+        allOption.textContent = 'Nenhum país marcado';
+      } else {
+        select.value = '';
+        allOption.textContent = `Países marcados (${checked.length})`;
+      }
+
+      updateCountryLabelsVisual();
+      updateStateFilterAvailability(checked);
+      renderLatamSources(checked);
+
+      if (triggerFilter) {
+        applyFilters(false);
+      }
+    }
+
+    function syncFromCountrySelect(triggerFilter = true) {
+      const val = $('countryFilter').value;
+      const checkboxes = [...document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]')];
+
+      if (val) {
+        checkboxes.forEach(cb => {
+          cb.checked = cb.value === val;
+        });
+      } else {
+        checkboxes.forEach(cb => {
+          cb.checked = true;
+        });
+      }
+
+      syncFromCheckboxes(triggerFilter);
+    }
+
+    function populateStatesDropdown() {
+      const select = $('stateFilter');
+      BRAZIL_STATES.forEach(st => {
+        const opt = document.createElement('option');
+        opt.value = st.uf;
+        opt.textContent = `${st.uf} — ${st.label || st.name}`;
+        select.appendChild(opt);
+      });
+    }
+
+    function updatePeriodBadge() {
+      const rawDate = $('dateFromFilter').value || MIN_DATE_STR;
+      const safeDate = rawDate < MIN_DATE_STR ? MIN_DATE_STR : rawDate;
+      $('dateFromFilter').value = safeDate;
+      const [y, m, d] = safeDate.split('-');
+      const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      const label = safeDate === MIN_DATE_STR
+        ? 'Jan/2025 → Hoje'
+        : `${d}/${monthNames[Number(m) - 1]}/${y} → Hoje`;
+      $('periodBadge').textContent = `📅 Recorte: ${label}`;
     }
 
     async function api(url, opts = {}) {
-      const r = await fetch(API_BASE + url, { headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) }, ...opts });
+      const r = await fetch(API_BASE + url, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(opts.headers || {})
+        },
+        ...opts
+      });
       const j = await r.json();
-      if (!r.ok) throw new Error(j.error || 'Erro');
+      if (!r.ok) throw new Error(j.error || 'Falha na requisição');
       return j;
     }
 
     function render(rows) {
-      // ORDENAÇÃO CRONOLÓGICA DECRESCENTE (Mais recentes primeiro)
+      // CONTROLE DE ORDEM CRONOLÓGICA DECRESCENTE (Mais recentes no topo, mais antigas descendo)
       rows.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0));
 
       filteredLeadsCache = rows;
@@ -933,33 +1417,59 @@
       $('companies').textContent = rows.filter(x => x.company).length;
 
       if (!rows.length) {
-        $('leads').innerHTML = '<div class="empty">Nenhum registro encontrado.</div>';
+        $('leads').innerHTML = '<div class="empty">Nenhum registro encontrado no recorte atual (Jan/2025 em diante e filtros selecionados). Ajuste os filtros ou clique em <b>Pesquisar Novas Fontes</b>.</div>';
         return;
       }
 
       $('leads').innerHTML = rows.map(x => {
-        const companyName = x.company || x.title || 'Empresa';
-        const linkedInUrl = `https://www.google.com/search?q=` + encodeURIComponent(`site:linkedin.com/in "${companyName}" (logistica OR supply chain OR diretor)`);
+        const detectedUf = x.detectedState || detectBrazilianState(x);
         
+        let decisorHtml = '';
+        const hasContact = x.contactName || x.contactRole || x.phone || x.email;
+        
+        const companyName = x.company || x.title || 'Empresa';
+        const linkedInQuery = x.contactName 
+          ? `${x.contactName} ${companyName} LinkedIn` 
+          : `site:linkedin.com/in "${companyName}" (logistica OR supply chain OR diretor OR gerente)`;
+        const linkedInUrl = `https://www.google.com/search?q=` + encodeURIComponent(linkedInQuery);
+
+        if (hasContact || companyName) {
+          decisorHtml = `
+            <div class="decisor-box">
+              ${x.contactName ? `<span class="decisor-item">👤 <strong>Decisor:</strong> ${escapeHtml(x.contactName)}</span>` : ''}
+              ${x.contactRole ? `<span class="decisor-item">💼 <strong>Cargo:</strong> ${escapeHtml(x.contactRole)}</span>` : ''}
+              <span class="decisor-item">🔗 <a href="${escapeHtml(linkedInUrl)}" target="_blank" rel="noopener">Buscar Decisores no LinkedIn ↗</a></span>
+              ${x.phone ? `<span class="decisor-item">📞 <strong>Tel:</strong> <a href="tel:${escapeHtml(x.phone)}">${escapeHtml(x.phone)}</a></span>` : ''}
+            </div>
+          `;
+        }
+
         return `
           <article class="lead">
             <div>
-              <h3>${x.company || 'Empresa'} — ${x.title}</h3>
-              <p>Fonte: ${x.source || 'Pública'} · Publicado: ${formatDate(x.publishedAt)}</p>
-              <p>${(x.description || '').slice(0, 240)}...</p>
+              <h3>${escapeHtml(x.company || 'Empresa a identificar')} — ${escapeHtml(x.title)}</h3>
+              <p>${countryFlags[x.country] || ''} ${escapeHtml(x.countryName || countryNames[x.country] || x.country)}${detectedUf ? ` (${escapeHtml(detectedUf)})` : ''} · ${escapeHtml(x.source || 'Fonte pública')} · Publicado: ${formatDate(x.publishedAt)}</p>
+              <p>${escapeHtml((x.description || '').replace(/<[^>]*>/g, ' ').slice(0, 260))}</p>
+              
+              ${decisorHtml}
+
               <div class="leadmeta">
-                <span class="tag ${String(x.priority || 'C').toLowerCase()}">Prioridade ${x.priority || 'C'}</span>
+                <span class="tag ${String(x.priority || 'C').toLowerCase()}">Prioridade ${escapeHtml(x.priority || 'C')}</span>
                 <span class="tag">Score ${x.score ?? 0}/20</span>
-                <span class="tag">${x.status || 'Novo'}</span>
+                ${detectedUf ? `<span class="tag uf">📍 ${escapeHtml(getStateDisplayName(detectedUf))}</span>` : ''}
+                <span class="tag">${escapeHtml(x.status || 'Novo')}</span>
+                ${x.verified ? '<span class="tag a">Contato verificado</span>' : ''}
               </div>
               <div class="links">
-                <a href="${x.url}" target="_blank" rel="noopener">Abrir Notícia ↗</a>
-                <a href="${linkedInUrl}" target="_blank" rel="noopener">Buscar Decisores no LinkedIn ↗</a>
+                <a href="${escapeHtml(x.url)}" target="_blank" rel="noopener">Abrir notícia ↗</a>
+                <a href="${googleSearch((x.company || x.title) + ' site oficial contato')}" target="_blank" rel="noopener">Buscar site/contato ↗</a>
+                <a href="${linkedInUrl}" target="_blank" rel="noopener">Buscar decisores no LinkedIn ↗</a>
               </div>
             </div>
             <div class="score">
               <div class="muted small">Score BI</div>
               <strong>${x.score ?? 0}</strong>
+              <div class="muted small">/ 20 pts</div>
               <button class="btn xs" style="margin-top:10px; width:100%; justify-content:center;" onclick="editLead('${x.id}')">Abrir Ficha</button>
             </div>
           </article>
@@ -967,58 +1477,366 @@
       }).join('');
     }
 
-    function applyFilters() {
-      const seg = $('segmentFilter').value;
-      const pri = $('priorityFilter').value;
-      const dateFrom = $('dateFromFilter').value || MIN_DATE_STR;
-      const minTs = new Date(dateFrom + 'T00:00:00').getTime();
+    function filterRecordsClientSide(records) {
+      const checkedCountries = getCheckedCountries();
+      const selectedState = $('stateFilter').value;
+      const selectedSegment = $('segmentFilter').value;
+      const priority = $('priorityFilter').value;
+      const dateFromStr = $('dateFromFilter').value >= MIN_DATE_STR ? $('dateFromFilter').value : MIN_DATE_STR;
+      const minTimestamp = new Date(dateFromStr + 'T00:00:00').getTime();
 
-      const filtered = allLeadsCache.filter(item => {
-        if (item.publishedAt && new Date(item.publishedAt).getTime() < minTs) return false;
-        if (pri && item.priority !== pri) return false;
-        if (seg && !JSON.stringify(item).toLowerCase().includes(seg.toLowerCase())) return false;
+      return records.filter(item => {
+        if (checkedCountries.length === 0) return false;
+        if (item.country && !checkedCountries.includes(item.country)) return false;
+
+        if (item.publishedAt) {
+          const pubTs = new Date(item.publishedAt).getTime();
+          if (!isNaN(pubTs) && pubTs < minTimestamp) return false;
+        }
+
+        const uf = item.detectedState || detectBrazilianState(item);
+        if (selectedState && checkedCountries.includes('BR')) {
+          if (item.country !== 'BR' || uf !== selectedState) return false;
+        }
+
+        if (priority && item.priority !== priority) return false;
+
+        if (selectedSegment) {
+          const haystack = normalizeText([
+            item.company,
+            item.title,
+            item.description,
+            item.source,
+            item.notes
+          ].filter(Boolean).join(' '));
+
+          const segNorm = normalizeText(selectedSegment);
+          let matches = false;
+          if (segNorm.includes('armazenagem') || segNorm.includes('distribuicao')) {
+            matches = haystack.includes('centro') || haystack.includes('armazem') || haystack.includes('galpao') || haystack.includes('logistica') || haystack.includes('armazenagem');
+          } else if (segNorm.includes('automotiva')) {
+            matches = haystack.includes('automotiva') || haystack.includes('veiculos') || haystack.includes('montadora') || haystack.includes('autopecas');
+          } else if (segNorm.includes('agronegocio')) {
+            matches = haystack.includes('agro') || haystack.includes('graos') || haystack.includes('silo') || haystack.includes('cooperativa') || haystack.includes('fertilizantes');
+          } else if (segNorm.includes('varejo')) {
+            matches = haystack.includes('varejo') || haystack.includes('e-commerce') || haystack.includes('atacarejo') || haystack.includes('supermercado');
+          } else if (segNorm.includes('alimentos')) {
+            matches = haystack.includes('alimentos') || haystack.includes('bebidas') || haystack.includes('frigrorifico') || haystack.includes('cervejaria');
+          } else if (segNorm.includes('automacao') || segNorm.includes('wms')) {
+            matches = haystack.includes('automacao') || haystack.includes('wms') || haystack.includes('amr') || haystack.includes('robotica') || haystack.includes('software');
+          } else if (segNorm.includes('operadores') || haystack.includes('3pl')) {
+            matches = haystack.includes('operador logistico') || haystack.includes('fulfillment') || haystack.includes('3pl') || haystack.includes('armazem geral');
+          } else if (segNorm.includes('condominios')) {
+            matches = haystack.includes('condominio logistico') || haystack.includes('parque industrial') || haystack.includes('multimodal');
+          } else if (segNorm.includes('transporte')) {
+            matches = haystack.includes('transporte') || haystack.includes('frete') || haystack.includes('porto') || haystack.includes('frota');
+          } else {
+            matches = haystack.includes(segNorm);
+          }
+
+          if (!matches) return false;
+        }
+
         return true;
       });
-      render(filtered);
+    }
+
+    async function applyFilters(fetchFromBackend = true) {
+      updatePeriodBadge();
+      const checkedCountries = getCheckedCountries();
+      const selectedCountry = $('countryFilter').value;
+      const selectedState = $('stateFilter').value;
+      const selectedSegment = $('segmentFilter').value;
+      const priority = $('priorityFilter').value;
+      const dateFrom = $('dateFromFilter').value >= MIN_DATE_STR ? $('dateFromFilter').value : MIN_DATE_STR;
+
+      if (fetchFromBackend) {
+        try {
+          const params = new URLSearchParams();
+          if (selectedSegment) params.set('q', selectedSegment);
+          if (priority) params.set('priority', priority);
+          if (selectedCountry) params.set('country', selectedCountry);
+          if (selectedState && checkedCountries.includes('BR')) params.set('state', selectedState);
+          params.set('dateFrom', dateFrom);
+
+          const data = await api('/api/leads?' + params.toString());
+          const enriched = (data.leads || []).map(item => ({
+            ...item,
+            detectedState: detectBrazilianState(item)
+          }));
+          render(filterRecordsClientSide(enriched));
+          return;
+        } catch (_) {
+          // Fallback para cache local
+        }
+      }
+
+      render(filterRecordsClientSide(allLeadsCache));
     }
 
     async function load() {
       try {
-        const res = await api('/api/leads');
-        allLeadsCache = res.leads || [];
-        render(allLeadsCache);
+        const [l, s] = await Promise.all([api('/api/leads'), api('/api/status')]);
+        allLeadsCache = (l.leads || []).map(item => ({
+          ...item,
+          detectedState: detectBrazilianState(item)
+        }));
+        $('apiStatus').textContent = 'Backend conectado · ' + (s.storage || 'local');
+        $('lastRun').textContent = s.lastRun ? formatDate(s.lastRun.finishedAt) : '—';
+        $('lastRunDetail').textContent = s.lastRun
+          ? `${s.lastRun.added} novos · ${s.lastRun.queriesRun} consultas`
+          : 'Aguardando primeira varredura';
+        render(filterRecordsClientSide(allLeadsCache));
       } catch (e) {
-        $('leads').innerHTML = '<div class="empty">Erro ao conectar ao servidor backend.</div>';
+        $('apiStatus').textContent = 'Backend em cold start / indisponível';
+        $('leads').innerHTML = '<div class="empty">Não foi possível conectar ao servidor Render. Clique em <b>Pesquisar Novas Fontes</b> ou aguarde alguns segundos.</div>';
       }
     }
 
+    function exportFilteredToXLSX() {
+      if (typeof XLSX === 'undefined') {
+        showToast('Biblioteca XLSX carregando. Tente novamente em instantes.');
+        return;
+      }
+
+      if (!filteredLeadsCache.length) {
+        showToast('Não há registros filtrados para exportação no momento.');
+        return;
+      }
+
+      const checkedCountries = getCheckedCountries();
+      const selectedState = $('stateFilter').value;
+      const selectedSegment = $('segmentFilter').value;
+      const priority = $('priorityFilter').value;
+      const dateFrom = $('dateFromFilter').value || MIN_DATE_STR;
+
+      const rowsData = filteredLeadsCache.map(item => {
+        const uf = item.detectedState || detectBrazilianState(item);
+        return {
+          'ID': item.id || '',
+          'País': item.countryName || countryNames[item.country] || item.country || '',
+          'Código País': item.country || '',
+          'Estado / UF': uf ? getStateDisplayName(uf) : (item.country === 'BR' ? 'Nacional / Não especificado' : 'N/A'),
+          'Empresa': item.company || 'A identificar',
+          'Título da Notícia': item.title || '',
+          'Descrição / Evidência': (item.description || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(),
+          'Fonte': item.source || 'Fonte pública',
+          'Data de Publicação': formatDate(item.publishedAt),
+          'Prioridade': item.priority || 'C',
+          'Score (/20)': Number(item.score ?? 0),
+          'Status CRM': item.status || 'Novo',
+          'Contato Verificado': item.verified ? 'Sim' : 'Não',
+          'Nome Contato (Decisor)': item.contactName || '',
+          'Cargo': item.contactRole || '',
+          'E-mail': item.email || '',
+          'Telefone': item.phone || '',
+          'Site Oficial': item.website || '',
+          'Endereço': item.address || '',
+          'Notas de Qualificação': item.notes || '',
+          'URL da Notícia': item.url || ''
+        };
+      });
+
+      const byCountrySummary = ALL_COUNTRIES.map(code => ({
+        'Critério / Indicador': `Registros — ${countryNames[code]} (${code})`,
+        'Valor': filteredLeadsCache.filter(x => x.country === code).length
+      }));
+
+      const summaryData = [
+        { 'Critério / Indicador': 'Sistema', 'Valor': 'RADAR BSA — Paim Business Intelligence Consultant' },
+        { 'Critério / Indicador': 'Data / Hora da Extração', 'Valor': new Date().toLocaleString('pt-BR') },
+        { 'Critério / Indicador': 'Países Selecionados', 'Valor': checkedCountries.length ? checkedCountries.map(c => `${countryNames[c]} (${c})`).join(', ') : 'Nenhum' },
+        { 'Critério / Indicador': 'Estado / UF Filtrado (BR)', 'Valor': selectedState ? getStateDisplayName(selectedState) : 'Todos os estados' },
+        { 'Critério / Indicador': 'Segmento Filtrado', 'Valor': selectedSegment || 'Todos os segmentos' },
+        { 'Critério / Indicador': 'Prioridade Filtrada', 'Valor': priority || 'Todas (A, B, C)' },
+        { 'Critério / Indicador': 'Recorte Temporal Inicial', 'Valor': `${dateFrom} (>= Jan/2025)` },
+        { 'Critério / Indicador': 'Total de Registros Exportados', 'Valor': filteredLeadsCache.length },
+        { 'Critério / Indicador': 'Prioridade A', 'Valor': filteredLeadsCache.filter(x => x.priority === 'A').length },
+        { 'Critério / Indicador': 'Prioridade B', 'Valor': filteredLeadsCache.filter(x => x.priority === 'B').length },
+        { 'Critério / Indicador': 'Prioridade C', 'Valor': filteredLeadsCache.filter(x => x.priority === 'C').length },
+        ...byCountrySummary
+      ];
+
+      const wb = XLSX.utils.book_new();
+      const wsLeads = XLSX.utils.json_to_sheet(rowsData);
+      const wsSummary = XLSX.utils.json_to_sheet(summaryData);
+
+      wsLeads['!cols'] = [
+        { wch: 12 }, { wch: 14 }, { wch: 12 }, { wch: 24 }, { wch: 28 },
+        { wch: 52 }, { wch: 58 }, { wch: 22 }, { wch: 18 }, { wch: 12 },
+        { wch: 12 }, { wch: 18 }, { wch: 18 }, { wch: 24 }, { wch: 20 },
+        { wch: 26 }, { wch: 18 }, { wch: 28 }, { wch: 28 }, { wch: 36 },
+        { wch: 45 }
+      ];
+
+      wsSummary['!cols'] = [{ wch: 34 }, { wch: 56 }];
+
+      XLSX.utils.book_append_sheet(wb, wsLeads, 'Sinais_Filtrados');
+      XLSX.utils.book_append_sheet(wb, wsSummary, 'Resumo_Filtros');
+
+      const todayStr = new Date().toISOString().slice(0, 10);
+      XLSX.writeFile(wb, `radar_bsa_filtrado_${todayStr}.xlsx`);
+      showToast(`Arquivo radar_bsa_filtrado_${todayStr}.xlsx exportado com sucesso.`);
+    }
+
+    document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', () => syncFromCheckboxes(true));
+    });
+
+    $('countryFilter').addEventListener('change', () => syncFromCountrySelect(true));
+    $('stateFilter').addEventListener('change', () => applyFilters(true));
+    $('segmentFilter').addEventListener('change', () => applyFilters(true));
+    $('priorityFilter').addEventListener('change', () => applyFilters(true));
+    $('dateFromFilter').addEventListener('change', () => applyFilters(true));
+    $('filterBtn').addEventListener('click', () => applyFilters(true));
+
+    $('selectAllCountriesBtn').addEventListener('click', () => {
+      document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => {
+        cb.checked = true;
+      });
+      syncFromCheckboxes(true);
+    });
+
+    $('clearCountriesBtn').addEventListener('click', () => {
+      document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+      });
+      syncFromCheckboxes(true);
+    });
+
+    $('resetFiltersBtn').addEventListener('click', () => {
+      document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => {
+        cb.checked = true;
+      });
+      $('segmentFilter').value = '';
+      $('priorityFilter').value = '';
+      $('stateFilter').value = '';
+      $('dateFromFilter').value = MIN_DATE_STR;
+      syncFromCheckboxes(false);
+      applyFilters(true);
+    });
+
+    $('toggleSourcesBtn').addEventListener('click', () => {
+      const box = $('latamSourcesContainer');
+      const hidden = box.style.display === 'none';
+      box.style.display = hidden ? 'grid' : 'none';
+      $('toggleSourcesBtn').textContent = hidden ? 'Ocultar Fontes' : 'Mostrar Fontes';
+    });
+
+    $('searchBtn').onclick = async () => {
+      const countries = getCheckedCountries();
+      if (!countries.length) {
+        showToast('Selecione pelo menos um país para iniciar a varredura.');
+        return;
+      }
+
+      const state = countries.includes('BR') ? $('stateFilter').value : '';
+      const dateFrom = $('dateFromFilter').value >= MIN_DATE_STR ? $('dateFromFilter').value : MIN_DATE_STR;
+
+      const activeSourcesPayload = {};
+      countries.forEach(code => {
+        activeSourcesPayload[code] = [...(LATAM_SOURCES[code] || []), ...GLOBAL_SOURCES];
+      });
+
+      $('searchBtn').disabled = true;
+      $('searchBtn').textContent = 'Varrendo fontes...';
+
+      try {
+        const r = await api('/api/search', {
+          method: 'POST',
+          body: JSON.stringify({
+            countries,
+            state,
+            dateFrom,
+            latamSources: activeSourcesPayload
+          })
+        });
+        showToast(
+          `Varredura concluída: ${r.run.found} notícias processadas, ${r.run.added} novos registros únicos (${r.run.queriesRun} consultas).`,
+          6000
+        );
+        await load();
+      } catch (e) {
+        showToast('Não foi possível concluir a varredura: ' + e.message, 6000);
+      } finally {
+        $('searchBtn').disabled = false;
+        $('searchBtn').textContent = '⌕ Pesquisar Novas Fontes';
+      }
+    };
+
+    $('exportXlsxBtn').onclick = exportFilteredToXLSX;
+    $('exportBtn').onclick = () => {
+      location.href = API_BASE + '/api/export';
+    };
+
+    $('importBtn').onclick = () => $('csvFile').click();
+
+    $('csvFile').onchange = async e => {
+      const f = e.target.files[0];
+      if (!f) return;
+
+      try {
+        const csv = await f.text();
+        const r = await api('/api/import/cnpj', {
+          method: 'POST',
+          body: JSON.stringify({ csv })
+        });
+        const msg = `Importação concluída: ${r.added} novos registros de ${r.rowsRead} linhas. Total: ${r.total}.`;
+        $('cnpjStatus').textContent = msg;
+        showToast(msg, 5500);
+      } catch (err) {
+        showToast('Erro na importação CSV: ' + err.message, 5500);
+      }
+      e.target.value = '';
+    };
+
     window.editLead = id => {
-      const x = allLeadsCache.find(a => a.id === id);
+      const x = allLeadsCache.find(a => a.id === id) || filteredLeadsCache.find(a => a.id === id);
       if (!x) return;
+
       $('leadId').value = id;
-      $('company').value = x.company || '';
-      $('website').value = x.website || '';
-      $('contactName').value = x.contactName || '';
-      $('contactRole').value = x.contactRole || '';
-      $('notes').value = x.notes || '';
+      for (const k of ['company', 'website', 'address', 'contactName', 'contactRole', 'email', 'phone', 'notes']) {
+        $(k).value = x[k] || '';
+      }
+      $('leadStatus').value = x.status || 'Novo';
+      $('verified').checked = !!x.verified;
       $('modal').classList.add('open');
     };
 
     $('closeModal').onclick = () => $('modal').classList.remove('open');
-    $('filterBtn').onclick = applyFilters;
-    $('triggerAiEnrichment').onclick = () => {
-      $('contactRole').value = 'Diretor de Supply Chain';
-      showToast('Cargo sugerido aplicado.');
+
+    $('leadForm').onsubmit = async e => {
+      e.preventDefault();
+      const id = $('leadId').value;
+      const body = {};
+
+      for (const k of ['company', 'website', 'address', 'contactName', 'contactRole', 'email', 'phone', 'notes']) {
+        body[k] = $(k).value;
+      }
+      body.status = $('leadStatus').value;
+      body.verified = $('verified').checked;
+
+      try {
+        await api('/api/leads/' + id, {
+          method: 'PATCH',
+          body: JSON.stringify(body)
+        });
+        $('modal').classList.remove('open');
+        showToast('Ficha da oportunidade atualizada com sucesso.');
+        await load();
+      } catch (err) {
+        showToast('Erro ao salvar ficha: ' + err.message);
+      }
     };
 
-    $('exportXlsxBtn').onclick = () => {
-      if (typeof XLSX === 'undefined') return showToast('XLSX carregando...');
-      const ws = XLSX.utils.json_to_sheet(filteredLeadsCache);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Sinais');
-      XLSX.writeFile(wb, 'radar_bsa_cronologico.xlsx');
+    $('researchCompany').onclick = () => {
+      const q = $('company').value || allLeadsCache.find(x => x.id === $('leadId').value)?.title || '';
+      window.open(googleSearch(q + ' site oficial contato telefone'), '_blank', 'noopener');
     };
 
+    populateStatesDropdown();
+    syncFromCheckboxes(false);
+    updatePeriodBadge();
     load();
   </script>
 </body>
