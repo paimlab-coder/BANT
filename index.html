@@ -4,8 +4,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Radar BSA v3.5 | BDR Command Center + Benchmarking</title>
+  <title>Radar BSA v3.9 | BDR Command Center + Benchmarking</title>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js"></script>
   <style>
     :root {
       --bg: #070D12;
@@ -951,6 +956,33 @@
     .nw-status{font-size:12px;color:#8AA8B8;font-weight:400;margin-left:8px}
     .share-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
     
+
+    /* ===== Mapa de projetos dos concorrentes (v3.6) ===== */
+    .heat-fab { position: fixed; top: 16px; right: 16px; z-index: 55; width: 74px; height: 74px; border-radius: 50%; border: 2px solid rgba(255, 170, 60, .8); cursor: pointer; color: #fff; font-weight: 900; font-size: 13px; letter-spacing: .5px; display: grid; place-items: center; overflow: hidden; box-shadow: 0 6px 22px rgba(0, 0, 0, .55), 0 0 18px rgba(255, 120, 40, .35); background: #0b0f14; }
+    .heat-fab::before { content: ""; position: absolute; inset: -30%; background: radial-gradient(circle at 30% 35%, rgba(255, 50, 30, .95) 0 14%, transparent 34%), radial-gradient(circle at 68% 30%, rgba(255, 190, 40, .9) 0 12%, transparent 30%), radial-gradient(circle at 55% 70%, rgba(255, 110, 30, .9) 0 16%, transparent 36%), radial-gradient(circle at 28% 72%, rgba(40, 140, 255, .85) 0 12%, transparent 30%), radial-gradient(circle at 78% 66%, rgba(0, 255, 196, .7) 0 10%, transparent 28%); filter: blur(6px) saturate(1.2); animation: heatSpin 9s linear infinite, heatPulse 2.4s ease-in-out infinite; }
+    .heat-fab span { position: relative; z-index: 1; text-shadow: 0 1px 6px rgba(0, 0, 0, .95); line-height: 1; text-align: center; }
+    .heat-fab span small { display: block; font-size: 8.5px; font-weight: 800; color: #ffe0b8; margin-top: 2px; }
+    .heat-fab:hover { transform: scale(1.06); } .heat-fab:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+    .heat-fab[hidden] { display: none; }
+    @keyframes heatSpin { to { transform: rotate(360deg); } }
+    @keyframes heatPulse { 50% { opacity: .75; filter: blur(8px) saturate(1.5); } }
+    body.map-open .bench-screen.open { transform: translateX(-100vw); }
+    .map-screen { position: fixed; inset: 0; z-index: 52; background: var(--bg); display: flex; transform: translateX(100vw); transition: transform .55s cubic-bezier(.7, 0, .2, 1); overflow-y: auto; overflow-x: hidden; }
+    .map-screen.open { transform: none; }
+    .map-screen .side-matrix { position: sticky; top: 0; }
+    #compMap { height: 600px; border-radius: 12px; border: 1px solid var(--line); background: #e8eaed; overflow: hidden; }
+    .map-dark .leaflet-container { background: #e8eaed; font: 12px/1.45 Inter, system-ui, sans-serif; }
+    .map-dark .leaflet-popup-content-wrapper, .map-dark .leaflet-popup-tip { background: #0E1A24; color: #E2F1F8; border: 1px solid #1E384A; }
+    .map-dark .leaflet-popup-content a { color: #00B4D8; }
+    .map-dark .leaflet-control-attribution { background: rgba(7, 13, 18, .8); color: #8AA8B8; } .map-dark .leaflet-control-attribution a { color: #8AA8B8; }
+    .flow-line { stroke-dasharray: 7 7; animation: flowDash 1.6s linear infinite; }
+    @keyframes flowDash { to { stroke-dashoffset: -28; } }
+    .wh-icon svg { filter: drop-shadow(0 0 6px rgba(0, 230, 120, .6)); }
+    .map-legend { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; font-size: 12px; color: var(--muted); margin-top: 10px; }
+    .map-legend i { display: inline-block; vertical-align: -2px; margin-right: 6px; }
+    .lg-fab { width: 12px; height: 12px; border-radius: 50%; background: #2f80ff; box-shadow: 0 0 8px #2f80ff; border: 2px solid #fff; }
+    .lg-line { width: 26px; height: 0; border-top: 2px dashed #3d8bff; }
+    @media (prefers-reduced-motion: reduce) { .heat-fab::before, .flow-line { animation: none; } .map-screen { transition: none; } }
   </style>
 </head>
 
@@ -1278,7 +1310,7 @@
 
     <!-- RODAPÉ -->
     <footer class="footer">
-      <div>RADAR BSA v3.5 · BDR Command Center · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
+      <div>RADAR BSA v3.9 · BDR Command Center · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
       <a
         class="author-card"
         href="https://www.linkedin.com/in/diogopaimg"
@@ -1316,6 +1348,7 @@
 
   <!-- TELA DE BENCHMARKING (desliza da direita, mesmo layout do Radar) -->
   <section class="bench-screen" id="benchScreen" aria-hidden="true" aria-labelledby="benchTitle">
+    <button class="heat-fab" type="button" id="heatFab" aria-label="Abrir mapa de projetos dos concorrentes" title="Mapa: concorrentes → clientes"><span>MAPA<small>PROJETOS</small></span></button>
     <aside class="side-matrix"><canvas class="matrix-canvas" id="matrixBenchL"></canvas></aside>
     <main class="main-container">
       <div class="holo-wrap">
@@ -1408,9 +1441,65 @@
         <div class="actions" style="margin-top:14px;justify-content:flex-end"><button class="btn" type="button" id="bfCancel">Cancelar</button><button class="btn primary" type="button" id="bfSave">Salvar movimento</button></div>
       </section>
 
-      <footer class="footer"><div>RADAR BSA v3.5 · Benchmarking de concorrentes · Paim Business Intelligence Consultant</div></footer>
+      <footer class="footer"><div>RADAR BSA v3.9 · Benchmarking de concorrentes · Paim Business Intelligence Consultant</div></footer>
     </main>
     <aside class="side-matrix"><canvas class="matrix-canvas" id="matrixBenchR"></canvas></aside>
+  </section>
+
+  <!-- PÁGINA 3: MAPA DE PROJETOS DOS CONCORRENTES -->
+  <section class="map-screen" id="mapScreen" aria-hidden="true" aria-labelledby="mapTitle">
+    <aside class="side-matrix"><canvas class="matrix-canvas" id="matrixMapL"></canvas></aside>
+    <main class="main-container">
+      <div class="holo-wrap">
+        <header class="holo-hero" id="mapHero">
+          <span class="holo-grid" aria-hidden="true"></span><span class="holo-scan" aria-hidden="true"></span>
+          <span class="hud tl" aria-hidden="true"></span><span class="hud tr" aria-hidden="true"></span><span class="hud bl" aria-hidden="true"></span><span class="hud br" aria-hidden="true"></span>
+          <div class="holo-inner">
+            <div class="holo-top">
+              <div>
+                <div class="holo-eyebrow"><span class="dot"></span>Paim Business Intelligence · Geointeligência competitiva</div>
+                <h1 class="holo-title" id="mapTitle">MAPA DE PROJETOS <span>/ Concorrentes → clientes atendidos</span></h1>
+                <div class="holo-sub">Pontos azuis: fábricas, sedes e escritórios dos concorrentes. Armazéns verdes: clientes finais. As linhas ligam cada concorrente aos projetos que ele vendeu.</div>
+              </div>
+              <button class="btn" type="button" id="mapBack">← Voltar ao Benchmarking</button>
+            </div>
+            <div class="holo-term" aria-hidden="true"><span class="p">bsa@radar:~$</span>geo.trace --concorrentes --clientes --sku <span class="cur">▍</span></div>
+          </div>
+        </header>
+      </div>
+
+      <section class="grid" id="mapKpis"></section>
+
+      <section class="panel">
+        <div class="panel-header"><h2>Filtros</h2></div>
+        <div class="toolbar">
+          <div class="field-group"><label class="field-label" for="mpPais">País do cliente</label><select class="field" id="mpPais"><option value="">Todos</option></select></div>
+          <div class="field-group"><label class="field-label" for="mpUf">UF (Brasil)</label><select class="field" id="mpUf"><option value="">Todas</option></select></div>
+          <div class="field-group wide-field"><label class="field-label" for="mpSku">SKU / produto</label><select class="field" id="mpSku"><option value="">Todos os produtos</option></select></div>
+          <div class="field-group"><label class="field-label" for="mpComp">Concorrente</label><select class="field" id="mpComp"><option value="">Todos</option></select></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header"><h2>Mapa</h2><span class="muted small" id="mapCount"></span></div>
+        <div id="compMap" class="map-dark" role="region" aria-label="Mapa de concorrentes e clientes"></div>
+        <div class="map-legend">
+          <span><i class="lg-fab"></i>Fábrica, sede ou escritório do concorrente</span>
+          <span><i class="lg-line"></i>Projeto vendido (concorrente → cliente)</span>
+          <span><i><svg width="18" height="16" viewBox="0 0 28 24"><path d="M2 11 14 3l12 8v11H2z" fill="#16c172" stroke="#b9ffd9" stroke-width="1.5"/><rect x="10" y="14" width="8" height="8" fill="#0b3d24"/></svg></i>Cliente final (armazém)</span>
+        </div>
+        <div class="cc-note">Localizações por cidade (centro do município), não o endereço exato da planta. Itens marcados “aprox.” têm cidade incerta na fonte. Quando a fonte não informa o escritório local, a linha parte da sede internacional do concorrente.</div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header"><h2>Conexões no mapa</h2></div>
+        <div class="cc-table-wrap"><table class="cc-table" style="min-width:860px"><thead><tr><th>Concorrente (origem)</th><th>Cliente</th><th>Local do cliente</th><th>SKU / produto</th><th>Data</th><th>Fonte</th></tr></thead><tbody id="mapRows"></tbody></table></div>
+        <div class="cc-note" id="mapOut"></div>
+      </section>
+
+      <footer class="footer"><div>RADAR BSA v3.9 · Mapa de projetos dos concorrentes · Paim Business Intelligence Consultant</div></footer>
+    </main>
+    <aside class="side-matrix"><canvas class="matrix-canvas" id="matrixMapR"></canvas></aside>
   </section>
 
   <!-- CONTA (COMMAND CENTER) -->
@@ -2990,7 +3079,7 @@
     }
     $('benchFab').addEventListener('click', benchOpen);
     $('benchBack').addEventListener('click', benchClose);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('benchScreen').classList.contains('open') && !$('ccD').classList.contains('open')) benchClose(); });
+    document.addEventListener('keydown', e => { if (e.key !== 'Escape' || $('ccD').classList.contains('open')) return; if ($('mapScreen').classList.contains('open')) { mapClose(); return; } if ($('benchScreen').classList.contains('open')) benchClose(); });
     ['bnComp', 'bnReg', 'bnTipo'].forEach(id => $(id).addEventListener('change', benchRender));
     $('bnQ').addEventListener('input', benchRender);
     $('benchExport').addEventListener('click', benchExport);
@@ -3009,6 +3098,16 @@
     function benchFilteredList() {
       const fc = $('bnComp').value, fr = $('bnReg').value, ft = $('bnTipo').value, q = normalizeText($('bnQ').value);
       return benchAll().filter(b => (!fc || b.concorrente === fc) && (!fr || b.regiao === fr) && (!ft || b.tipo === ft) && (!q || normalizeText([b.titulo, b.cliente, b.local, b.segmento, b.solucao, b.fato].join(' ')).includes(q)));
+    }
+    const TEAM_MAP_CSS = `.pg2{display:flex;min-height:100vh;transition:transform .55s cubic-bezier(.7,0,.2,1)}body.map-open{overflow:hidden}body.map-open .pg2{transform:translateX(-100vw)}.heat-fab{position:fixed;top:16px;right:16px;z-index:55;width:74px;height:74px;border-radius:50%;border:2px solid rgba(255,170,60,.8);cursor:pointer;color:#fff;font:900 13px/1 Inter,system-ui,sans-serif;letter-spacing:.5px;display:grid;place-items:center;overflow:hidden;box-shadow:0 6px 22px rgba(0,0,0,.55),0 0 18px rgba(255,120,40,.35);background:#0b0f14}.heat-fab::before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle at 30% 35%,rgba(255,50,30,.95) 0 14%,transparent 34%),radial-gradient(circle at 68% 30%,rgba(255,190,40,.9) 0 12%,transparent 30%),radial-gradient(circle at 55% 70%,rgba(255,110,30,.9) 0 16%,transparent 36%),radial-gradient(circle at 28% 72%,rgba(40,140,255,.85) 0 12%,transparent 30%),radial-gradient(circle at 78% 66%,rgba(0,255,196,.7) 0 10%,transparent 28%);filter:blur(6px) saturate(1.2);animation:heatSpin 9s linear infinite,heatPulse 2.4s ease-in-out infinite}.heat-fab span{position:relative;z-index:1;text-shadow:0 1px 6px rgba(0,0,0,.95);text-align:center}.heat-fab span small{display:block;font-size:8.5px;font-weight:800;color:#ffe0b8;margin-top:2px}.heat-fab[hidden]{display:none}.heat-fab:focus-visible{outline:2px solid #00FFC4;outline-offset:3px}@keyframes heatSpin{to{transform:rotate(360deg)}}@keyframes heatPulse{50%{opacity:.75;filter:blur(8px) saturate(1.5)}}.map-screen{position:fixed;inset:0;z-index:52;background:#070D12;display:flex;transform:translateX(100vw);transition:transform .55s cubic-bezier(.7,0,.2,1);overflow-y:auto;overflow-x:hidden}.map-screen.open{transform:none}#compMap{height:560px;border-radius:12px;border:1px solid #1E384A;background:#e8eaed;overflow:hidden}.map-dark .leaflet-container{background:#e8eaed;font:12px/1.45 Inter,system-ui,sans-serif}.map-dark .leaflet-popup-content-wrapper,.map-dark .leaflet-popup-tip{background:#0E1A24;color:#E2F1F8;border:1px solid #1E384A}.map-dark .leaflet-popup-content a{color:#00B4D8}.map-dark .leaflet-control-attribution{background:rgba(7,13,18,.8);color:#8AA8B8}.map-dark .leaflet-control-attribution a{color:#8AA8B8}.flow-line{stroke-dasharray:7 7;animation:flowDash 1.6s linear infinite}@keyframes flowDash{to{stroke-dashoffset:-28}}.wh-icon svg{filter:drop-shadow(0 0 6px rgba(0,230,120,.6))}.map-legend{display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-size:12px;color:#8AA8B8;margin-top:10px}.map-legend i{display:inline-block;vertical-align:-2px;margin-right:6px}.lg-fab{width:12px;height:12px;border-radius:50%;background:#2f80ff;box-shadow:0 0 8px #2f80ff;border:2px solid #fff}.lg-line{width:26px;height:0;border-top:2px dashed #3d8bff}.tbl{overflow:auto;border:1px solid #1E384A;border-radius:10px}.tbl table{border-collapse:collapse;width:100%;min-width:760px;font-size:12.5px}.tbl th{background:#132431;color:#8AA8B8;text-align:left;font-size:11.5px;padding:9px;border-bottom:1px solid #1E384A}.tbl td{padding:9px;border-bottom:1px solid #1E384A;vertical-align:top}.tbl small{color:#8AA8B8}.back-btn{background:#0E1A24;border:1px solid #1E384A;color:#E2F1F8;border-radius:10px;padding:9px 14px;font:600 12.5px Inter,system-ui,sans-serif;cursor:pointer}.back-btn:hover{border-color:#00FFC4;color:#00FFC4}.holo-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}@media(prefers-reduced-motion:reduce){.heat-fab::before,.flow-line{animation:none}.pg2,.map-screen{transition:none}}`;
+    const TEAM_MAP_JS_TPL = "(function(){\nvar D=__DATA__;\nfunction esc(v){return String(v==null?'':v).replace(/[&<>\"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c];});}\nvar WH='<svg width=\"28\" height=\"24\" viewBox=\"0 0 28 24\" aria-hidden=\"true\"><path d=\"M2 11 14 3l12 8v11H2z\" fill=\"#16c172\" stroke=\"#b9ffd9\" stroke-width=\"1.5\"/><rect x=\"10\" y=\"14\" width=\"8\" height=\"8\" fill=\"#0b3d24\"/><path d=\"M6 13h4M18 13h4\" stroke=\"#b9ffd9\" stroke-width=\"1.2\"/><\/svg>';\nvar M=null,LY=null;function mapBase(map){var att='<a href=\"https://openfreemap.org\" target=\"_blank\" rel=\"noopener\">OpenFreeMap<\/a> &copy; <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap<\/a>';function esri(){if(map._paimEsri)return;map._paimEsri=1;L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,attribution:'Tiles &copy; Esri'}).addTo(map);}function webgl(){try{var c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch(_){return false;}}try{if(L.maplibreGL&&window.maplibregl&&webgl()){var gl=L.maplibreGL({style:'https://tiles.openfreemap.org/styles/liberty',attribution:att}).addTo(map);if(map.attributionControl)map.attributionControl.addAttribution(att);var ok=false,drop=function(){if(ok)return;ok=true;try{map.removeLayer(gl);}catch(_){}esri();},mm=gl.getMaplibreMap&&gl.getMaplibreMap();if(mm){mm.once('load',function(){ok=true;});mm.on('error',function(){drop();});}setTimeout(drop,8000);return;}}catch(e){}esri();}var _x=0,matrixOn=false,$=function(id){return document.getElementById(id);};\nfunction arc(a,b){var la1=a[0],lo1=a[1],la2=b[0],lo2=b[1],mx=(la1+la2)/2,my=(lo1+lo2)/2,k=.18,cx=mx-(lo2-lo1)*k,cy=my+(la2-la1)*k,p=[];for(var t=0;t<=1.0001;t+=.04){p.push([(1-t)*(1-t)*la1+2*(1-t)*t*cx+t*t*la2,(1-t)*(1-t)*lo1+2*(1-t)*t*cy+t*t*lo2]);}return p;}\nfunction uniq(a){var o={},r=[];a.forEach(function(v){if(v&&!o[v]){o[v]=1;r.push(v);}});return r.sort();}\nfunction fill(id,vals,first){var s=$(id),cur=s.value;s.innerHTML='<option value=\"\">'+first+'<\/option>'+uniq(vals).map(function(v){return '<option>'+esc(v)+'<\/option>';}).join('');s.value=cur;if(s.value!==cur)s.value='';}\nfunction fillAll(){var cl=[];D.links.forEach(function(e){e.clientes.forEach(function(c){cl.push(c);});});fill('mpPais',cl.map(function(c){return c.pais;}),'Todos');fill('mpUf',cl.filter(function(c){return c.pais==='Brasil';}).map(function(c){return c.uf;}),'Todas');fill('mpSku',D.links.map(function(e){return e.sku;}),'Todos os produtos');fill('mpComp',D.links.map(function(e){return e.comp;}),'Todos');$('mpUf').disabled=!!($('mpPais').value&&$('mpPais').value!=='Brasil');}\nfunction render(){\n  if(!window.L){$('compMap').innerHTML='<p class=\"muted\" style=\"padding:20px\">O mapa precisa de internet para carregar. Recarregue a página.<\/p>';return;}\n  if(!M){M=L.map('compMap',{worldCopyJump:true,minZoom:2}).setView([5,-30],2);mapBase(M);LY=L.layerGroup().addTo(M);}\n  M.invalidateSize();LY.clearLayers();\n  var fp=$('mpPais').value,fu=$('mpUf').value,fs=$('mpSku').value,fc=$('mpComp').value,rows=[],used={},bd=[];\n  D.links.forEach(function(e){\n    if(fs&&e.sku!==fs)return;if(fc&&e.comp!==fc)return;\n    var cls=e.clientes.filter(function(c){return(!fp||c.pais===fp)&&(!fu||c.uf===fu);});if(!cls.length)return;\n    used[e.origem]=1;\n    cls.forEach(function(c){\n      L.polyline(arc([e.oLat,e.oLon],[c.lat,c.lon]),{color:'#3d8bff',weight:2,opacity:.9,className:'flow-line'}).addTo(LY);\n      L.marker([c.lat,c.lon],{icon:L.divIcon({className:'wh-icon',html:WH,iconSize:[28,24],iconAnchor:[14,22]}),title:c.nome}).bindPopup('<b>'+esc(c.nome)+'<\/b><br>'+esc(c.cidade)+(c.uf?' ('+esc(c.uf)+')':'')+' · '+esc(c.pais)+(c.aprox?' · local aprox.':'')+'<br>Fornecedor: <b>'+esc(e.comp)+'<\/b><br>SKU: '+esc(e.sku)+'<br>'+esc(e.numeros||'')+'<br>'+esc(e.data)+(e.url?'<br><a href=\"'+esc(e.url)+'\" target=\"_blank\" rel=\"noopener\">Abrir matéria ↗<\/a>':'')).addTo(LY);\n      bd.push([c.lat,c.lon]);rows.push([e,c]);\n    });\n  });\n  D.factories.forEach(function(f){\n    var on=used[f.key];if(!on&&(fp||fu||fs||fc))return;\n    if(on)L.circleMarker([f.lat,f.lon],{radius:14,weight:0,fillColor:'#2f80ff',fillOpacity:.18}).addTo(LY);\n    L.circleMarker([f.lat,f.lon],{radius:on?7:6,color:'#fff',weight:on?2:1.5,fillColor:'#2f80ff',fillOpacity:on?1:.6}).bindPopup('<b>'+esc(f.nome)+'<\/b><br>'+esc(f.tipo)+' · '+esc(f.cidade)+(f.uf?' ('+esc(f.uf)+')':'')+' · '+esc(f.pais)+(on?'':'<br>Nenhum projeto de cliente mapeado ainda.')+'<br><a href=\"'+esc(f.url)+'\" target=\"_blank\" rel=\"noopener\">Fonte: '+esc(f.fonte)+' ↗<\/a>').addTo(LY);\n    bd.push([f.lat,f.lon]);\n  });\n  if(bd.length)M.fitBounds(bd,{padding:[40,40],maxZoom:6});\n  $('mapCount').textContent=rows.length+' cliente(s) no mapa';\n  $('mapRows').innerHTML=rows.length?rows.map(function(r){var e=r[0],c=r[1];return '<tr><td><b>'+esc(e.comp)+'<\/b><br><small>'+esc(e.origemNome)+' · '+esc(e.origemCidade)+'<\/small><\/td><td>'+esc(c.nome)+'<\/td><td>'+esc(c.cidade)+(c.uf?' ('+esc(c.uf)+')':'')+' · '+esc(c.pais)+(c.aprox?' <small>(aprox.)<\/small>':'')+'<\/td><td>'+esc(e.sku)+'<\/td><td>'+esc(e.data)+'<\/td><td>'+(e.url?'<a href=\"'+esc(e.url)+'\" target=\"_blank\" rel=\"noopener\">'+esc(e.fonte)+' ↗<\/a>':esc(e.fonte))+(e.obs?'<br><small>'+esc(e.obs)+'<\/small>':'')+'<\/td><\/tr>';}).join(''):'<tr><td colspan=\"6\" class=\"muted\" style=\"text-align:center;padding:20px\">Nenhuma conexão nos filtros atuais.<\/td><\/tr>';\n}\nfunction open(){if(!matrixOn&&window.matrixRain){matrixRain('mxML');matrixRain('mxMR');matrixOn=true;}\n  var h=$('mapHero');h.style.animation='none';void h.offsetWidth;h.style.animation='';\n  document.body.classList.add('map-open');$('mapScreen').classList.add('open');$('mapScreen').setAttribute('aria-hidden','false');$('heatFab').hidden=true;fillAll();setTimeout(function(){render();$('mapBack').focus();},560);}\nfunction close(){document.body.classList.remove('map-open');$('mapScreen').classList.remove('open');$('mapScreen').setAttribute('aria-hidden','true');$('heatFab').hidden=false;$('heatFab').focus();}\n$('heatFab').addEventListener('click',open);$('mapBack').addEventListener('click',close);\ndocument.addEventListener('keydown',function(e){if(e.key==='Escape'&&$('mapScreen').classList.contains('open'))close();});\n['mpPais','mpUf','mpSku','mpComp'].forEach(function(id){$(id).addEventListener('change',function(){if(id==='mpPais'&&$('mpPais').value!=='Brasil')$('mpUf').value='';fillAll();render();});});\nvar cl=0,br=0;D.links.forEach(function(e){cl+=e.clientes.length;e.clientes.forEach(function(c){if(c.pais==='Brasil')br++;});});\n$('mapKpis').innerHTML='<div class=\"kpi\"><span class=\"muted\">Clientes mapeados<\/span><b>'+cl+'<\/b><\/div><div class=\"kpi\"><span class=\"muted\">Clientes no Brasil<\/span><b>'+br+'<\/b><span class=\"muted\">'+br+' de '+cl+'<\/span><\/div><div class=\"kpi\"><span class=\"muted\">Origens de concorrentes<\/span><b>'+D.factories.length+'<\/b><\/div><div class=\"kpi\"><span class=\"muted\">Produtos (SKU)<\/span><b>'+uniq(D.links.map(function(e){return e.sku;})).length+'<\/b><\/div>';\nif(window.holoTilt)holoTilt($('mapHero'));\nif(location.hash==='#mapa')open();\n})();\n";
+    const TEAM_MAP_HTML = "<button class=\"heat-fab\" type=\"button\" id=\"heatFab\" aria-label=\"Abrir mapa de projetos dos concorrentes\" title=\"Mapa: concorrentes → clientes\"><span>MAPA<small>PROJETOS<\/small><\/span><\/button>\n<section class=\"map-screen\" id=\"mapScreen\" aria-hidden=\"true\" aria-labelledby=\"mapTitle\">\n<aside class=\"mx-side\" aria-hidden=\"true\"><canvas id=\"mxML\"><\/canvas><\/aside>\n<div class=\"wrap\">\n<div class=\"holo-wrap\"><header class=\"holo-hero\" id=\"mapHero\">\n  <span class=\"holo-grid\" aria-hidden=\"true\"><\/span><span class=\"holo-scan\" aria-hidden=\"true\"><\/span>\n  <span class=\"hud tl\" aria-hidden=\"true\"><\/span><span class=\"hud tr\" aria-hidden=\"true\"><\/span><span class=\"hud bl\" aria-hidden=\"true\"><\/span><span class=\"hud br\" aria-hidden=\"true\"><\/span>\n  <div class=\"holo-inner\">\n    <div class=\"holo-top\"><div>\n      <div class=\"holo-eyebrow\"><span class=\"dot\"><\/span>Bertolini BSA · Geointeligência competitiva<\/div>\n      <h1 class=\"holo-title\" id=\"mapTitle\">MAPA DE PROJETOS <span>/ Concorrentes → clientes atendidos<\/span><\/h1>\n      <div class=\"holo-sub\">Pontos azuis: fábricas, sedes e escritórios dos concorrentes. Armazéns verdes: clientes finais. As linhas ligam cada concorrente aos projetos que ele vendeu.<\/div>\n    <\/div><button class=\"back-btn\" type=\"button\" id=\"mapBack\">← Voltar ao Benchmarking<\/button><\/div>\n    <div class=\"holo-term\" aria-hidden=\"true\"><span class=\"p\">time-comercial@bsa:~$<\/span>geo.trace --concorrentes --clientes --sku <span class=\"cur\">▍<\/span><\/div>\n  <\/div>\n<\/header><\/div>\n<section class=\"kpis\" id=\"mapKpis\"><\/section>\n<section class=\"panel\"><h2>Filtros<\/h2><div class=\"filters\">\n  <select id=\"mpPais\" aria-label=\"País do cliente\"><option value=\"\">Todos<\/option><\/select>\n  <select id=\"mpUf\" aria-label=\"UF (Brasil)\"><option value=\"\">Todas<\/option><\/select>\n  <select id=\"mpSku\" aria-label=\"SKU / produto\"><option value=\"\">Todos os produtos<\/option><\/select>\n  <select id=\"mpComp\" aria-label=\"Concorrente\"><option value=\"\">Todos<\/option><\/select>\n<\/div><p class=\"muted\" style=\"margin:8px 0 0\">Filtros: país do cliente · UF (Brasil) · SKU / produto · concorrente.<\/p><\/section>\n<section class=\"panel\"><h2>Mapa <span class=\"nw-status\" id=\"mapCount\"><\/span><\/h2>\n  <div id=\"compMap\" class=\"map-dark\" role=\"region\" aria-label=\"Mapa de concorrentes e clientes\"><\/div>\n  <div class=\"map-legend\"><span><i class=\"lg-fab\"><\/i>Fábrica, sede ou escritório do concorrente<\/span><span><i class=\"lg-line\"><\/i>Projeto vendido (concorrente → cliente)<\/span><span><i><svg width=\"18\" height=\"16\" viewBox=\"0 0 28 24\"><path d=\"M2 11 14 3l12 8v11H2z\" fill=\"#16c172\" stroke=\"#b9ffd9\" stroke-width=\"1.5\"/><rect x=\"10\" y=\"14\" width=\"8\" height=\"8\" fill=\"#0b3d24\"/><\/svg><\/i>Cliente final (armazém)<\/span><\/div>\n  <p class=\"muted\" style=\"margin:10px 0 0\">Localizações por cidade (centro do município), não o endereço exato da planta. “Aprox.” indica cidade incerta na fonte. Quando a fonte não informa o escritório local, a linha parte da sede internacional do concorrente.<\/p>\n<\/section>\n<section class=\"panel\"><h2>Conexões no mapa<\/h2><div class=\"tbl\"><table><thead><tr><th>Concorrente (origem)<\/th><th>Cliente<\/th><th>Local do cliente<\/th><th>SKU / produto<\/th><th>Data<\/th><th>Fonte<\/th><\/tr><\/thead><tbody id=\"mapRows\"><\/tbody><\/table><\/div><\/section>\n<footer>Mapa de projetos dos concorrentes · Bertolini Sistemas de Armazenagem · uso interno do time comercial<\/footer>\n<\/div>\n<aside class=\"mx-side\" aria-hidden=\"true\"><canvas id=\"mxMR\"><\/canvas><\/aside>\n<\/section>\n";
+    function teamMapJs() {
+      const data = {
+        factories: Object.entries(MAP_FACTORIES).map(([key, f]) => ({ key, nome: f.nome, tipo: f.tipo, cidade: f.cidade, uf: f.uf, pais: f.pais, lat: f.lat, lon: f.lon, fonte: f.fonte, url: f.url })),
+        links: mapEntries().map(e => ({ origem: e.origem, comp: e.f.comp, origemNome: e.f.nome, origemCidade: e.f.cidade, oLat: e.f.lat, oLon: e.f.lon, sku: e.sku, numeros: e.b.numeros || '', data: benchDate(e.b), fonte: e.b.fonte || '', url: safeUrl(e.b.url), obs: e.obs || '', clientes: e.clientes }))
+      };
+      return TEAM_MAP_JS_TPL.replace('__DATA__', JSON.stringify(data).replace(/</g, '\\u003c'));
     }
     const NEWS_CSS = `.nw-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start;padding:10px 0;border-top:1px solid #1E384A}.nw-item:first-child{border-top:0}.nw-item a.t{color:#E2F1F8;font-weight:700;text-decoration:none;font-size:13.5px;line-height:1.4}.nw-item a.t:hover{color:#00FFC4;text-decoration:underline}.nw-meta{font-size:12px;color:#8AA8B8;margin-top:3px}.nw-chip{display:inline-block;font-weight:800;font-size:10.5px;padding:2px 7px;border-radius:7px;background:rgba(255,92,92,.12);color:#ff9c9c;border:1px solid rgba(255,92,92,.35);margin-right:6px}.nw-nv{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 6px;border-radius:5px;background:#132431;color:#8AA8B8;border:1px solid #1E384A;margin-left:6px}.nw-new{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff3b3b;margin-right:6px;vertical-align:1px}.nw-status{font-size:12px;color:#8AA8B8;font-weight:400;margin-left:8px}.share-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}`;
     const TEAM_LIVE_JS = "(function(){\nvar API=\"https://paim-ia-prospect-2-0-cld.onrender.com/api/news\",QUERIES=[{\"comp\": \"Mecalux\", \"q\": \"\\\"Mecalux\\\"\", \"langs\": [\"pt\", \"en\", \"es\"]}, {\"comp\": \"Águia Sistemas\", \"q\": \"\\\"Águia Sistemas\\\"\", \"langs\": [\"pt\"]}, {\"comp\": \"SSI Schaefer\", \"q\": \"\\\"SSI Schaefer\\\"\", \"langs\": [\"pt\", \"en\"]}, {\"comp\": \"Dematic\", \"q\": \"\\\"Dematic\\\"\", \"langs\": [\"pt\", \"en\"]}, {\"comp\": \"Jungheinrich\", \"q\": \"\\\"Jungheinrich\\\" (armazém OR intralogística OR \\\"centro de distribuição\\\")\", \"langs\": [\"pt\"]}, {\"comp\": \"ISMA\", \"q\": \"\\\"ISMA\\\" (armazenagem OR porta-paletes)\", \"langs\": [\"pt\"]}, {\"comp\": \"Longa Industrial\", \"q\": \"\\\"Longa Industrial\\\"\", \"langs\": [\"pt\"]}, {\"comp\": \"Scheffer\", \"q\": \"\\\"Scheffer Logística\\\"\", \"langs\": [\"pt\"]}, {\"comp\": \"AR Racking\", \"q\": \"\\\"AR Racking\\\"\", \"langs\": [\"pt\", \"es\"]}];\nfunction esc(v){return String(v==null?'':v).replace(/[&<>\"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c];});}\nfunction fmt(d){if(!d)return 'data não informada';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}\nvar st=document.getElementById('nwStatus'),box=document.getElementById('nwList');\nfunction load(){\n  if(!box)return;\n  st.textContent='· buscando notícias (o servidor pode levar até 1 minuto para acordar)…';\n  var byLang={};QUERIES.forEach(function(q){q.langs.forEach(function(l){(byLang[l]=byLang[l]||[]).push(q);});});\n  var calls=Object.keys(byLang).map(function(l){var qs=byLang[l].map(function(q){return 'q='+encodeURIComponent(q.q);}).join('&');return fetch(API+'?'+qs+'&lang='+l+'&days=30').then(function(r){return r.json();}).then(function(d){return(d.items||[]).map(function(it){var m=byLang[l].filter(function(q){return q.q===it.consulta;})[0];it.comp=m?m.comp:it.consulta;return it;});}).catch(function(){return null;});});\n  Promise.all(calls).then(function(res){\n    var ok=res.filter(function(x){return x;}),all=[].concat.apply([],ok),seen={},list=[];\n    all.sort(function(a,b){return(b.data||'').localeCompare(a.data||'');}).forEach(function(it){var k=it.titulo.toLowerCase();if(!seen[k]){seen[k]=1;list.push(it);}});\n    if(!ok.length){st.textContent='· não foi possível buscar agora; tente recarregar em 1 minuto.';box.innerHTML='';return;}\n    st.textContent='· atualizado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+' · '+list.length+' notícias dos últimos 30 dias · Google Notícias';\n    box.innerHTML=list.slice(0,40).map(function(it){return '<div class=\"nw-item\"><div><span class=\"nw-chip\">'+esc(it.comp)+'<\/span><a class=\"t\" href=\"'+esc(it.url)+'\" target=\"_blank\" rel=\"noopener\">'+esc(it.titulo)+'<\/a><div class=\"nw-meta\">'+esc(it.fonte||'fonte')+' · '+esc(fmt(it.data))+'<span class=\"nw-nv\">NÃO VERIFICADO<\/span><\/div><\/div><\/div>';}).join('')||'<p class=\"muted\">Nenhuma notícia nos últimos 30 dias.<\/p>';\n  });\n}\nload();\ntry{var h=location.hash.match(/#m=([A-Za-z0-9_-]+)/);if(h){var b64=h[1].replace(/-/g,'+').replace(/_/g,'/');var json=decodeURIComponent(escape(atob(b64)));var extra=JSON.parse(json),list=document.getElementById('list');\n  if(Array.isArray(extra)&&list){extra=extra.filter(function(b){return list.textContent.indexOf(b.titulo)<0;});list.insertAdjacentHTML('afterbegin',extra.map(function(b){return '<article class=\"card\" data-comp=\"'+esc(b.concorrente)+'\" data-reg=\"'+esc(b.regiao)+'\"><div class=\"main\"><h3><span class=\"chip\">'+esc(b.concorrente)+'<\/span>'+esc(b.titulo)+'<\/h3><p class=\"meta\">'+esc(b.tipo)+' · '+esc(b.local||'Local não informado')+' · '+esc(b.regiao)+' · '+esc(b.data?fmt(b.data):'Data não informada')+' · '+esc(b.fonte||'')+'<\/p><p><span class=\"ev f\">FATO<\/span> '+esc(b.fato)+'<\/p>'+(b.leitura?'<p><span class=\"ev h\">HIPÓTESE<\/span> '+esc(b.leitura)+'<\/p>':'')+(b.url?'<p><a href=\"'+esc(b.url)+'\" target=\"_blank\" rel=\"noopener\">Abrir matéria ↗<\/a><\/p>':'')+'<\/div><div class=\"side\"><b>'+esc(b.cliente||'Sem cliente específico')+'<\/b><div>Segmento: '+esc(b.segmento||'—')+'<\/div><div>Solução: '+esc(b.solucao||'—')+'<\/div><div>Números: '+esc(b.numeros||'Não identificado')+'<\/div><\/div><\/article>';}).join(''));}}}catch(e){}\n})();\n";
@@ -3041,15 +3140,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <title>Benchmarking de concorrentes · BSA · ${e(hoje)}</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"><\/script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js"><\/script>
 <style>
 :root{--bg:#070D12;--panel:#0E1A24;--card:#132431;--line:#1E384A;--txt:#E2F1F8;--muted:#8AA8B8;--brand:#00FFC4;--cta:#F2A93B;--info:#00B4D8}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;min-height:100vh}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
 .mx-side{width:220px;flex:0 0 220px;position:sticky;top:0;height:100vh;overflow:hidden;background:#050B10;border-left:1px solid var(--line);border-right:1px solid var(--line)}
 .mx-side canvas{position:absolute;inset:0;opacity:.45;width:100%;height:100%}
 .wrap{flex:1;min-width:0;max-width:1100px;margin:0 auto;padding:22px 16px 40px}
 ${HOLO_CSS}
 ${PROD_CSS}
 ${NEWS_CSS}
+${TEAM_MAP_CSS}
 @media(max-width:1200px){.mx-side{display:none}}
 .muted{color:var(--muted);font-size:12.5px}
 .conf{margin-top:10px;font-size:12px;color:#ffb3b3;border:1px solid rgba(255,92,92,.4);background:rgba(255,92,92,.08);border-radius:10px;padding:8px 10px}
@@ -3071,7 +3176,7 @@ footer{color:var(--muted);font-size:11.5px;text-align:center;margin-top:24px}
 @media(max-width:760px){.card{grid-template-columns:1fr}}
 </style>
 </head>
-<body><aside class="mx-side" aria-hidden="true"><canvas id="mxL"></canvas></aside><div class="wrap">
+<body><div class="pg2" id="pg2"><aside class="mx-side" aria-hidden="true"><canvas id="mxL"></canvas></aside><div class="wrap">
 <div class="holo-wrap"><header class="holo-hero" id="hero">
   <span class="holo-grid" aria-hidden="true"></span><span class="holo-scan" aria-hidden="true"></span>
   <span class="hud tl" aria-hidden="true"></span><span class="hud tr" aria-hidden="true"></span><span class="hud bl" aria-hidden="true"></span><span class="hud br" aria-hidden="true"></span>
@@ -3080,7 +3185,7 @@ footer{color:var(--muted);font-size:11.5px;text-align:center;margin-top:24px}
     <h1 class="holo-title">BENCHMARKING <span>/ Movimentos dos concorrentes em sistemas de armazenagem</span></h1>
     <div class="holo-sub">Gerado em ${e(hoje)} · ${list.length} movimentos · fontes públicas com link · Paim Business Intelligence</div>
     <div class="holo-term" aria-hidden="true"><span class="p">time-comercial@bsa:~$</span>benchmarking --gerado ${e(hoje)} --itens ${list.length} <span class="cur">▍</span></div>
-    <div class="conf">Uso interno do time comercial. Não encaminhar a clientes. Cada item separa FATO (publicado na fonte), HIPÓTESE e RECOMENDAÇÃO. As notícias recentes se atualizam sozinhas a cada abertura.</div>
+    <div class="conf">Uso interno do time comercial. Não encaminhar a clientes. Cada item separa FATO (publicado na fonte), HIPÓTESE e RECOMENDAÇÃO. As notícias recentes se atualizam sozinhas a cada abertura. Toque em <b>MAPA</b> (canto superior direito) para ver os projetos no mapa.</div>
   </div>
 </header></div>
 <section class="kpis">
@@ -3097,13 +3202,15 @@ footer{color:var(--muted);font-size:11.5px;text-align:center;margin-top:24px}
 <section class="panel"><h2>Movimentos (mais recentes no topo)</h2><div id="list">${list.map(card).join('') || '<p class="muted">Nenhum movimento.</p>'}</div></section>
 <section class="panel"><h2>Recomendações</h2><ol>${BENCH_RECS.map((r, i) => i === 4 ? ['Clientes de concorrentes também são sinais.', 'Quem automatizou um CD ou fábrica pode ampliar estruturas convencionais, picking e mezaninos ao redor (HIPÓTESE, a confirmar caso a caso). RECOMENDAÇÃO: avisar o BDR quando um cliente citado aqui estiver na sua carteira.'] : r).map(([t, d]) => `<li><b>${e(t)}</b><small>${e(d)}</small></li>`).join('')}</ol></section>
 <footer>Benchmarking de concorrentes · Bertolini Sistemas de Armazenagem · gerado pelo Radar BSA em ${e(hoje)}</footer>
-</div><aside class="mx-side" aria-hidden="true"><canvas id="mxR"></canvas></aside>
+</div><aside class="mx-side" aria-hidden="true"><canvas id="mxR"></canvas></aside></div>
+${TEAM_MAP_HTML}
 <script>
 ${TEAM_JS}
 matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
 (function(){var fc=document.getElementById('fc'),fr=document.getElementById('fr');function f(){var c=fc.value,r=fr.value;document.querySelectorAll('#list .card').forEach(function(el){el.style.display=(!c||el.dataset.comp===c)&&(!r||el.dataset.reg===r)?'':'none';});}fc.addEventListener('change',f);fr.addEventListener('change',f);})();
 <\/script>
 <script>${TEAM_LIVE_JS}<\/script>
+<script>${teamMapJs()}<\/script>
 </body>
 </html>`;
     }
@@ -3203,7 +3310,7 @@ matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
       }
       return u;
     }
-    const shareMsg = () => `Benchmarking de concorrentes (sistemas de armazenagem) · Bertolini BSA · ${new Date().toLocaleDateString('pt-BR')}. Movimentos, CAPEX estimado e notícias recentes do mercado. Uso interno do time comercial.`;
+    const shareMsg = () => `Benchmarking de concorrentes (sistemas de armazenagem) · Bertolini BSA · ${new Date().toLocaleDateString('pt-BR')}. Movimentos, mapa de projetos, CAPEX estimado e notícias recentes do mercado. Uso interno do time comercial.`;
     $('benchWaBtn').onclick = async () => { const l = await benchShareLink(); window.open('https://wa.me/?text=' + encodeURIComponent(shareMsg() + '\n' + l), '_blank', 'noopener'); };
     $('benchMailBtn').onclick = async () => { const l = await benchShareLink(); location.href = 'mailto:?subject=' + encodeURIComponent('Benchmarking de concorrentes · ' + new Date().toLocaleDateString('pt-BR')) + '&body=' + encodeURIComponent(shareMsg() + '\n\nAcesse: ' + l); };
     $('benchTeamsBtn').onclick = async () => { const l = await benchShareLink(); window.open('https://teams.microsoft.com/share?href=' + encodeURIComponent(l) + '&msgText=' + encodeURIComponent(shareMsg()) + '&preview=true', '_blank', 'noopener'); };
@@ -3219,6 +3326,115 @@ matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
     };
     $('nwRefresh').onclick = benchNewsFetch;
     $('nwListApp').addEventListener('click', e => { const b = e.target.closest('[data-nw]'); if (b) benchNewsToForm(+b.dataset.nw); });
+
+    // ---------- Página 3: mapa concorrentes → clientes (v3.6)
+    const MAP_FACTORIES = {
+      mecalux_es: { comp: 'Mecalux', nome: 'Mecalux · sede internacional', tipo: 'Sede', cidade: 'Cornellà de Llobregat', uf: '', pais: 'Espanha', lat: 41.357, lon: 2.070, fonte: 'automa.net (cadastro da empresa)', url: 'https://automa.net/company/mecalux' },
+      mecalux_br: { comp: 'Mecalux', nome: 'Mecalux Brasil · escritório', tipo: 'Escritório no Brasil', cidade: 'Hortolândia', uf: 'SP', pais: 'Brasil', lat: -22.858, lon: -47.220, fonte: 'Mecalux (site internacional)', url: 'https://www.mecalux.com/' },
+      mecalux_mx: { comp: 'Mecalux', nome: 'Mecalux México · escritório', tipo: 'Escritório no México', cidade: 'Guadalajara', uf: '', pais: 'México', lat: 20.659, lon: -103.349, fonte: 'Mecalux México', url: 'https://www.mecalux.com.mx/' },
+      ssi_de: { comp: 'SSI Schaefer', nome: 'SSI Schaefer · sede internacional', tipo: 'Sede', cidade: 'Neunkirchen (Siegerland)', uf: '', pais: 'Alemanha', lat: 50.797, lon: 8.002, fonte: 'SSI Schaefer (localidades)', url: 'https://ssi-schaefer.com/en-de/international-headquarters-in-neunkirchen-de--2816' },
+      aguia_br: { comp: 'Águia Sistemas', nome: 'Águia Sistemas · fábrica', tipo: 'Fábrica', cidade: 'Ponta Grossa', uf: 'PR', pais: 'Brasil', lat: -25.095, lon: -50.162, fonte: 'MundoLogística', url: 'https://mundologistica.com.br/noticias/aguia-sistemas-investe-fabrica-parana' },
+      jungh_br: { comp: 'Jungheinrich', nome: 'Jungheinrich Brasil · sede', tipo: 'Sede no Brasil', cidade: 'Itupeva', uf: 'SP', pais: 'Brasil', lat: -23.153, lon: -47.058, fonte: 'Frota&Cia', url: 'https://frotacia.com.br/jungheinrich-vai-ampliar-as-suas-operacoes-no-brasil-e-tem-nas-empilhadeiras-eletricas-aliadas-contra-o-impacto-ambiental/' }
+    };
+    const MAP_LINKS = [
+      { id: 'b13', origem: 'mecalux_br', clientes: [{ nome: 'Bem Brasil Alimentos', cidade: 'Perdizes', uf: 'MG', pais: 'Brasil', lat: -19.353, lon: -47.296 }] },
+      { id: 'b14', origem: 'ssi_de', obs: 'Escritório da SSI Schaefer no Brasil não identificado na fonte; a linha parte da sede internacional.', clientes: [{ nome: 'Grupo Boticário (fábrica)', cidade: 'Camaçari', uf: 'BA', pais: 'Brasil', lat: -12.698, lon: -38.324 }, { nome: 'Grupo Boticário (CD)', cidade: 'São Gonçalo dos Campos', uf: 'BA', pais: 'Brasil', lat: -12.433, lon: -38.966 }] },
+      { id: 'b01', origem: 'mecalux_es', clientes: [{ nome: 'PepsiCo', cidade: 'Michrów', uf: '', pais: 'Polônia', lat: 51.86, lon: 20.72, aprox: true }] },
+      { id: 'b08', origem: 'mecalux_es', clientes: [{ nome: 'GBS', cidade: 'Billy-Berclau', uf: '', pais: 'França', lat: 50.518, lon: 2.866 }] },
+      { id: 'b02', origem: 'ssi_de', clientes: [{ nome: 'adidas', cidade: 'Spartanburg', uf: '', pais: 'EUA', lat: 34.950, lon: -81.932 }] },
+      { id: 'b10', origem: 'ssi_de', clientes: [{ nome: 'Schaeffler', cidade: 'Katowice', uf: '', pais: 'Polônia', lat: 50.264, lon: 19.023 }] },
+      { id: 'b15', origem: 'mecalux_mx', clientes: [{ nome: 'RADEC', cidade: 'Guadalajara', uf: '', pais: 'México', lat: 20.70, lon: -103.40 }] }
+    ];
+    const WH_SVG = '<svg width="28" height="24" viewBox="0 0 28 24" aria-hidden="true"><path d="M2 11 14 3l12 8v11H2z" fill="#16c172" stroke="#b9ffd9" stroke-width="1.5"/><rect x="10" y="14" width="8" height="8" fill="#0b3d24"/><path d="M6 13h4M18 13h4" stroke="#b9ffd9" stroke-width="1.2"/></svg>';
+    let MAPOBJ = null, MAPLAYER = null;
+    function mapBase(map){var att='<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>';function esri(){if(map._paimEsri)return;map._paimEsri=1;L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,attribution:'Tiles &copy; Esri'}).addTo(map);}function webgl(){try{var c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch(_){return false;}}try{if(L.maplibreGL&&window.maplibregl&&webgl()){var gl=L.maplibreGL({style:'https://tiles.openfreemap.org/styles/liberty',attribution:att}).addTo(map);if(map.attributionControl)map.attributionControl.addAttribution(att);var ok=false,drop=function(){if(ok)return;ok=true;try{map.removeLayer(gl);}catch(_){}esri();},mm=gl.getMaplibreMap&&gl.getMaplibreMap();if(mm){mm.once('load',function(){ok=true;});mm.on('error',function(){drop();});}setTimeout(drop,8000);return;}}catch(e){}esri();}
+    function mapEntries() {
+      const all = benchAll();
+      return MAP_LINKS.map(l => {
+        const b = all.find(x => x.id === l.id);
+        return b ? { ...l, b, f: MAP_FACTORIES[l.origem], sku: ILU_LABEL[benchIluKey(b)] } : null;
+      }).filter(Boolean);
+    }
+    function mapArc(a, b) {
+      const [la1, lo1] = a, [la2, lo2] = b, mx = (la1 + la2) / 2, my = (lo1 + lo2) / 2, k = .18;
+      const cx = mx - (lo2 - lo1) * k, cy = my + (la2 - la1) * k, pts = [];
+      for (let t = 0; t <= 1.0001; t += .04) pts.push([(1 - t) ** 2 * la1 + 2 * (1 - t) * t * cx + t * t * la2, (1 - t) ** 2 * lo1 + 2 * (1 - t) * t * cy + t * t * lo2]);
+      return pts;
+    }
+    function mapFillFilters() {
+      const E = mapEntries(), cl = E.flatMap(e => e.clientes.map(c => ({ ...c, e })));
+      const fill = (id, vals, first) => { const s = $(id), cur = s.value; s.innerHTML = `<option value="">${first}</option>` + [...new Set(vals)].sort().map(v => optionHtml(v)).join(''); s.value = [...s.options].some(o => o.value === cur) ? cur : ''; };
+      fill('mpPais', cl.map(c => c.pais), 'Todos');
+      fill('mpUf', cl.filter(c => c.pais === 'Brasil' && c.uf).map(c => c.uf), 'Todas');
+      fill('mpSku', E.map(e => e.sku), 'Todos os produtos');
+      fill('mpComp', E.map(e => e.f.comp), 'Todos');
+      $('mpUf').disabled = $('mpPais').value && $('mpPais').value !== 'Brasil';
+    }
+    function mapRender() {
+      if (!window.L) { $('compMap').innerHTML = '<div class="empty">Biblioteca do mapa não carregou. Verifique a conexão e recarregue a página.</div>'; return; }
+      if (!MAPOBJ) {
+        MAPOBJ = L.map('compMap', { worldCopyJump: true, minZoom: 2 }).setView([5, -30], 2);
+        mapBase(MAPOBJ);
+        MAPLAYER = L.layerGroup().addTo(MAPOBJ);
+      }
+      MAPOBJ.invalidateSize();
+      MAPLAYER.clearLayers();
+      const fp = $('mpPais').value, fu = $('mpUf').value, fs = $('mpSku').value, fc = $('mpComp').value;
+      const rows = [], usedF = new Set(), bounds = [];
+      mapEntries().forEach(e => {
+        if (fs && e.sku !== fs) return;
+        if (fc && e.f.comp !== fc) return;
+        const cls = e.clientes.filter(c => (!fp || c.pais === fp) && (!fu || c.uf === fu));
+        if (!cls.length) return;
+        usedF.add(e.origem);
+        cls.forEach(c => {
+          L.polyline(mapArc([e.f.lat, e.f.lon], [c.lat, c.lon]), { color: '#3d8bff', weight: 2, opacity: .9, className: 'flow-line' }).addTo(MAPLAYER);
+          const url = safeUrl(e.b.url);
+          L.marker([c.lat, c.lon], { icon: L.divIcon({ className: 'wh-icon', html: WH_SVG, iconSize: [28, 24], iconAnchor: [14, 22] }), title: c.nome })
+            .bindPopup(`<b>${escapeHtml(c.nome)}</b><br>${escapeHtml(c.cidade)}${c.uf ? ' (' + escapeHtml(c.uf) + ')' : ''} · ${escapeHtml(c.pais)}${c.aprox ? ' · local aprox.' : ''}<br>Fornecedor: <b>${escapeHtml(e.f.comp)}</b><br>SKU: ${escapeHtml(e.sku)}<br>${escapeHtml(e.b.numeros || '')}<br>${escapeHtml(benchDate(e.b))}${url ? `<br><a href="${escapeHtml(url)}" target="_blank" rel="noopener">Abrir matéria ↗</a>` : ''}`).addTo(MAPLAYER);
+          bounds.push([c.lat, c.lon]);
+          rows.push({ e, c });
+        });
+      });
+      usedF.forEach(k => {
+        const f = MAP_FACTORIES[k];
+        L.circleMarker([f.lat, f.lon], { radius: 14, color: '#2f80ff', weight: 0, fillColor: '#2f80ff', fillOpacity: .18 }).addTo(MAPLAYER);
+        L.circleMarker([f.lat, f.lon], { radius: 7, color: '#ffffff', weight: 2, fillColor: '#2f80ff', fillOpacity: 1 })
+          .bindPopup(`<b>${escapeHtml(f.nome)}</b><br>${escapeHtml(f.tipo)} · ${escapeHtml(f.cidade)}${f.uf ? ' (' + escapeHtml(f.uf) + ')' : ''} · ${escapeHtml(f.pais)}<br><a href="${escapeHtml(f.url)}" target="_blank" rel="noopener">Fonte: ${escapeHtml(f.fonte)} ↗</a>`).addTo(MAPLAYER);
+        bounds.push([f.lat, f.lon]);
+      });
+      if (!fp && !fu && !fs && !fc) Object.entries(MAP_FACTORIES).forEach(([k, f]) => { if (!usedF.has(k)) { L.circleMarker([f.lat, f.lon], { radius: 6, color: '#ffffff', weight: 1.5, fillColor: '#2f80ff', fillOpacity: .6 }).bindPopup(`<b>${escapeHtml(f.nome)}</b><br>${escapeHtml(f.tipo)} · ${escapeHtml(f.cidade)} · ${escapeHtml(f.pais)}<br>Nenhum projeto de cliente mapeado ainda.<br><a href="${escapeHtml(f.url)}" target="_blank" rel="noopener">Fonte ↗</a>`).addTo(MAPLAYER); bounds.push([f.lat, f.lon]); } });
+      if (bounds.length) MAPOBJ.fitBounds(bounds, { padding: [40, 40], maxZoom: 6 });
+      $('mapCount').textContent = `${rows.length} cliente(s) · ${usedF.size} origem(ns) de concorrente`;
+      $('mapRows').innerHTML = rows.length ? rows.map(({ e, c }) => `<tr><td><b>${escapeHtml(e.f.comp)}</b><br><small>${escapeHtml(e.f.nome)} · ${escapeHtml(e.f.cidade)}</small></td><td>${escapeHtml(c.nome)}</td><td>${escapeHtml(c.cidade)}${c.uf ? ' (' + escapeHtml(c.uf) + ')' : ''} · ${escapeHtml(c.pais)}${c.aprox ? ' <small>(aprox.)</small>' : ''}</td><td>${escapeHtml(e.sku)}</td><td>${escapeHtml(benchDate(e.b))}</td><td>${safeUrl(e.b.url) ? `<a href="${escapeHtml(safeUrl(e.b.url))}" target="_blank" rel="noopener" style="color:var(--info)">${escapeHtml(e.b.fonte)} ↗</a>` : escapeHtml(e.b.fonte)}${e.obs ? `<br><small>${escapeHtml(e.obs)}</small>` : ''}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">Nenhuma conexão nos filtros atuais.</td></tr>';
+      const mapped = new Set(MAP_LINKS.map(l => l.id)), fora = benchAll().filter(b => !mapped.has(b.id));
+      $('mapOut').textContent = `Fora do mapa (${fora.length}): ` + fora.map(b => `${b.concorrente} · ${b.cliente || b.titulo}${b.custom ? ' (registrado por você, sem coordenadas)' : b.cliente ? ' (local do cliente não informado na fonte)' : ' (sem cliente final: feira, estratégia ou investimento)'}`).join('; ') + '.';
+      const allE = mapEntries(), nCl = allE.reduce((t, e) => t + e.clientes.length, 0), nBr = allE.reduce((t, e) => t + e.clientes.filter(c => c.pais === 'Brasil').length, 0);
+      const st = (l, v, n) => `<div class="stat"><div class="muted small">${escapeHtml(l)}</div><div class="n">${v}</div><div class="muted small">${escapeHtml(n)}</div></div>`;
+      $('mapKpis').innerHTML = st('Clientes mapeados', nCl, `de ${benchAll().length} movimentos`) + st('Clientes no Brasil', nBr, `${nBr} de ${nCl}`) + st('Origens de concorrentes', Object.keys(MAP_FACTORIES).length, 'fábricas, sedes e escritórios') + st('Produtos (SKU)', new Set(allE.map(e => e.sku)).size, 'tipos de solução');
+    }
+    let mapMatrixOn = false;
+    function mapOpen() {
+      if (!mapMatrixOn) { initMatrix('matrixMapL'); initMatrix('matrixMapR'); mapMatrixOn = true; }
+      const hero = $('mapHero'); hero.style.animation = 'none'; void hero.offsetWidth; hero.style.animation = '';
+      document.body.classList.add('map-open');
+      $('mapScreen').classList.add('open');
+      $('mapScreen').setAttribute('aria-hidden', 'false');
+      $('heatFab').hidden = true;
+      mapFillFilters();
+      setTimeout(() => { mapRender(); $('mapBack').focus(); }, 560);
+    }
+    function mapClose() {
+      document.body.classList.remove('map-open');
+      $('mapScreen').classList.remove('open');
+      $('mapScreen').setAttribute('aria-hidden', 'true');
+      $('heatFab').hidden = false;
+      $('heatFab').focus();
+    }
+    $('heatFab').addEventListener('click', mapOpen);
+    $('mapBack').addEventListener('click', mapClose);
+    ['mpPais', 'mpUf', 'mpSku', 'mpComp'].forEach(id => $(id).addEventListener('change', () => { if (id === 'mpPais' && $('mpPais').value !== 'Brasil') $('mpUf').value = ''; mapFillFilters(); mapRender(); }));
+    holoTilt($('mapHero'));
     holoTilt($('benchHero'));
     initMatrix('matrixBenchL'); initMatrix('matrixBenchR'); benchMatrixOn = true;
     benchLoad().then(benchNewsLoadSeen).then(() => { benchFab(); benchNewsFetch(); });
