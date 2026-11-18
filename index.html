@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Radar BSA v3.0 | BDR Command Center</title>
+  <title>Radar BSA v3.5 | BDR Command Center + Benchmarking</title>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <style>
     :root {
@@ -844,6 +844,113 @@
     .test-banner { border: 1px solid rgba(255, 99, 99, 0.45); background: rgba(255, 99, 99, 0.1); color: #ffb3b3; border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; font-size: 12.5px; display: none; }
     @media (max-width: 760px) { .cc-grid2 { grid-template-columns: 1fr; } }
     @media (prefers-reduced-motion: reduce) { .cc-drawer { transition: none; } }
+
+    /* ===== BENCHMARKING DE CONCORRENTES (v3.1) ===== */
+    .bench-fab { position: fixed; top: 18px; right: 18px; z-index: 60; width: 62px; height: 62px; border-radius: 50%; border: 2px solid #ff5c5c; background: radial-gradient(circle at 30% 30%, #2a1416, #120a0c); color: #fff; font-weight: 900; font-size: 15px; letter-spacing: .5px; cursor: pointer; display: grid; place-items: center; box-shadow: 0 6px 22px rgba(0, 0, 0, .5); transition: transform .2s ease; }
+    .bench-fab:hover { transform: scale(1.06); }
+    .bench-fab:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+    .bench-fab .lbl { font-size: 9px; font-weight: 800; color: #ffb3b3; display: block; margin-top: -2px; letter-spacing: .3px; }
+    .bench-fab .badge { position: absolute; top: -4px; right: -4px; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 99px; background: #ff3b3b; color: #fff; font-size: 11px; font-weight: 900; display: grid; place-items: center; border: 2px solid var(--bg); }
+    .bench-fab[hidden], .bench-fab .badge[hidden] { display: none; }
+    .bench-fab.alert::before, .bench-fab.alert::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid rgba(255, 92, 92, .8); animation: benchPulse 1.6s ease-out infinite; }
+    .bench-fab.alert::after { animation-delay: .8s; }
+    .bench-fab.alert { animation: benchBlink 1.2s ease-in-out infinite; }
+    @keyframes benchPulse { from { transform: scale(1); opacity: .9; } to { transform: scale(1.6); opacity: 0; } }
+    @keyframes benchBlink { 0%, 100% { border-color: #ff5c5c; box-shadow: 0 0 0 rgba(255, 60, 60, 0); } 50% { border-color: #ffd0d0; box-shadow: 0 0 22px rgba(255, 60, 60, .55); } }
+    body > .side-matrix, body > main.main-container { transition: transform .55s cubic-bezier(.7, 0, .2, 1); }
+    body.bench-open { overflow: hidden; }
+    body.bench-open > .side-matrix, body.bench-open > main.main-container { transform: translateX(-100vw); }
+    .bench-screen { position: fixed; inset: 0; z-index: 50; background: var(--bg); display: flex; transform: translateX(100vw); transition: transform .55s cubic-bezier(.7, 0, .2, 1); overflow-y: auto; overflow-x: hidden; }
+    .bench-screen.open { transform: none; }
+    .bench-screen .side-matrix { position: sticky; top: 0; }
+    .bench-card { border-top: 1px solid var(--line); padding: 18px 0; display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 18px; }
+    .bench-card:first-child { border-top: 0; padding-top: 4px; }
+    .bench-card h3 { margin: 0 0 6px; font-size: 15.5px; line-height: 1.4; }
+    .bench-card p { margin: 6px 0; font-size: 12.8px; color: var(--muted); }
+    .bench-card p b { color: var(--txt); }
+    .bench-side { background: var(--card-bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: 12px; color: var(--muted); }
+    .bench-side b { color: var(--txt); display: block; font-size: 13px; margin-bottom: 4px; }
+    .comp-chip { display: inline-block; font-weight: 800; font-size: 11.5px; padding: 3px 9px; border-radius: 8px; background: rgba(255, 92, 92, .12); color: #ff9c9c; border: 1px solid rgba(255, 92, 92, .35); margin-right: 6px; }
+    .new-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ff3b3b; margin-right: 6px; vertical-align: 1px; }
+    .comp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+    .comp-box { background: var(--card-bg); border: 1px solid var(--line); border-radius: 12px; padding: 14px; font-size: 12.5px; color: var(--muted); }
+    .comp-box b { color: var(--txt); font-size: 14px; display: block; margin-bottom: 4px; }
+    .comp-box .links { margin-top: 8px; }
+    .rec-list { margin: 0; padding-left: 20px; font-size: 13px; color: var(--txt); }
+    .rec-list li { margin: 10px 0; }
+    .rec-list small { display: block; color: var(--muted); margin-top: 3px; }
+    @media (max-width: 900px) { .bench-card { grid-template-columns: 1fr; } .bench-screen .side-matrix { display: none; } }
+    @media (prefers-reduced-motion: reduce) { .bench-fab.alert, .bench-fab.alert::before, .bench-fab.alert::after { animation: none; } body > .side-matrix, body > main.main-container, .bench-screen { transition: none; } }
+
+    /* ===== Botão giroscópio 3D + compartilhamento (v3.2) ===== */
+    .bench-fab.gyro { width: 74px; height: 74px; top: 16px; right: 16px; border: 0; background: radial-gradient(circle at 35% 30%, #3a1b1e 0%, #14090b 60%, #070D12 100%); overflow: visible; }
+    .gyro-scene { position: absolute; inset: -8px; perspective: 260px; transform-style: preserve-3d; pointer-events: none; }
+    .gyro-scene .ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid transparent; transform-style: preserve-3d; }
+    .gyro-scene .r1 { border-top-color: #ff5c5c; border-bottom-color: #ff5c5c; animation: gyro1 2.8s linear infinite; box-shadow: 0 0 10px rgba(255, 92, 92, .45); }
+    .gyro-scene .r2 { inset: 6px; border-left-color: var(--brand); border-right-color: var(--brand); animation: gyro2 3.6s linear infinite; box-shadow: 0 0 10px rgba(0, 255, 196, .35); }
+    .gyro-scene .r3 { inset: 12px; border-top-color: var(--cta); border-left-color: var(--cta); animation: gyro3 2.2s linear infinite; }
+    .gyro-scene .core { position: absolute; inset: 24px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffd0d0, #ff3b3b 45%, #6b0f0f 100%); box-shadow: 0 0 16px rgba(255, 59, 59, .8); animation: gyroCore 1.4s ease-in-out infinite; }
+    @keyframes gyro1 { from { transform: rotateX(70deg) rotateZ(0deg); } to { transform: rotateX(70deg) rotateZ(360deg); } }
+    @keyframes gyro2 { from { transform: rotateY(70deg) rotateZ(0deg); } to { transform: rotateY(70deg) rotateZ(-360deg); } }
+    @keyframes gyro3 { from { transform: rotateX(-45deg) rotateY(45deg) rotateZ(0deg); } to { transform: rotateX(-45deg) rotateY(45deg) rotateZ(360deg); } }
+    @keyframes gyroCore { 0%, 100% { transform: scale(.85); opacity: .85; } 50% { transform: scale(1.05); opacity: 1; } }
+    .bench-fab.gyro .gyro-txt { position: relative; z-index: 2; font-weight: 900; font-size: 14px; color: #fff; text-shadow: 0 1px 6px rgba(0, 0, 0, .9); line-height: 1; text-align: center; }
+    .bench-fab.gyro .lbl { margin-top: 2px; }
+    .bench-fab.gyro:not(.alert) .gyro-scene .ring { animation-duration: 9s; }
+    .bench-fab.gyro:not(.alert) .gyro-scene .core { background: radial-gradient(circle at 35% 30%, #c9fff1, #00bfa5 50%, #04332c 100%); box-shadow: 0 0 12px rgba(0, 255, 196, .5); }
+    .bench-fab.gyro .badge { z-index: 3; }
+    @media (prefers-reduced-motion: reduce) { .gyro-scene .ring, .gyro-scene .core { animation: none !important; } }
+    .btn.wa { background: rgba(37, 211, 102, .14); border-color: rgba(37, 211, 102, .55); color: #5ff59b; font-weight: 800; }
+    .btn.wa:hover:not(:disabled) { background: rgba(37, 211, 102, .25); color: #8dffbb; border-color: #25d366; }
+
+    /* ===== Cabeçalho holográfico (v3.3) ===== */
+    .holo-wrap{perspective:1400px;margin-bottom:24px}
+    .holo-hero{position:relative;overflow:hidden;border-radius:18px;padding:26px 26px 20px;background:radial-gradient(120% 140% at 0% 0%,rgba(0,255,196,.10),transparent 55%),radial-gradient(120% 140% at 100% 0%,rgba(0,180,216,.10),transparent 55%),linear-gradient(160deg,#0B1620 0%,#0E1A24 55%,#0A141C 100%);border:1px solid rgba(0,255,196,.22);box-shadow:0 30px 70px -20px rgba(0,0,0,.75),0 0 0 1px rgba(0,180,216,.06) inset,0 0 40px rgba(0,255,196,.06);transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out;animation:holoIn 1.1s cubic-bezier(.2,.8,.2,1) both}
+    @keyframes holoIn{from{opacity:0;transform:translateZ(-260px) rotateX(16deg) scale(.96)}to{opacity:1;transform:none}}
+    .holo-hero::before{content:"";position:absolute;inset:0;border-radius:18px;padding:1px;background:conic-gradient(from var(--ang,0deg),transparent 0 60%,rgba(0,255,196,.75) 72%,rgba(0,180,216,.6) 80%,transparent 92%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:holoSpin 8s linear infinite;pointer-events:none}
+    @property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}
+    @keyframes holoSpin{to{--ang:360deg}}
+    .holo-grid{position:absolute;left:-20%;right:-20%;bottom:-40%;height:120%;background-image:linear-gradient(rgba(0,255,196,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,196,.10) 1px,transparent 1px);background-size:44px 44px;transform:rotateX(68deg);transform-origin:50% 100%;-webkit-mask-image:linear-gradient(to top,#000 10%,transparent 75%);mask-image:linear-gradient(to top,#000 10%,transparent 75%);animation:holoFloor 6s linear infinite;pointer-events:none}
+    @keyframes holoFloor{to{background-position:0 44px,0 0}}
+    .holo-scan{position:absolute;left:0;right:0;top:-30%;height:30%;background:linear-gradient(180deg,transparent,rgba(0,255,196,.07) 45%,rgba(0,255,196,.16) 50%,transparent);animation:holoScan 7s ease-in-out infinite;pointer-events:none}
+    @keyframes holoScan{0%{top:-30%}60%,100%{top:110%}}
+    .hud{position:absolute;width:18px;height:18px;border:2px solid rgba(0,255,196,.55);pointer-events:none}
+    .hud.tl{top:10px;left:10px;border-right:0;border-bottom:0;border-top-left-radius:6px}.hud.tr{top:10px;right:10px;border-left:0;border-bottom:0;border-top-right-radius:6px}
+    .hud.bl{bottom:10px;left:10px;border-right:0;border-top:0;border-bottom-left-radius:6px}.hud.br{bottom:10px;right:10px;border-left:0;border-top:0;border-bottom-right-radius:6px}
+    .holo-inner{position:relative;transform:translateZ(46px);transform-style:preserve-3d}
+    .holo-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+    .holo-eyebrow{font-size:11.5px;letter-spacing:2px;font-weight:800;text-transform:uppercase;color:#00FFC4;display:flex;align-items:center;gap:8px}
+    .holo-eyebrow .dot{width:8px;height:8px;border-radius:50%;background:#00FFC4;box-shadow:0 0 10px #00FFC4;animation:holoDot 2s ease-in-out infinite}
+    @keyframes holoDot{50%{opacity:.35}}
+    .holo-title{margin:8px 0 6px;font-size:clamp(24px,3.4vw,34px);font-weight:800;letter-spacing:-.5px;line-height:1.15;color:#F2FBFF;text-shadow:0 0 18px rgba(0,255,196,.25),0 10px 30px rgba(0,0,0,.6);transform:translateZ(30px)}
+    .holo-title span{font-weight:400;font-size:.55em;color:#8AA8B8;letter-spacing:0;text-shadow:none}
+    .holo-sub{color:#9FB9C7;font-size:13px;max-width:720px}
+    .holo-term{margin-top:14px;font:12.5px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#7FE9D4;background:rgba(0,0,0,.28);border:1px solid rgba(0,255,196,.18);border-radius:10px;padding:8px 12px;display:inline-block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+    .holo-term .p{color:#00B4D8;margin-right:6px}.holo-term .cur{animation:holoDot 1s steps(1) infinite}
+    .holo-actions{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid rgba(30,56,74,.7)}
+    @media (prefers-reduced-motion:reduce){.holo-hero,.holo-hero::before,.holo-grid,.holo-scan,.holo-eyebrow .dot,.holo-term .cur{animation:none!important}.holo-hero{transform:none!important}}
+    
+
+    /* ===== Produto e CAPEX (v3.4) ===== */
+    .bench-prod{grid-column:1/-1;display:grid;grid-template-columns:240px minmax(0,1fr);gap:14px;align-items:stretch;margin-top:4px;padding:12px;border:1px solid rgba(0,255,196,.16);border-radius:12px;background:linear-gradient(135deg,rgba(0,255,196,.04),rgba(0,180,216,.03))}
+    .pc-ilu{margin:0;color:#00FFC4;background:rgba(0,0,0,.25);border:1px solid #1E384A;border-radius:10px;padding:8px}.pc-ilu svg{display:block;width:100%;height:auto}
+    .pc-ilu figcaption{font-size:10.5px;color:#8AA8B8;margin-top:4px;line-height:1.35}
+    .pc-box{font-size:12.5px;color:#8AA8B8}.pc-t{font-weight:700;color:#E2F1F8;font-size:12.5px}.pc-v{font-size:22px;font-weight:800;color:#E2F1F8;margin:4px 0;letter-spacing:-.3px}
+    .pc-m{line-height:1.5}.pc-m a,.pc-links a{color:#00B4D8;font-weight:600;text-decoration:none}.pc-links{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+    .pev{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 6px;border-radius:5px;margin-right:4px}
+    .pev-f{background:rgba(0,245,212,.14);color:#00F5D4}.pev-e{background:rgba(170,130,255,.16);color:#c9b2ff}.pev-n{background:#132431;color:#8AA8B8;border:1px solid #1E384A}
+    @media(max-width:760px){.bench-prod{grid-template-columns:1fr}}
+    
+
+    /* ===== Notícias e compartilhamento (v3.5) ===== */
+    .nw-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start;padding:10px 0;border-top:1px solid #1E384A}.nw-item:first-child{border-top:0}
+    .nw-item a.t{color:#E2F1F8;font-weight:700;text-decoration:none;font-size:13.5px;line-height:1.4}.nw-item a.t:hover{color:#00FFC4;text-decoration:underline}
+    .nw-meta{font-size:12px;color:#8AA8B8;margin-top:3px}.nw-chip{display:inline-block;font-weight:800;font-size:10.5px;padding:2px 7px;border-radius:7px;background:rgba(255,92,92,.12);color:#ff9c9c;border:1px solid rgba(255,92,92,.35);margin-right:6px}
+    .nw-nv{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 6px;border-radius:5px;background:#132431;color:#8AA8B8;border:1px solid #1E384A;margin-left:6px}
+    .nw-new{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff3b3b;margin-right:6px;vertical-align:1px}
+    .nw-status{font-size:12px;color:#8AA8B8;font-weight:400;margin-left:8px}
+    .share-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    
   </style>
 </head>
 
@@ -1171,7 +1278,7 @@
 
     <!-- RODAPÉ -->
     <footer class="footer">
-      <div>RADAR BSA v3.0 · BDR Command Center · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
+      <div>RADAR BSA v3.5 · BDR Command Center · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
       <a
         class="author-card"
         href="https://www.linkedin.com/in/diogopaimg"
@@ -1203,6 +1310,108 @@
   <aside class="side-matrix">
     <canvas class="matrix-canvas" id="matrixRight"></canvas>
   </aside>
+
+  <!-- BOTÃO CIRCULAR: ALERTA DE CONCORRENTES -->
+  <button class="bench-fab gyro" type="button" id="benchFab" aria-label="Abrir benchmarking de concorrentes" title="Benchmarking: movimentos dos concorrentes"><span class="gyro-scene" aria-hidden="true"><span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span><span class="core"></span></span><span class="gyro-txt">VS<span class="lbl">CONCORR.</span></span><span class="badge" id="benchBadge" hidden>0</span></button>
+
+  <!-- TELA DE BENCHMARKING (desliza da direita, mesmo layout do Radar) -->
+  <section class="bench-screen" id="benchScreen" aria-hidden="true" aria-labelledby="benchTitle">
+    <aside class="side-matrix"><canvas class="matrix-canvas" id="matrixBenchL"></canvas></aside>
+    <main class="main-container">
+      <div class="holo-wrap">
+      <header class="holo-hero" id="benchHero">
+        <span class="holo-grid" aria-hidden="true"></span>
+        <span class="holo-scan" aria-hidden="true"></span>
+        <span class="hud tl" aria-hidden="true"></span><span class="hud tr" aria-hidden="true"></span><span class="hud bl" aria-hidden="true"></span><span class="hud br" aria-hidden="true"></span>
+        <div class="holo-inner">
+          <div class="holo-top">
+            <div>
+              <div class="holo-eyebrow"><span class="dot"></span>Paim Business Intelligence · Inteligência competitiva</div>
+              <h1 class="holo-title" id="benchTitle">BENCHMARKING <span>/ Concorrentes em sistemas de armazenagem</span></h1>
+              <div class="holo-sub">Projetos, plantas, investimentos e movimentos de mercado dos concorrentes, no Brasil e no exterior</div>
+            </div>
+            <button class="btn" type="button" id="benchBack">← Voltar ao Radar</button>
+          </div>
+          <div class="holo-term" aria-hidden="true"><span class="p">bsa@radar:~$</span>benchmarking.scan --brasil --exterior --fontes-publicas <span class="cur">▍</span></div>
+          <div class="holo-actions">
+            <div class="muted small" id="benchAsOf">Pesquisa inicial: 18/11/2026 · fontes públicas com link</div>
+            <div class="actions">
+            <span class="share-row" aria-label="Compartilhar o link da página do time">
+              <button class="btn wa" type="button" id="benchWaBtn" title="Envia o link da página do time pelo WhatsApp (funciona com o Business)">📲 WhatsApp</button>
+              <button class="btn" type="button" id="benchMailBtn" title="Abre um e-mail com o link da página do time">✉ E-mail</button>
+              <button class="btn" type="button" id="benchTeamsBtn" title="Compartilha o link no Microsoft Teams">💬 Teams</button>
+              <button class="btn" type="button" id="benchCopyBtn" title="Copia o link da página do time">🔗 Copiar link</button>
+              <button class="btn" type="button" id="benchTeamBtn" title="Baixa o benchmarking.html atualizado, para publicar no GitHub Pages">⬇ benchmarking.html</button>
+              <button class="btn xs" type="button" id="benchUrlBtn" title="Definir o endereço público da página do time">⚙ Link</button>
+            </span>
+            <button class="btn xlsx" type="button" id="benchExport">📊 Exportar XLSX</button>
+            <button class="btn" type="button" id="benchAddBtn">+ Registrar movimento</button>
+          </div>
+          </div>
+        </div>
+      </header>
+      </div>
+
+      <div class="notice"><b>Como ler:</b> cada movimento traz o <b>FATO</b> publicado (com fonte e data), a <b>HIPÓTESE</b> sobre o que significa para a BSA e uma <b>RECOMENDAÇÃO</b>. Pessoas aparecem só quando citadas na fonte. As fotos e plantas ficam na matéria original (botão “Abrir matéria”), para respeitar os direitos de imagem. Os dados não se atualizam sozinhos: use “Buscar notícias recentes” em cada concorrente e registre o que encontrar.</div>
+
+      <section class="grid" id="benchKpis"></section>
+
+      <section class="panel">
+        <div class="panel-header"><h2>Notícias recentes do mercado <span class="nw-status" id="nwStatusApp"></span></h2><button class="btn xs" type="button" id="nwRefresh">↻ Atualizar agora</button></div>
+        <div class="muted small" style="margin-bottom:8px">Buscadas automaticamente ao abrir o Radar (últimos 30 dias, Google Notícias). São NÃO VERIFICADAS: leia a matéria e use “Registrar como movimento” quando for relevante.</div>
+        <div id="nwListApp"><div class="empty">Carregando notícias…</div></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header"><h2>Filtros</h2></div>
+        <div class="toolbar">
+          <div class="field-group"><label class="field-label" for="bnComp">Concorrente</label><select class="field" id="bnComp"><option value="">Todos</option></select></div>
+          <div class="field-group"><label class="field-label" for="bnReg">Região</label><select class="field" id="bnReg"><option value="">Todas</option><option>Brasil</option><option>América Latina</option><option>Exterior</option><option>Não identificado</option></select></div>
+          <div class="field-group"><label class="field-label" for="bnTipo">Tipo</label><select class="field" id="bnTipo"><option value="">Todos</option><option>Projeto em cliente</option><option>Investimento do concorrente</option><option>Lançamento / feira</option><option>Estratégia / mercado</option></select></div>
+          <div class="field-group wide-field"><label class="field-label" for="bnQ">Busca</label><input class="field" id="bnQ" placeholder="Cliente, cidade, segmento, tecnologia…"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header"><h2>Movimentos dos concorrentes (mais recentes no topo)</h2><span class="muted small" id="benchCount"></span></div>
+        <div id="benchList"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header"><h2>Recomendações para a BSA</h2></div>
+        <ol class="rec-list" id="benchRecs"></ol>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header"><h2>Concorrentes monitorados</h2></div>
+        <div class="comp-grid" id="benchComps"></div>
+      </section>
+
+      <section class="panel" id="benchFormPanel" hidden>
+        <div class="panel-header"><h2>Registrar movimento de concorrente</h2></div>
+        <div class="formgrid">
+          <label>Concorrente<input class="field" id="bfComp" placeholder="Ex.: Mecalux"></label>
+          <label>Tipo<select class="field" id="bfTipo"><option>Projeto em cliente</option><option>Investimento do concorrente</option><option>Lançamento / feira</option><option>Estratégia / mercado</option></select></label>
+          <label>Cliente / empresa atendida<input class="field" id="bfCli"></label>
+          <label>Local (cidade, UF/país)<input class="field" id="bfLocal"></label>
+          <label>Região<select class="field" id="bfReg"><option>Brasil</option><option>América Latina</option><option>Exterior</option><option>Não identificado</option></select></label>
+          <label>Segmento do cliente<input class="field" id="bfSeg"></label>
+          <label>Solução / tecnologia<input class="field" id="bfSol" placeholder="Ex.: autoportante, shuttle, porta-paletes"></label>
+          <label>Números (capacidade, área, valor)<input class="field" id="bfNum"></label>
+          <label>Pessoas citadas na fonte (nome — papel)<input class="field" id="bfPes"></label>
+          <label>Data da publicação<input class="field" type="date" id="bfData"></label>
+          <label>Fonte<input class="field" id="bfFonte"></label>
+          <label>URL da matéria<input class="field" id="bfUrl" placeholder="https://"></label>
+          <label class="wide" style="grid-column:1/-1">Fato publicado (resumo com suas palavras)<textarea class="field" id="bfFato"></textarea></label>
+          <label class="wide" style="grid-column:1/-1">Leitura para a BSA (hipótese)<textarea class="field" id="bfLeit"></textarea></label>
+        </div>
+        <div class="actions" style="margin-top:14px;justify-content:flex-end"><button class="btn" type="button" id="bfCancel">Cancelar</button><button class="btn primary" type="button" id="bfSave">Salvar movimento</button></div>
+      </section>
+
+      <footer class="footer"><div>RADAR BSA v3.5 · Benchmarking de concorrentes · Paim Business Intelligence Consultant</div></footer>
+    </main>
+    <aside class="side-matrix"><canvas class="matrix-canvas" id="matrixBenchR"></canvas></aside>
+  </section>
 
   <!-- CONTA (COMMAND CENTER) -->
   <div class="cc-drawer-back" id="ccBack"></div>
@@ -2558,6 +2767,461 @@
       ccRenderFila();
       ccRenderFunil();
     });
+
+
+    // =====================================================================
+    // BENCHMARKING DE CONCORRENTES (v3.1)
+    // Base inicial pesquisada em 18/11/2026 em fontes públicas (links em cada item).
+    // Novos movimentos registrados pelo analista ficam no navegador (IndexedDB).
+    // =====================================================================
+    const BENCH_SEED = [
+      { id: 'b01', concorrente: 'Mecalux', tipo: 'Projeto em cliente', titulo: 'PepsiCo terá terceiro armazém automático da Mecalux na Polônia', cliente: 'PepsiCo', local: 'Michrów, Polônia', regiao: 'Exterior', segmento: 'Alimentos e bebidas', solucao: 'Armazém automático com 6 transelevadores, transportadores e Easy WMS', numeros: '6 transelevadores', pessoas: [], data: '2026-10-09', aprox: false, fonte: 'Mecalux (notícias)', url: 'https://www.mecalux.com.br/empresa/noticias', fato: 'A Mecalux informou que a PepsiCo está construindo um novo armazém automático em Michrów, o terceiro da cliente automatizado pela Mecalux no país.', leitura: 'Contas globais de alimentos e bebidas tendem a repetir o fornecedor de automação entre unidades; o relacionamento corporativo pesa tanto quanto o preço.', acao: 'Mapear unidades brasileiras de multinacionais de bebidas e alimentos e verificar quem é o fornecedor atual de armazenagem.' },
+      { id: 'b02', concorrente: 'SSI Schaefer', tipo: 'Projeto em cliente', titulo: 'adidas escolhe SSI Schaefer para armazenagem automática de caixas nos EUA', cliente: 'adidas', local: 'Spartanburg, EUA', regiao: 'Exterior', segmento: 'Vestuário e calçados', solucao: 'Miniload (22 transelevadores), transportadores e software WAMAS', numeros: '22 miniloads · mais de 300 mil posições de caixa', pessoas: [], data: '2026-10-16', aprox: false, fonte: 'SSI Schaefer (newsroom)', url: 'https://www.ssi-schaefer.com/en-us/newsroom/news', fato: 'A SSI Schaefer anunciou o fornecimento de um armazém automático de caixas para calçados da adidas em Spartanburg, com 22 transelevadores miniload e mais de 300 mil posições.', leitura: 'O mercado de varejo de moda está migrando o armazenamento de caixas para miniload; estrutura convencional fica restrita a pulmão e paletes.', acao: 'Em contas de moda e calçados no Brasil, posicionar porta-paletes e mezanino como complemento a projetos de automação, não como concorrente deles.' },
+      { id: 'b03', concorrente: 'Mecalux', tipo: 'Projeto em cliente', titulo: 'Clavo Food Factory dobra capacidade com 4-Way Pallet Shuttle', cliente: 'Clavo Food Factory', local: 'Não identificado na fonte', regiao: 'Não identificado', segmento: 'Alimentos', solucao: '4-Way Pallet Shuttle (alta densidade)', numeros: 'Capacidade duplicada', pessoas: [], data: '2026-09-29', aprox: false, fonte: 'Mecalux Chile (vídeos)', url: 'https://www.mecalux.cl/', fato: 'Vídeo da Mecalux mostra que a Clavo Food Factory dobrou a capacidade de armazenagem com o sistema 4-Way Pallet Shuttle.', leitura: 'Shuttle de 4 direções virou o carro-chefe da Mecalux para alimentos, onde a densidade importa mais que a seletividade.', acao: 'Ter argumento técnico e de custo total para drive-in, push-back e porta-paletes de alta densidade frente ao shuttle em clientes de alimentos.' },
+      { id: 'b04', concorrente: 'Águia Sistemas', tipo: 'Lançamento / feira', titulo: 'Águia leva robôs de triagem à INTRA-LOG Expo 2026', cliente: '', local: 'São Paulo (SP)', regiao: 'Brasil', segmento: 'E-commerce e varejo', solucao: 'Robôs de triagem T-Sort e 3D Sort (Libiao Robotics, representados pela Águia), além de porta-paletes, autoportante, dinâmico, mezanino, flow rack e pick to light', numeros: 'Evento de 15 a 17/09/2026', pessoas: [], data: '2026-09-15', aprox: false, fonte: 'Tecnologística', url: 'https://www.tecnologistica.com.br/noticias/evento/21897/aguia-sistemas-apresenta-solucoes-de-intralogistica-e-automacao-na-intra-log-expo-2026', fato: 'Na INTRA-LOG 2026, a Águia demonstrou robôs de triagem da chinesa Libiao, que distribui no Brasil, junto com seu portfólio de estruturas e separação de pedidos.', leitura: 'O principal concorrente nacional está se posicionando como integrador completo (estrutura + robótica + software), não só como fabricante de estruturas.', acao: 'Definir o posicionamento da BSA frente ao “integrador completo”: especialização e prazo em estruturas, ou parcerias formais de automação.' },
+      { id: 'b05', concorrente: 'Scheffer + Longa Industrial', tipo: 'Lançamento / feira', titulo: 'Sistema 4-Way apresentado na INTRA-LOG 2026', cliente: '', local: 'São Paulo (SP)', regiao: 'Brasil', segmento: 'Multissetorial', solucao: 'Carros 4-Way que movem paletes em quatro direções dentro da estrutura; estruturas fabricadas pela Longa Industrial', numeros: '', pessoas: [], data: '2026-09-15', aprox: false, fonte: 'Portal Logweb', url: 'https://logweb.com.br/intra-log-2026-tecnologias-automacao-intralogistica/', fato: 'A Scheffer Logística e Automação apresentou na feira um sistema 4-Way em parceria com a Longa Industrial, responsável pela engenharia e fabricação das estruturas.', leitura: 'Fabricantes nacionais de estrutura estão se associando a integradores para oferecer alta densidade automatizada; o modelo de parceria é replicável.', acao: 'Avaliar uma parceria equivalente (estrutura BSA + integrador de shuttle) antes que os clientes peçam essa combinação em concorrência.' },
+      { id: 'b06', concorrente: 'KION (Dematic / STILL)', tipo: 'Lançamento / feira', titulo: 'Dematic demonstra armazém inteligente de paletes de alta densidade', cliente: '', local: 'São Paulo (SP)', regiao: 'Brasil', segmento: 'Multissetorial', solucao: 'Armazenagem automática de paletes em estrutura de alta densidade; empilhadeira retrátil STILL FM-X', numeros: '', pessoas: [], data: '2026-09-15', aprox: false, fonte: 'Portal Logweb', url: 'https://logweb.com.br/intra-log-2026-automacao-ia-intralogistica/', fato: 'A KION South America integrou equipamentos, automação e software no estande, com demonstração da Dematic de armazenagem automática de paletes.', leitura: 'Grupos globais de movimentação chegam ao cliente pelo equipamento (empilhadeira) e ampliam para automação de estrutura.', acao: 'Monitorar contas onde STILL/Linde/Jungheinrich já atendem a frota: são porta de entrada para projetos de automação concorrentes.' },
+      { id: 'b07', concorrente: 'Mecalux', tipo: 'Projeto em cliente', titulo: 'Frigo Logistics: autoportante para 15 mil paletes a -24 °C', cliente: 'Frigo Logistics', local: 'Não identificado na fonte', regiao: 'Não identificado', segmento: 'Logística frigorificada', solucao: 'Armazém autoportante (clad-rack) para congelados', numeros: '15.000 paletes · -24 °C', pessoas: [], data: '2026-09-15', aprox: false, fonte: 'Mecalux Chile (vídeos)', url: 'https://www.mecalux.cl/', fato: 'A Mecalux divulgou um armazém autoportante para 15 mil paletes em temperatura de -24 °C para a Frigo Logistics.', leitura: 'Frio é o nicho em que o autoportante mais cresce, porque reduz o volume refrigerado por palete.', acao: 'Incluir frigoríficos e operadores de frio como segmento prioritário no Radar e preparar referência técnica para câmaras frias.' },
+      { id: 'b08', concorrente: 'Mecalux', tipo: 'Projeto em cliente', titulo: 'GBS (cerveja) adota 4-Way Pallet Shuttle na França', cliente: 'GBS', local: 'Billy-Berclau, França', regiao: 'Exterior', segmento: 'Bebidas (cerveja)', solucao: '4-Way Pallet Shuttle e Easy WMS', numeros: '', pessoas: [], data: '2026-06-22', aprox: false, fonte: 'Mecalux (notícias)', url: 'https://www.mecalux.com.br/empresa/noticias', fato: 'O novo armazém da GBS em Billy-Berclau usará o 4-Way Pallet Shuttle e o software Easy WMS da Mecalux.', leitura: 'Bebidas é o segmento em que alta densidade automatizada substitui drive-in; o mesmo movimento pode chegar às cervejarias brasileiras.', acao: 'Acompanhar expansões de cervejarias no Radar e abordar cedo, na fase de layout.' },
+      { id: 'b09', concorrente: 'Mecalux', tipo: 'Estratégia / mercado', titulo: 'Mecalux acelera automação com AMRs no México', cliente: '', local: 'Cidade do México, México', regiao: 'América Latina', segmento: 'Multissetorial', solucao: 'Robôs móveis autônomos (AMR), armazenagem automática e Easy WMS', numeros: '', pessoas: [{ nome: 'Lluis Fuster', papel: 'Diretor da Mecalux México e América Central' }], data: '2026-04-06', aprox: false, fonte: 'México Industry', url: 'https://mexicoindustry.com/noticia/mecalux-impulsa-robots-amr-para-transformar-la-operacion-de-almacenes', fato: 'Segundo o diretor da Mecalux no México, a alta do salário mínimo e a possível redução da jornada aceleraram a demanda por automação de armazéns no país.', leitura: 'O argumento de custo de mão de obra deve chegar aos clientes brasileiros; a automação passa a competir com a expansão física de estrutura.', acao: 'Preparar comparativo de custo total (estrutura + operação) para responder ao argumento “automatize em vez de ampliar”.' },
+      { id: 'b10', concorrente: 'SSI Schaefer', tipo: 'Projeto em cliente', titulo: 'Schaeffler constrói centro logístico automatizado na Polônia', cliente: 'Schaeffler', local: 'Katowice, Polônia', regiao: 'Exterior', segmento: 'Autopeças / indústria', solucao: 'Armazém automático de pequenas peças com robôs RackBot e RunBot, AGVs (DS Automotion) e AMRs', numeros: 'Mais de 120 mil posições · 55 RackBots · 116 RunBots', pessoas: [{ nome: 'Jörg Zellerhoff', papel: 'Warehouse Engineering Logistics, Schaeffler (cliente)' }], data: '2026-03-10', aprox: false, fonte: 'Loginfo24', url: 'https://loginfo24.com/en/2026/03/10/schaeffler-builds-automated-logistics-center-with-ssi-schaefer/', fato: 'A Schaeffler e a SSI Schaefer estão construindo em Katowice um centro de distribuição automatizado, com armazém de pequenas peças de mais de 120 mil posições operado por robôs.', leitura: 'Autopeças globais padronizam automação de pequenas peças; no Brasil, CDs de peças podem seguir o mesmo caminho em reformas.', acao: 'Priorizar CDs de autopeças no Brasil com estrutura antiga: ampliação e retrofit podem abrir conversa antes da automação.' },
+      { id: 'b11', concorrente: 'Grupo Águia', tipo: 'Investimento do concorrente', titulo: 'Grupo Águia fatura R$ 1,5 bilhão em 2025 e mira R$ 2 bilhões em 2026', cliente: '', local: 'Ponta Grossa (PR)', regiao: 'Brasil', segmento: '—', solucao: 'Estruturas de armazenagem, automação e construção industrializada', numeros: 'R$ 1,5 bi (2025) · meta R$ 2 bi (2026)', pessoas: [], data: '2025-12-07', aprox: true, fonte: 'Exame', url: 'https://exame.com/negocios/o-grupo-de-r-15-bi-no-centro-da-corrida-por-obras-rapidas-e-sem-tijolo/', fato: 'Reportagem da Exame informa que o Grupo Águia, dono da Águia Sistemas, faturou R$ 1,5 bilhão em 2025 e projeta superar R$ 2 bilhões em 2026, com novos equipamentos importados do Japão e ampliação industrial.', leitura: 'O maior concorrente nacional tem escala e caixa para disputar preço e prazo em grandes projetos.', acao: 'Evitar disputa só por preço em grandes contas; competir por prazo, engenharia dedicada e atendimento regional.' },
+      { id: 'b12', concorrente: 'Águia Sistemas', tipo: 'Investimento do concorrente', titulo: 'Águia investe R$ 40 milhões para ampliar fábrica no Paraná', cliente: '', local: 'Ponta Grossa (PR)', regiao: 'Brasil', segmento: '—', solucao: 'Ampliação do parque fabril com tecnologia de origem japonesa', numeros: 'R$ 40 mi · ~1 mil colaboradores diretos · 3,5 a 4 mil t de aço/mês', pessoas: [{ nome: 'Rogério Scheffer', papel: 'Diretor-presidente da Águia Sistemas' }], data: '2025-10-31', aprox: true, fonte: 'Gazeta do Povo / MundoLogística', url: 'https://mundologistica.com.br/noticias/aguia-sistemas-investe-fabrica-parana', fato: 'A Águia anunciou investimento de R$ 40 milhões na unidade de Ponta Grossa e citou entre seus clientes Mercado Livre, Shopee e Amazon.', leitura: 'Mais capacidade fabril do concorrente tende a encurtar prazos de entrega dele em 2026.', acao: 'Medir o prazo médio de entrega da BSA versus o mercado e usar pronta-entrega como argumento onde ele for melhor.' },
+      { id: 'b13', concorrente: 'Mecalux', tipo: 'Projeto em cliente', titulo: 'Bem Brasil: dois armazéns autoportantes automáticos em Perdizes (MG)', cliente: 'Bem Brasil Alimentos', local: 'Perdizes (MG)', regiao: 'Brasil', segmento: 'Alimentos congelados', solucao: 'Dois autoportantes (clad-rack) com Pallet Shuttle automático, transelevador e Easy WMS', numeros: '66 mil paletes · 500 mil t/ano expedidas', pessoas: [], data: '2025-07-09', aprox: true, fonte: 'MundoLogística', url: 'https://mundologistica.com.br/noticias/bem-brasil-integra-solucao-mecalux-armazenar-500-mil-toneladas-ano', fato: 'A Bem Brasil ampliou a logística da fábrica de Perdizes com dois armazéns autoportantes da Mecalux, chegando a 66 mil paletes de capacidade.', leitura: 'Indústrias de congelados no Brasil já compram autoportante automatizado; a concorrência nesse nicho é com a Mecalux, não com fabricantes locais.', acao: 'Mapear indústrias de congelados e frigoríficos no Radar e oferecer estrutura para expansões de câmaras convencionais.' },
+      { id: 'b14', concorrente: 'SSI Schaefer', tipo: 'Projeto em cliente', titulo: 'Grupo Boticário: autoportantes em Camaçari e São Gonçalo dos Campos (BA)', cliente: 'Grupo Boticário', local: 'Camaçari e São Gonçalo dos Campos (BA)', regiao: 'Brasil', segmento: 'Cosméticos', solucao: 'Armazéns autoportantes automáticos (40 m e 30 m de altura)', numeros: '+46 mil posições (fábrica) · ~20 mil posições (CD) · escopo total de 90 mil posições-palete', pessoas: [], data: '', aprox: false, fonte: 'SSI Schaefer (case)', url: 'https://www.ssi-schaefer.com/pt-br/tendencias-insights/cases-de-sucesso/solu%C3%A7%C3%B5es-log%C3%ADsticas-de-ponta-para-o-grupo-botic%C3%A1rio-1710420', fato: 'O case da SSI Schaefer descreve autoportantes para a fábrica do Boticário em Camaçari e para o CD de São Gonçalo dos Campos, que atende franquias do Norte e Nordeste.', leitura: 'Referência histórica: mostra que grandes contas de cosméticos no Nordeste já operam com autoportante automatizado.', acao: 'Usar como mapa de conta: ampliações de picking, mezaninos e estruturas convencionais ao redor desses CDs ainda podem ser oportunidade.' },
+      { id: 'b15', concorrente: 'Mecalux', tipo: 'Projeto em cliente', titulo: 'RADEC renova CD de autopeças em Guadalajara', cliente: 'RADEC', local: 'Guadalajara, México', regiao: 'América Latina', segmento: 'Autopeças (colisão)', solucao: 'Racks para paletes e racks com passarelas', numeros: '', pessoas: [], data: '', aprox: false, fonte: 'Mecalux México (caso prático)', url: 'https://www.mecalux.com.mx/home', fato: 'A Mecalux México destaca a renovação de um dos maiores CDs da RADEC, distribuidora de autopeças, com racks para paletes e racks com passarelas.', leitura: 'Mesmo a Mecalux vende estrutura convencional e passarelas em reformas de CD; o mercado de retrofit é disputado.', acao: 'Tratar retrofit e ampliação de CDs existentes como linha de prospecção própria no Radar.' }
+    ];
+    const BENCH_COMPS = [
+      { nome: 'Mecalux', origem: 'Espanha · escritório no Brasil em Hortolândia (SP)', foco: 'Estruturas, autoportante, Pallet Shuttle 4-Way, AMR e software Easy WMS', site: 'https://www.mecalux.com.br/empresa/noticias' },
+      { nome: 'Águia Sistemas', origem: 'Brasil · Ponta Grossa (PR)', foco: 'Estruturas de armazenagem, automação, robótica (Libiao) e software', site: 'https://aguiasistemas.com.br/category/sistemas-de-armazenagem/' },
+      { nome: 'SSI Schaefer', origem: 'Alemanha · atua no Brasil', foco: 'Autoportante, miniload, robótica e software WAMAS', site: 'https://www.ssi-schaefer.com/en-us/newsroom/news' },
+      { nome: 'KION (Dematic / STILL / Linde)', origem: 'Alemanha · atua no Brasil', foco: 'Automação, empilhadeiras e software', site: 'https://logweb.com.br/intra-log-2026-automacao-ia-intralogistica/' },
+      { nome: 'Scheffer + Longa Industrial', origem: 'Brasil', foco: 'Integração 4-Way com estruturas Longa', site: 'https://logweb.com.br/intra-log-2026-tecnologias-automacao-intralogistica/' },
+      { nome: 'ISMA', origem: 'Brasil', foco: 'Estruturas de armazenagem (presente na INTRA-LOG 2026)', site: 'https://logweb.com.br/intra-log-2026-tecnologias-automacao-intralogistica/' },
+      { nome: 'Jungheinrich', origem: 'Alemanha · sede no Brasil em Itupeva (SP)', foco: 'Empilhadeiras, sistemas de armazenagem e WMS', site: 'https://frotacia.com.br/jungheinrich-vai-ampliar-as-suas-operacoes-no-brasil-e-tem-nas-empilhadeiras-eletricas-aliadas-contra-o-impacto-ambiental/' }
+    ];
+    const BENCH_RECS = [
+      ['Alta densidade automatizada é o discurso dominante dos concorrentes.', 'Mecalux (4-Way Pallet Shuttle), Scheffer + Longa (4-Way) e Dematic (paletes automáticos) levaram o mesmo tema à INTRA-LOG 2026. RECOMENDAÇÃO: preparar comparativo técnico e de custo total de drive-in, push-back e porta-paletes versus shuttle, e avaliar uma parceria de shuttle com estrutura BSA.'],
+      ['O concorrente nacional virou integrador completo.', 'A Águia soma estrutura, robótica e software, com escala de R$ 1,5 bi e R$ 40 mi em fábrica. RECOMENDAÇÃO: não disputar só preço em grandes contas; vender prazo, engenharia dedicada, atendimento regional e retrofit.'],
+      ['Frio e alimentos congelados são o nicho do autoportante.', 'Bem Brasil (MG) e Frigo Logistics mostram demanda por autoportante em congelados. RECOMENDAÇÃO: incluir frigoríficos, laticínios e operadores de frio como segmento prioritário no Radar e preparar referência para câmaras frias.'],
+      ['Software é diferencial na proposta dos líderes.', 'Mecalux (Easy WMS) e SSI Schaefer (WAMAS) vendem estrutura com software. RECOMENDAÇÃO: firmar parcerias com WMS nacionais para não perder concorrências que exigem pacote completo.'],
+      ['Clientes de concorrentes também são sinais.', 'Quem automatizou um CD ou fábrica pode ampliar estruturas convencionais, picking e mezaninos ao redor. HIPÓTESE, a confirmar caso a caso. RECOMENDAÇÃO: usar “Adicionar cliente à Fila” e acompanhar essas contas no Command Center.']
+    ];
+    const BENCH = { custom: [], seen: [] };
+    // ---------- Produto (ilustração esquemática) e CAPEX estimado por movimento (v3.4)
+    const BENCH_EXTRA = {
+      b01: { ilu: 'asrs', capexMotivo: 'a fonte informa 6 transelevadores, mas não a quantidade de posições' },
+      b02: { ilu: 'miniload', capexMotivo: 'não encontramos referência pública confiável de custo por posição de miniload (caixas)' },
+      b03: { ilu: 'shuttle', capexMotivo: 'a fonte não informa a quantidade de posições' },
+      b04: { ilu: 'robots', capexMotivo: 'lançamento em feira, sem projeto de cliente' },
+      b05: { ilu: 'shuttle', capexMotivo: 'lançamento em feira, sem projeto de cliente' },
+      b06: { ilu: 'asrs', capexMotivo: 'demonstração em feira, sem projeto de cliente' },
+      b07: { ilu: 'clad', capex: { pos: 15000, lo: 300, hi: 800, sistema: 'AS/RS de paletes instalado', fonte: 'GoASRS (guia de custos de AS/RS de paletes)', url: 'https://goasrs.com/pallet-asrs-systems-guide/', obs: 'Não inclui prédio nem refrigeração. Câmara a -24 °C tende ao topo da faixa (HIPÓTESE).' } },
+      b08: { ilu: 'shuttle', capexMotivo: 'a fonte não informa a quantidade de posições' },
+      b09: { ilu: 'robots', capexMotivo: 'movimento estratégico, sem projeto de cliente' },
+      b10: { ilu: 'robots', capexMotivo: 'não encontramos referência pública confiável de custo por posição de pequenas peças com robôs' },
+      b11: { ilu: 'factory', capexMotivo: 'informação de faturamento do concorrente, não de investimento' },
+      b12: { ilu: 'factory', capexFato: 'R$ 40 milhões, valor anunciado pela própria Águia para a ampliação da fábrica' },
+      b13: { ilu: 'clad', capex: { pos: 66000, lo: 350, hi: 1200, sistema: 'pallet shuttle automático', fonte: 'Raymond Storage Concepts (faixa de custo de pallet shuttle)', url: 'https://www.raymondsci.com/warehouse-automation/pallet-shuttle', obs: 'Não inclui o prédio autoportante (envelope, cobertura, piso) nem o frio. Valor de referência de mercado dos EUA.' } },
+      b14: { ilu: 'clad', capex: { pos: 90000, lo: 300, hi: 800, sistema: 'AS/RS de paletes instalado', fonte: 'GoASRS (guia de custos de AS/RS de paletes)', url: 'https://goasrs.com/pallet-asrs-systems-guide/', obs: 'Escopo total informado no case (fábrica e CD). Não inclui o prédio. Data do projeto não informada.' } },
+      b15: { ilu: 'rack', capexMotivo: 'a fonte não informa a quantidade de posições' }
+    };
+    BENCH_SEED.forEach(b => Object.assign(b, BENCH_EXTRA[b.id] || {}));
+    const ILU_LABEL = { rack: 'porta-paletes seletivo', clad: 'armazém autoportante (clad-rack) com transelevador', shuttle: 'pallet shuttle / 4-Way (alta densidade)', miniload: 'miniload para caixas', robots: 'robôs móveis e automação de pequenas cargas', factory: 'fábrica / ampliação industrial', asrs: 'armazém automático de paletes (transelevadores)' };
+    const S = 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+    const PAL = (x, y) => `<rect x="${x}" y="${y}" width="22" height="14" rx="1.5" fill="rgba(242,169,59,.35)" stroke="#F2A93B" stroke-width="1.2"/>`;
+    const BENCH_ILU = {
+      rack: `<svg viewBox="0 0 220 120" role="img" aria-label="Porta-paletes"><g ${S}><path d="M20 110V14M80 110V14M140 110V14M200 110V14M20 44H200M20 78H200M10 110H210"/></g>${[30,52,92,112,152,172].map(x => PAL(x, 26) + PAL(x, 60) + PAL(x, 94)).join('')}</svg>`,
+      clad: `<svg viewBox="0 0 220 120" role="img" aria-label="Autoportante"><g ${S}><path d="M14 112V26L110 8l96 18v86M14 112h192"/><path d="M40 106V40M76 106V36M144 106V36M180 106V40M40 62h36M40 84h36M144 62h36M144 84h36" opacity=".8"/><path d="M110 104V28M100 104h20M104 60h12"/></g>${PAL(46,46)+PAL(46,68)+PAL(46,90)+PAL(150,46)+PAL(150,68)+PAL(150,90)}<rect x="102" y="52" width="16" height="10" fill="#00B4D8" opacity=".8"/></svg>`,
+      shuttle: `<svg viewBox="0 0 220 120" role="img" aria-label="Pallet shuttle"><g ${S}><path d="M14 20h192M14 50h192M14 80h192M14 110h192M14 20v90M206 20v90"/></g>${[24,50,76,102,128].map(x => PAL(x, 32) + PAL(x, 62)).join('')}${[24,50,76].map(x => PAL(x, 92)).join('')}<rect x="150" y="92" width="26" height="12" rx="3" fill="#00FFC4" opacity=".85"/><g stroke="#00FFC4" stroke-width="2" fill="none"><path d="M182 98h16M192 92l6 6-6 6M163 88v-8M159 84l4-6 4 6"/></g></svg>`,
+      miniload: `<svg viewBox="0 0 220 120" role="img" aria-label="Miniload"><g ${S}><path d="M20 112V10M90 112V10M130 112V10M200 112V10M20 30h70M20 50h70M20 70h70M20 90h70M130 30h70M130 50h70M130 70h70M130 90h70M110 112V12"/></g>${[26,50,74-10].map(x => [18,38,58,78].map(y => `<rect x="${x}" y="${y}" width="16" height="10" rx="1" fill="rgba(0,180,216,.35)" stroke="#00B4D8"/>`).join('')).join('')}${[136,160,180].map(x => [18,38,58,78].map(y => `<rect x="${x}" y="${y}" width="14" height="10" rx="1" fill="rgba(0,180,216,.35)" stroke="#00B4D8"/>`).join('')).join('')}<rect x="102" y="44" width="16" height="12" fill="#00FFC4" opacity=".85"/></svg>`,
+      robots: `<svg viewBox="0 0 220 120" role="img" aria-label="Robôs móveis"><g ${S}><path d="M10 108h200"/><rect x="24" y="78" width="46" height="22" rx="5"/><rect x="92" y="78" width="46" height="22" rx="5"/><rect x="160" y="78" width="40" height="22" rx="5"/><circle cx="34" cy="102" r="4"/><circle cx="60" cy="102" r="4"/><circle cx="102" cy="102" r="4"/><circle cx="128" cy="102" r="4"/><circle cx="168" cy="102" r="4"/><circle cx="192" cy="102" r="4"/></g><rect x="32" y="60" width="30" height="18" fill="rgba(242,169,59,.35)" stroke="#F2A93B"/><rect x="100" y="54" width="30" height="24" fill="rgba(242,169,59,.35)" stroke="#F2A93B"/><g stroke="#00FFC4" stroke-width="1.5" fill="none" opacity=".8"><path d="M70 90h22M138 90h22M30 30q80-30 160 0" stroke-dasharray="4 4"/></g></svg>`,
+      factory: `<svg viewBox="0 0 220 120" role="img" aria-label="Fábrica"><g ${S}><path d="M14 110V60l40 20V60l40 20V60l40 20V30h22v80M14 110h192M156 30v-14h12v14M178 110V46h28v64"/><path d="M30 92h14M70 92h14M110 92h14" opacity=".8"/></g><path d="M162 12q8-8 18-4" stroke="#8AA8B8" fill="none" stroke-width="2"/></svg>`,
+      asrs: `<svg viewBox="0 0 220 120" role="img" aria-label="Armazém automático"><g ${S}><path d="M14 112V10M62 112V10M104 112V10M152 112V10M200 112V10M14 34h48M14 58h48M14 82h48M104 34h48M104 58h48M104 82h48M152 34h48M152 58h48M152 82h48M83 112V12"/></g>${[20,38].map(x => PAL(x,20)+PAL(x,44)+PAL(x,68)+PAL(x,92)).join('')}${[110,128,158,176].map(x => PAL(x,20)+PAL(x,44)+PAL(x,68)).join('')}<rect x="74" y="58" width="18" height="12" fill="#00FFC4" opacity=".85"/></svg>`
+    };
+    function benchIluKey(b) {
+      if (b.ilu) return b.ilu;
+      const t = normalizeText(`${b.solucao} ${b.titulo}`);
+      if (/autoportante|clad/.test(t)) return 'clad';
+      if (/shuttle|4-way/.test(t)) return 'shuttle';
+      if (/miniload/.test(t)) return 'miniload';
+      if (/robo|amr|agv/.test(t)) return 'robots';
+      if (/fabrica|ampliacao industrial/.test(t)) return 'factory';
+      if (/transelevador|automatic/.test(t)) return 'asrs';
+      return 'rack';
+    }
+    const usdM = v => 'US$ ' + (v / 1e6).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' mi';
+    function benchProductHtml(b) {
+      const e = escapeHtml, k = benchIluKey(b);
+      const tag = (cls, label) => `<span class="pev pev-${cls}">${label}</span>`;
+      let capex;
+      if (b.capexFato) capex = `<div class="pc-t">${tag('f', 'FATO')} Investimento informado</div><div class="pc-v">${e(b.capexFato)}</div>`;
+      else if (b.capex) {
+        const c = b.capex;
+        capex = `<div class="pc-t">${tag('e', 'ESTIMATIVA')} CAPEX do sistema de armazenagem</div><div class="pc-v">${usdM(c.pos * c.lo)} a ${usdM(c.pos * c.hi)}</div><div class="pc-m">Cálculo: ${c.pos.toLocaleString('pt-BR')} posições × US$ ${c.lo.toLocaleString('pt-BR')} a ${c.hi.toLocaleString('pt-BR')} por posição (${e(c.sistema)}). Referência pública: <a href="${e(c.url)}" target="_blank" rel="noopener">${e(c.fonte)}</a>. ${e(c.obs)} Ordem de grandeza, não valor do contrato.</div>`;
+      } else capex = `<div class="pc-t">${tag('n', 'NÃO ESTIMADO')} CAPEX</div><div class="pc-m">Motivo: ${e(b.capexMotivo || 'a fonte não informa capacidade ou valor')}.</div>`;
+      const url = safeUrl(b.url);
+      const gImg = 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(`${b.concorrente.split(' (')[0]} ${b.cliente || ''} ${ILU_LABEL[k]}`);
+      return `<div class="bench-prod"><figure class="pc-ilu">${BENCH_ILU[k]}<figcaption>Ilustração esquemática: ${e(ILU_LABEL[k])}. Não é foto do projeto.</figcaption></figure><div class="pc-box">${capex}<div class="pc-links">${url ? `<a href="${e(url)}" target="_blank" rel="noopener">Fotos reais na matéria ↗</a>` : ''}<a href="${e(gImg)}" target="_blank" rel="noopener">Buscar fotos no Google Imagens ↗</a></div></div></div>`;
+    }
+
+    const benchAll = () => [...BENCH.custom, ...BENCH_SEED].sort((a, b) => String(b.data || '0000').localeCompare(String(a.data || '0000')));
+    const benchDate = b => b.data ? new Date(b.data + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) + (b.aprox ? ' (aprox.)' : '') : 'Data não informada na fonte';
+    const benchIsRecent = b => b.data && (Date.now() - new Date(b.data + 'T12:00:00').getTime()) / 864e5 <= 90;
+    async function benchLoad() {
+      await ccReady;
+      if (!IDB.db) return;
+      try {
+        BENCH.custom = (await IDB.get('bench')) || [];
+        BENCH.seen = (await IDB.get('benchSeen')) || [];
+      } catch (_) {}
+    }
+    function benchSave() {
+      if (!IDB.db) return;
+      IDB.set('bench', BENCH.custom).catch(() => {});
+      IDB.set('benchSeen', BENCH.seen).catch(() => {});
+    }
+    function benchUnseen() { return benchAll().filter(b => benchIsRecent(b) && !BENCH.seen.includes(b.id)); }
+    function benchFab() {
+      const n = benchUnseen().length + (typeof newsUnseen === 'function' ? newsUnseen().length : 0);
+      $('benchFab').classList.toggle('alert', n > 0);
+      $('benchBadge').hidden = n === 0;
+      $('benchBadge').textContent = n;
+      $('benchFab').setAttribute('aria-label', n ? `Abrir benchmarking: ${n} novidade(s) de concorrentes não vista(s)` : 'Abrir benchmarking de concorrentes');
+    }
+    function benchRender() {
+      const all = benchAll();
+      const comps = [...new Set(all.map(b => b.concorrente))].sort();
+      const sel = $('bnComp'), cur = sel.value;
+      sel.innerHTML = '<option value="">Todos</option>' + comps.map(c => optionHtml(c)).join('');
+      sel.value = comps.includes(cur) ? cur : '';
+      const fc = sel.value, fr = $('bnReg').value, ft = $('bnTipo').value, q = normalizeText($('bnQ').value);
+      const list = all.filter(b => (!fc || b.concorrente === fc) && (!fr || b.regiao === fr) && (!ft || b.tipo === ft) && (!q || normalizeText([b.titulo, b.cliente, b.local, b.segmento, b.solucao, b.fato].join(' ')).includes(q)));
+      const st = (l, v, n) => `<div class="stat"><div class="muted small">${escapeHtml(l)}</div><div class="n">${v}</div><div class="muted small">${escapeHtml(n)}</div></div>`;
+      const br = all.filter(b => b.regiao === 'Brasil').length, ext = all.filter(b => b.regiao === 'Exterior' || b.regiao === 'América Latina').length, rec = all.filter(benchIsRecent).length;
+      $('benchKpis').innerHTML = st('Movimentos registrados', all.length, `${BENCH.custom.length} adicionados por você`) + st('Últimos 90 dias', rec, `${rec} de ${all.length} = ${all.length ? fmt1(rec / all.length * 100) : 0}%`) + st('Brasil', br, `${br} de ${all.length}`) + st('Exterior e América Latina', ext, `${ext} de ${all.length}`);
+      $('benchCount').textContent = `${list.length} de ${all.length} movimentos`;
+      $('benchList').innerHTML = list.length ? list.map(b => {
+        const novo = benchIsRecent(b) && !BENCH.seen.includes(b.id);
+        const pessoas = (b.pessoas || []).length ? b.pessoas.map(p => `${escapeHtml(p.nome)} (${escapeHtml(p.papel)})`).join('; ') : 'NÃO IDENTIFICADO na fonte';
+        const url = safeUrl(b.url);
+        const gImg = 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(`${b.concorrente} ${b.cliente || ''} ${b.local || ''} armazém`);
+        return `<article class="bench-card">
+          <div>
+            <h3>${novo ? '<span class="new-dot" title="Novo"></span>' : ''}<span class="comp-chip">${escapeHtml(b.concorrente)}</span>${escapeHtml(b.titulo)}</h3>
+            <p>${escapeHtml(b.tipo)} · ${escapeHtml(b.local || 'Local não informado')} · ${escapeHtml(b.regiao)} · ${escapeHtml(benchDate(b))} · ${escapeHtml(b.fonte || '')}</p>
+            <p>${evTag('F')} ${escapeHtml(b.fato)}</p>
+            ${b.leitura ? `<p>${evTag('H')} ${escapeHtml(b.leitura)}</p>` : ''}
+            ${b.acao ? `<p>${evTag('R')} ${escapeHtml(b.acao)}</p>` : ''}
+            <div class="links">${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener">Abrir matéria (fotos e detalhes) ↗</a>` : ''}<a href="${escapeHtml(gImg)}" target="_blank" rel="noopener">Buscar imagens do projeto ↗</a>${b.cliente ? `<a href="#" data-bench-cli="${escapeHtml(b.id)}">Adicionar cliente à Fila ↗</a>` : ''}${b.custom ? `<a href="#" data-bench-del="${escapeHtml(b.id)}">Excluir</a>` : ''}</div>
+          </div>
+          <div class="bench-side">
+            <b>${escapeHtml(b.cliente || 'Sem cliente específico')}</b>
+            <div>Segmento: ${escapeHtml(b.segmento || '—')}</div>
+            <div style="margin-top:6px">Solução: ${escapeHtml(b.solucao || '—')}</div>
+            <div style="margin-top:6px">Números: ${escapeHtml(b.numeros || 'NÃO IDENTIFICADO')}</div>
+            <div style="margin-top:6px">Pessoas citadas: ${pessoas}</div>
+          </div>
+          ${benchProductHtml(b)}
+        </article>`;
+      }).join('') : '<div class="empty">Nenhum movimento nos filtros atuais.</div>';
+      $('benchRecs').innerHTML = BENCH_RECS.map(([t, d]) => `<li><b>${escapeHtml(t)}</b><small>${escapeHtml(d)}</small></li>`).join('');
+      $('benchComps').innerHTML = BENCH_COMPS.map(c => {
+        const n = all.filter(b => b.concorrente.includes(c.nome.split(' ')[0])).length;
+        const gn = 'https://news.google.com/search?hl=pt-BR&gl=BR&ceid=BR:pt-419&q=' + encodeURIComponent(`"${c.nome.split(' (')[0].split(' +')[0]}" armazenagem OR armazém OR "centro de distribuição"`);
+        return `<div class="comp-box"><b>${escapeHtml(c.nome)}</b><div>${escapeHtml(c.origem)}</div><div style="margin-top:6px">${escapeHtml(c.foco)}</div><div style="margin-top:6px">${n} movimento(s) registrados aqui</div><div class="links"><a href="${escapeHtml(gn)}" target="_blank" rel="noopener">Buscar notícias recentes ↗</a><a href="${escapeHtml(c.site)}" target="_blank" rel="noopener">Fonte de referência ↗</a></div></div>`;
+      }).join('');
+    }
+    function holoTilt(el){if(!el||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return;el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.style.setProperty('--ry',(x*5).toFixed(2)+'deg');el.style.setProperty('--rx',(-y*4).toFixed(2)+'deg');});el.addEventListener('pointerleave',function(){el.style.setProperty('--ry','0deg');el.style.setProperty('--rx','0deg');});}
+    let benchMatrixOn = false;
+    function benchOpen() {
+      if (!benchMatrixOn) { initMatrix('matrixBenchL'); initMatrix('matrixBenchR'); benchMatrixOn = true; }
+      const hero = $('benchHero'); hero.style.animation = 'none'; void hero.offsetWidth; hero.style.animation = '';
+      benchRender();
+      benchNewsRender();
+      benchNewsMarkSeen();
+      document.body.classList.add('bench-open');
+      $('benchScreen').classList.add('open');
+      $('benchScreen').setAttribute('aria-hidden', 'false');
+      $('benchScreen').scrollTop = 0;
+      $('benchFab').hidden = true;
+      setTimeout(() => $('benchBack').focus(), 560);
+      // ao abrir, os movimentos recentes passam a contar como vistos
+      BENCH.seen = [...new Set([...BENCH.seen, ...benchAll().filter(benchIsRecent).map(b => b.id)])];
+      benchSave();
+    }
+    function benchClose() {
+      document.body.classList.remove('bench-open');
+      $('benchScreen').classList.remove('open');
+      $('benchScreen').setAttribute('aria-hidden', 'true');
+      $('benchFab').hidden = false;
+      benchFab();
+      $('benchFab').focus();
+    }
+    function benchExport() {
+      if (typeof XLSX === 'undefined') { showToast('Biblioteca XLSX carregando. Tente novamente.'); return; }
+      const rows = benchAll().map(b => ({ 'Concorrente': b.concorrente, 'Tipo': b.tipo, 'Título': b.titulo, 'Cliente': b.cliente, 'Local': b.local, 'Região': b.regiao, 'Segmento': b.segmento, 'Solução': b.solucao, 'Números': b.numeros, 'Pessoas citadas': (b.pessoas || []).map(p => `${p.nome} (${p.papel})`).join('; '), 'Data': benchDate(b), 'Fonte': b.fonte, 'URL': b.url, 'FATO': b.fato, 'HIPÓTESE (leitura BSA)': b.leitura, 'RECOMENDAÇÃO': b.acao, 'Origem do registro': b.custom ? 'Analista' : 'Pesquisa 18/11/2026' }));
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), 'Benchmarking');
+      XLSX.writeFile(wb, `benchmarking_concorrentes_${todayStr()}.xlsx`);
+    }
+    function benchAddSave() {
+      const v = id => $(id).value.trim();
+      if (!v('bfComp') || !v('bfFato')) { showToast('Informe pelo menos o concorrente e o fato publicado.'); return; }
+      const pes = v('bfPes') ? v('bfPes').split(';').map(x => { const [nome, papel] = x.split(/—|-/).map(y => (y || '').trim()); return nome ? { nome, papel: papel || 'papel não informado' } : null; }).filter(Boolean) : [];
+      BENCH.custom.push({ id: uid('bm'), custom: true, concorrente: v('bfComp'), tipo: $('bfTipo').value, titulo: v('bfCli') ? `${v('bfComp')} · ${v('bfCli')}` : v('bfComp') + ' · ' + $('bfTipo').value, cliente: v('bfCli'), local: v('bfLocal'), regiao: $('bfReg').value, segmento: v('bfSeg'), solucao: v('bfSol'), numeros: v('bfNum'), pessoas: pes, data: $('bfData').value, aprox: false, fonte: v('bfFonte'), url: v('bfUrl'), fato: v('bfFato'), leitura: v('bfLeit'), acao: '' });
+      benchSave();
+      ['bfComp', 'bfCli', 'bfLocal', 'bfSeg', 'bfSol', 'bfNum', 'bfPes', 'bfData', 'bfFonte', 'bfUrl', 'bfFato', 'bfLeit'].forEach(id => $(id).value = '');
+      $('benchFormPanel').hidden = true;
+      benchRender();
+      showToast('Movimento registrado.');
+    }
+    function benchClienteToFila(id) {
+      const b = benchAll().find(x => x.id === id);
+      if (!b || !b.cliente) return;
+      const paisMap = { 'Brasil': 'BR' };
+      const c = upsertConta({ nome: b.cliente, pais: paisMap[b.regiao] || '' }, 'Benchmarking');
+      if (c) {
+        c.notas = (c.notas ? c.notas + '\n' : '') + `[Benchmarking] Cliente de ${b.concorrente}: ${b.titulo} (${benchDate(b)}). HIPÓTESE: pode haver demanda complementar (ampliação, picking, mezanino, retrofit).`;
+        ccSave();
+        ccRenderAll();
+        showToast(`${b.cliente} adicionado à Fila de prioridade (veja a nota na conta).`, 5000);
+      }
+    }
+    $('benchFab').addEventListener('click', benchOpen);
+    $('benchBack').addEventListener('click', benchClose);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('benchScreen').classList.contains('open') && !$('ccD').classList.contains('open')) benchClose(); });
+    ['bnComp', 'bnReg', 'bnTipo'].forEach(id => $(id).addEventListener('change', benchRender));
+    $('bnQ').addEventListener('input', benchRender);
+    $('benchExport').addEventListener('click', benchExport);
+    $('benchAddBtn').addEventListener('click', () => { $('benchFormPanel').hidden = false; $('benchFormPanel').scrollIntoView({ behavior: 'smooth' }); $('bfComp').focus(); });
+    $('bfCancel').addEventListener('click', () => { $('benchFormPanel').hidden = true; });
+    $('bfSave').addEventListener('click', benchAddSave);
+    $('benchList').addEventListener('click', e => {
+      const a = e.target.closest('[data-bench-cli],[data-bench-del]');
+      if (!a) return;
+      e.preventDefault();
+      if (a.dataset.benchCli) benchClienteToFila(a.dataset.benchCli);
+      if (a.dataset.benchDel && confirm('Excluir este movimento registrado por você?')) { BENCH.custom = BENCH.custom.filter(b => b.id !== a.dataset.benchDel); benchSave(); benchRender(); }
+    });
+
+    // ---------- Página do time (só o Benchmarking, sem acesso ao Radar)
+    function benchFilteredList() {
+      const fc = $('bnComp').value, fr = $('bnReg').value, ft = $('bnTipo').value, q = normalizeText($('bnQ').value);
+      return benchAll().filter(b => (!fc || b.concorrente === fc) && (!fr || b.regiao === fr) && (!ft || b.tipo === ft) && (!q || normalizeText([b.titulo, b.cliente, b.local, b.segmento, b.solucao, b.fato].join(' ')).includes(q)));
+    }
+    const NEWS_CSS = `.nw-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start;padding:10px 0;border-top:1px solid #1E384A}.nw-item:first-child{border-top:0}.nw-item a.t{color:#E2F1F8;font-weight:700;text-decoration:none;font-size:13.5px;line-height:1.4}.nw-item a.t:hover{color:#00FFC4;text-decoration:underline}.nw-meta{font-size:12px;color:#8AA8B8;margin-top:3px}.nw-chip{display:inline-block;font-weight:800;font-size:10.5px;padding:2px 7px;border-radius:7px;background:rgba(255,92,92,.12);color:#ff9c9c;border:1px solid rgba(255,92,92,.35);margin-right:6px}.nw-nv{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 6px;border-radius:5px;background:#132431;color:#8AA8B8;border:1px solid #1E384A;margin-left:6px}.nw-new{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff3b3b;margin-right:6px;vertical-align:1px}.nw-status{font-size:12px;color:#8AA8B8;font-weight:400;margin-left:8px}.share-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}`;
+    const TEAM_LIVE_JS = "(function(){\nvar API=\"https://paim-ia-prospect-2-0-cld.onrender.com/api/news\",QUERIES=[{\"comp\": \"Mecalux\", \"q\": \"\\\"Mecalux\\\"\", \"langs\": [\"pt\", \"en\", \"es\"]}, {\"comp\": \"Águia Sistemas\", \"q\": \"\\\"Águia Sistemas\\\"\", \"langs\": [\"pt\"]}, {\"comp\": \"SSI Schaefer\", \"q\": \"\\\"SSI Schaefer\\\"\", \"langs\": [\"pt\", \"en\"]}, {\"comp\": \"Dematic\", \"q\": \"\\\"Dematic\\\"\", \"langs\": [\"pt\", \"en\"]}, {\"comp\": \"Jungheinrich\", \"q\": \"\\\"Jungheinrich\\\" (armazém OR intralogística OR \\\"centro de distribuição\\\")\", \"langs\": [\"pt\"]}, {\"comp\": \"ISMA\", \"q\": \"\\\"ISMA\\\" (armazenagem OR porta-paletes)\", \"langs\": [\"pt\"]}, {\"comp\": \"Longa Industrial\", \"q\": \"\\\"Longa Industrial\\\"\", \"langs\": [\"pt\"]}, {\"comp\": \"Scheffer\", \"q\": \"\\\"Scheffer Logística\\\"\", \"langs\": [\"pt\"]}, {\"comp\": \"AR Racking\", \"q\": \"\\\"AR Racking\\\"\", \"langs\": [\"pt\", \"es\"]}];\nfunction esc(v){return String(v==null?'':v).replace(/[&<>\"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c];});}\nfunction fmt(d){if(!d)return 'data não informada';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}\nvar st=document.getElementById('nwStatus'),box=document.getElementById('nwList');\nfunction load(){\n  if(!box)return;\n  st.textContent='· buscando notícias (o servidor pode levar até 1 minuto para acordar)…';\n  var byLang={};QUERIES.forEach(function(q){q.langs.forEach(function(l){(byLang[l]=byLang[l]||[]).push(q);});});\n  var calls=Object.keys(byLang).map(function(l){var qs=byLang[l].map(function(q){return 'q='+encodeURIComponent(q.q);}).join('&');return fetch(API+'?'+qs+'&lang='+l+'&days=30').then(function(r){return r.json();}).then(function(d){return(d.items||[]).map(function(it){var m=byLang[l].filter(function(q){return q.q===it.consulta;})[0];it.comp=m?m.comp:it.consulta;return it;});}).catch(function(){return null;});});\n  Promise.all(calls).then(function(res){\n    var ok=res.filter(function(x){return x;}),all=[].concat.apply([],ok),seen={},list=[];\n    all.sort(function(a,b){return(b.data||'').localeCompare(a.data||'');}).forEach(function(it){var k=it.titulo.toLowerCase();if(!seen[k]){seen[k]=1;list.push(it);}});\n    if(!ok.length){st.textContent='· não foi possível buscar agora; tente recarregar em 1 minuto.';box.innerHTML='';return;}\n    st.textContent='· atualizado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+' · '+list.length+' notícias dos últimos 30 dias · Google Notícias';\n    box.innerHTML=list.slice(0,40).map(function(it){return '<div class=\"nw-item\"><div><span class=\"nw-chip\">'+esc(it.comp)+'<\/span><a class=\"t\" href=\"'+esc(it.url)+'\" target=\"_blank\" rel=\"noopener\">'+esc(it.titulo)+'<\/a><div class=\"nw-meta\">'+esc(it.fonte||'fonte')+' · '+esc(fmt(it.data))+'<span class=\"nw-nv\">NÃO VERIFICADO<\/span><\/div><\/div><\/div>';}).join('')||'<p class=\"muted\">Nenhuma notícia nos últimos 30 dias.<\/p>';\n  });\n}\nload();\ntry{var h=location.hash.match(/#m=([A-Za-z0-9_-]+)/);if(h){var b64=h[1].replace(/-/g,'+').replace(/_/g,'/');var json=decodeURIComponent(escape(atob(b64)));var extra=JSON.parse(json),list=document.getElementById('list');\n  if(Array.isArray(extra)&&list){extra=extra.filter(function(b){return list.textContent.indexOf(b.titulo)<0;});list.insertAdjacentHTML('afterbegin',extra.map(function(b){return '<article class=\"card\" data-comp=\"'+esc(b.concorrente)+'\" data-reg=\"'+esc(b.regiao)+'\"><div class=\"main\"><h3><span class=\"chip\">'+esc(b.concorrente)+'<\/span>'+esc(b.titulo)+'<\/h3><p class=\"meta\">'+esc(b.tipo)+' · '+esc(b.local||'Local não informado')+' · '+esc(b.regiao)+' · '+esc(b.data?fmt(b.data):'Data não informada')+' · '+esc(b.fonte||'')+'<\/p><p><span class=\"ev f\">FATO<\/span> '+esc(b.fato)+'<\/p>'+(b.leitura?'<p><span class=\"ev h\">HIPÓTESE<\/span> '+esc(b.leitura)+'<\/p>':'')+(b.url?'<p><a href=\"'+esc(b.url)+'\" target=\"_blank\" rel=\"noopener\">Abrir matéria ↗<\/a><\/p>':'')+'<\/div><div class=\"side\"><b>'+esc(b.cliente||'Sem cliente específico')+'<\/b><div>Segmento: '+esc(b.segmento||'—')+'<\/div><div>Solução: '+esc(b.solucao||'—')+'<\/div><div>Números: '+esc(b.numeros||'Não identificado')+'<\/div><\/div><\/article>';}).join(''));}}}catch(e){}\n})();\n";
+    const PROD_CSS = `.bench-prod{grid-column:1/-1;display:grid;grid-template-columns:240px minmax(0,1fr);gap:14px;align-items:stretch;margin-top:4px;padding:12px;border:1px solid rgba(0,255,196,.16);border-radius:12px;background:linear-gradient(135deg,rgba(0,255,196,.04),rgba(0,180,216,.03))}.pc-ilu{margin:0;color:#00FFC4;background:rgba(0,0,0,.25);border:1px solid #1E384A;border-radius:10px;padding:8px}.pc-ilu svg{display:block;width:100%;height:auto}.pc-ilu figcaption{font-size:10.5px;color:#8AA8B8;margin-top:4px;line-height:1.35}.pc-box{font-size:12.5px;color:#8AA8B8}.pc-t{font-weight:700;color:#E2F1F8;font-size:12.5px}.pc-v{font-size:22px;font-weight:800;color:#E2F1F8;margin:4px 0;letter-spacing:-.3px}.pc-m{line-height:1.5}.pc-m a,.pc-links a{color:#00B4D8;font-weight:600;text-decoration:none}.pc-links{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}.pev{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 6px;border-radius:5px;margin-right:4px}.pev-f{background:rgba(0,245,212,.14);color:#00F5D4}.pev-e{background:rgba(170,130,255,.16);color:#c9b2ff}.pev-n{background:#132431;color:#8AA8B8;border:1px solid #1E384A}@media(max-width:760px){.bench-prod{grid-template-columns:1fr}}`;
+    const HOLO_CSS = `.holo-wrap{perspective:1400px;margin-bottom:24px}.holo-hero{position:relative;overflow:hidden;border-radius:18px;padding:26px 26px 20px;background:radial-gradient(120% 140% at 0% 0%,rgba(0,255,196,.10),transparent 55%),radial-gradient(120% 140% at 100% 0%,rgba(0,180,216,.10),transparent 55%),linear-gradient(160deg,#0B1620 0%,#0E1A24 55%,#0A141C 100%);border:1px solid rgba(0,255,196,.22);box-shadow:0 30px 70px -20px rgba(0,0,0,.75),0 0 0 1px rgba(0,180,216,.06) inset,0 0 40px rgba(0,255,196,.06);transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out;animation:holoIn 1.1s cubic-bezier(.2,.8,.2,1) both}@keyframes holoIn{from{opacity:0;transform:translateZ(-260px) rotateX(16deg) scale(.96)}to{opacity:1;transform:none}}.holo-hero::before{content:"";position:absolute;inset:0;border-radius:18px;padding:1px;background:conic-gradient(from var(--ang,0deg),transparent 0 60%,rgba(0,255,196,.75) 72%,rgba(0,180,216,.6) 80%,transparent 92%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:holoSpin 8s linear infinite;pointer-events:none}@property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}@keyframes holoSpin{to{--ang:360deg}}.holo-grid{position:absolute;left:-20%;right:-20%;bottom:-40%;height:120%;background-image:linear-gradient(rgba(0,255,196,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,196,.10) 1px,transparent 1px);background-size:44px 44px;transform:rotateX(68deg);transform-origin:50% 100%;-webkit-mask-image:linear-gradient(to top,#000 10%,transparent 75%);mask-image:linear-gradient(to top,#000 10%,transparent 75%);animation:holoFloor 6s linear infinite;pointer-events:none}@keyframes holoFloor{to{background-position:0 44px,0 0}}.holo-scan{position:absolute;left:0;right:0;top:-30%;height:30%;background:linear-gradient(180deg,transparent,rgba(0,255,196,.07) 45%,rgba(0,255,196,.16) 50%,transparent);animation:holoScan 7s ease-in-out infinite;pointer-events:none}@keyframes holoScan{0%{top:-30%}60%,100%{top:110%}}.hud{position:absolute;width:18px;height:18px;border:2px solid rgba(0,255,196,.55);pointer-events:none}.hud.tl{top:10px;left:10px;border-right:0;border-bottom:0;border-top-left-radius:6px}.hud.tr{top:10px;right:10px;border-left:0;border-bottom:0;border-top-right-radius:6px}.hud.bl{bottom:10px;left:10px;border-right:0;border-top:0;border-bottom-left-radius:6px}.hud.br{bottom:10px;right:10px;border-left:0;border-top:0;border-bottom-right-radius:6px}.holo-inner{position:relative;transform:translateZ(46px);transform-style:preserve-3d}.holo-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.holo-eyebrow{font-size:11.5px;letter-spacing:2px;font-weight:800;text-transform:uppercase;color:#00FFC4;display:flex;align-items:center;gap:8px}.holo-eyebrow .dot{width:8px;height:8px;border-radius:50%;background:#00FFC4;box-shadow:0 0 10px #00FFC4;animation:holoDot 2s ease-in-out infinite}@keyframes holoDot{50%{opacity:.35}}.holo-title{margin:8px 0 6px;font-size:clamp(24px,3.4vw,34px);font-weight:800;letter-spacing:-.5px;line-height:1.15;color:#F2FBFF;text-shadow:0 0 18px rgba(0,255,196,.25),0 10px 30px rgba(0,0,0,.6);transform:translateZ(30px)}.holo-title span{font-weight:400;font-size:.55em;color:#8AA8B8;letter-spacing:0;text-shadow:none}.holo-sub{color:#9FB9C7;font-size:13px;max-width:720px}.holo-term{margin-top:14px;font:12.5px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#7FE9D4;background:rgba(0,0,0,.28);border:1px solid rgba(0,255,196,.18);border-radius:10px;padding:8px 12px;display:inline-block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.holo-term .p{color:#00B4D8;margin-right:6px}.holo-term .cur{animation:holoDot 1s steps(1) infinite}.holo-actions{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid rgba(30,56,74,.7)}@media (prefers-reduced-motion:reduce){.holo-hero,.holo-hero::before,.holo-grid,.holo-scan,.holo-eyebrow .dot,.holo-term .cur{animation:none!important}.holo-hero{transform:none!important}}`;
+    const TEAM_JS = `function matrixRain(id){var c=document.getElementById(id);if(!c)return;var x=c.getContext('2d');c.width=c.parentElement.clientWidth;c.height=c.parentElement.clientHeight;var ch='01PAIMBIQPS2026#SQL+XLSX$',fs=13,cols=Math.floor(c.width/fs),d=[];for(var i=0;i<cols;i++)d[i]=Math.floor(Math.random()*c.height/fs);function draw(){x.fillStyle='rgba(5,11,16,0.15)';x.fillRect(0,0,c.width,c.height);x.fillStyle='#00FFC4';x.font='bold '+fs+'px monospace';for(var i=0;i<d.length;i++){x.fillText(ch.charAt(Math.floor(Math.random()*ch.length)),i*fs,d[i]*fs);if(d[i]*fs>c.height&&Math.random()>0.975)d[i]=0;d[i]++;}}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){draw();return;}setInterval(function(){if(!document.hidden)draw();},40);}\nfunction holoTilt(el){if(!el||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return;el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.style.setProperty('--ry',(x*5).toFixed(2)+'deg');el.style.setProperty('--rx',(-y*4).toFixed(2)+'deg');});el.addEventListener('pointerleave',function(){el.style.setProperty('--ry','0deg');el.style.setProperty('--rx','0deg');});}`;
+    function benchStandaloneHtml(list) {
+      const e = escapeHtml, hoje = new Date().toLocaleDateString('pt-BR');
+      const comps = [...new Set(list.map(b => b.concorrente))].sort();
+      const regs = [...new Set(list.map(b => b.regiao))].sort();
+      const recent = list.filter(benchIsRecent).length, br = list.filter(b => b.regiao === 'Brasil').length;
+      const card = b => {
+        const url = safeUrl(b.url);
+        const pessoas = (b.pessoas || []).length ? b.pessoas.map(p => `${e(p.nome)} (${e(p.papel)})`).join('; ') : 'Não identificado na fonte';
+        return `<article class="card" data-comp="${e(b.concorrente)}" data-reg="${e(b.regiao)}">
+  <div class="main"><h3><span class="chip">${e(b.concorrente)}</span>${e(b.titulo)}</h3>
+  <p class="meta">${e(b.tipo)} · ${e(b.local || 'Local não informado')} · ${e(b.regiao)} · ${e(benchDate(b))} · ${e(b.fonte || '')}</p>
+  <p><span class="ev f">FATO</span> ${e(b.fato)}</p>
+  ${b.leitura ? `<p><span class="ev h">HIPÓTESE</span> ${e(b.leitura)}</p>` : ''}
+  ${b.acao ? `<p><span class="ev r">RECOMENDAÇÃO</span> ${e(b.acao)}</p>` : ''}
+  ${url ? `<p><a href="${e(url)}" target="_blank" rel="noopener">Abrir matéria (fotos e detalhes) ↗</a></p>` : ''}</div>
+  <div class="side"><b>${e(b.cliente || 'Sem cliente específico')}</b><div>Segmento: ${e(b.segmento || '—')}</div><div>Solução: ${e(b.solucao || '—')}</div><div>Números: ${e(b.numeros || 'Não identificado')}</div><div>Pessoas citadas: ${pessoas}</div></div>
+  ${benchProductHtml(b)}
+</article>`;
+      };
+      return `<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Benchmarking de concorrentes · BSA · ${e(hoje)}</title>
+<style>
+:root{--bg:#070D12;--panel:#0E1A24;--card:#132431;--line:#1E384A;--txt:#E2F1F8;--muted:#8AA8B8;--brand:#00FFC4;--cta:#F2A93B;--info:#00B4D8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;min-height:100vh}
+.mx-side{width:220px;flex:0 0 220px;position:sticky;top:0;height:100vh;overflow:hidden;background:#050B10;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.mx-side canvas{position:absolute;inset:0;opacity:.45;width:100%;height:100%}
+.wrap{flex:1;min-width:0;max-width:1100px;margin:0 auto;padding:22px 16px 40px}
+${HOLO_CSS}
+${PROD_CSS}
+${NEWS_CSS}
+@media(max-width:1200px){.mx-side{display:none}}
+.muted{color:var(--muted);font-size:12.5px}
+.conf{margin-top:10px;font-size:12px;color:#ffb3b3;border:1px solid rgba(255,92,92,.4);background:rgba(255,92,92,.08);border-radius:10px;padding:8px 10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}.kpi b{display:block;font-size:24px;margin-top:4px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+.panel h2{font-size:15px;margin:0 0 12px}
+.filters{display:flex;gap:10px;flex-wrap:wrap}.filters select{background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-width:180px;font:inherit}
+.card{border-top:1px solid var(--line);padding:16px 0;display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:16px;align-items:start}.card:first-child{border-top:0}
+.card h3{margin:0 0 6px;font-size:15px;line-height:1.4}.card p{margin:6px 0;color:var(--muted);font-size:12.8px}
+.meta{font-size:12px!important}
+.chip{display:inline-block;font-weight:800;font-size:11px;padding:2px 8px;border-radius:8px;background:rgba(255,92,92,.12);color:#ff9c9c;border:1px solid rgba(255,92,92,.35);margin-right:6px}
+.ev{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 6px;border-radius:5px;margin-right:4px}
+.ev.f{background:rgba(0,245,212,.14);color:#00F5D4}.ev.h{background:rgba(242,169,59,.16);color:var(--cta)}.ev.r{background:rgba(0,180,216,.14);color:var(--info)}
+a{color:var(--info);font-weight:600;text-decoration:none}a:hover{text-decoration:underline}
+.side{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12px;color:var(--muted)}.side b{display:block;color:var(--txt);font-size:13px;margin-bottom:4px}.side div{margin-top:5px}
+ol{margin:0;padding-left:20px}li{margin:10px 0}li small{display:block;color:var(--muted);margin-top:3px}
+footer{color:var(--muted);font-size:11.5px;text-align:center;margin-top:24px}
+@media(max-width:760px){.card{grid-template-columns:1fr}}
+</style>
+</head>
+<body><aside class="mx-side" aria-hidden="true"><canvas id="mxL"></canvas></aside><div class="wrap">
+<div class="holo-wrap"><header class="holo-hero" id="hero">
+  <span class="holo-grid" aria-hidden="true"></span><span class="holo-scan" aria-hidden="true"></span>
+  <span class="hud tl" aria-hidden="true"></span><span class="hud tr" aria-hidden="true"></span><span class="hud bl" aria-hidden="true"></span><span class="hud br" aria-hidden="true"></span>
+  <div class="holo-inner">
+    <div class="holo-eyebrow"><span class="dot"></span>Bertolini BSA · Novos Negócios · Inteligência competitiva</div>
+    <h1 class="holo-title">BENCHMARKING <span>/ Movimentos dos concorrentes em sistemas de armazenagem</span></h1>
+    <div class="holo-sub">Gerado em ${e(hoje)} · ${list.length} movimentos · fontes públicas com link · Paim Business Intelligence</div>
+    <div class="holo-term" aria-hidden="true"><span class="p">time-comercial@bsa:~$</span>benchmarking --gerado ${e(hoje)} --itens ${list.length} <span class="cur">▍</span></div>
+    <div class="conf">Uso interno do time comercial. Não encaminhar a clientes. Cada item separa FATO (publicado na fonte), HIPÓTESE e RECOMENDAÇÃO. As notícias recentes se atualizam sozinhas a cada abertura.</div>
+  </div>
+</header></div>
+<section class="kpis">
+  <div class="kpi"><span class="muted">Movimentos</span><b>${list.length}</b></div>
+  <div class="kpi"><span class="muted">Últimos 90 dias</span><b>${recent}</b><span class="muted">${recent} de ${list.length}</span></div>
+  <div class="kpi"><span class="muted">Brasil</span><b>${br}</b><span class="muted">${br} de ${list.length}</span></div>
+  <div class="kpi"><span class="muted">Concorrentes</span><b>${comps.length}</b></div>
+</section>
+<section class="panel"><h2>Filtrar</h2><div class="filters">
+  <select id="fc" aria-label="Concorrente"><option value="">Todos os concorrentes</option>${comps.map(c => `<option>${e(c)}</option>`).join('')}</select>
+  <select id="fr" aria-label="Região"><option value="">Todas as regiões</option>${regs.map(r => `<option>${e(r)}</option>`).join('')}</select>
+</div></section>
+<section class="panel"><h2>Notícias recentes do mercado <span class="nw-status" id="nwStatus"></span></h2><p class="muted" style="margin:-6px 0 8px">Atualizadas automaticamente a cada abertura (últimos 30 dias, Google Notícias). Não verificadas: confira na matéria.</p><div id="nwList"><p class="muted">Carregando…</p></div></section>
+<section class="panel"><h2>Movimentos (mais recentes no topo)</h2><div id="list">${list.map(card).join('') || '<p class="muted">Nenhum movimento.</p>'}</div></section>
+<section class="panel"><h2>Recomendações</h2><ol>${BENCH_RECS.map((r, i) => i === 4 ? ['Clientes de concorrentes também são sinais.', 'Quem automatizou um CD ou fábrica pode ampliar estruturas convencionais, picking e mezaninos ao redor (HIPÓTESE, a confirmar caso a caso). RECOMENDAÇÃO: avisar o BDR quando um cliente citado aqui estiver na sua carteira.'] : r).map(([t, d]) => `<li><b>${e(t)}</b><small>${e(d)}</small></li>`).join('')}</ol></section>
+<footer>Benchmarking de concorrentes · Bertolini Sistemas de Armazenagem · gerado pelo Radar BSA em ${e(hoje)}</footer>
+</div><aside class="mx-side" aria-hidden="true"><canvas id="mxR"></canvas></aside>
+<script>
+${TEAM_JS}
+matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
+(function(){var fc=document.getElementById('fc'),fr=document.getElementById('fr');function f(){var c=fc.value,r=fr.value;document.querySelectorAll('#list .card').forEach(function(el){el.style.display=(!c||el.dataset.comp===c)&&(!r||el.dataset.reg===r)?'':'none';});}fc.addEventListener('change',f);fr.addEventListener('change',f);})();
+<\/script>
+<script>${TEAM_LIVE_JS}<\/script>
+</body>
+</html>`;
+    }
+    function benchTeamFile() {
+      const list = benchFilteredList();
+      if (!list.length) { showToast('Nenhum movimento nos filtros atuais para gerar a página.'); return null; }
+      const name = `benchmarking_concorrentes_${todayStr()}.html`;
+      return { list, name, file: new File([benchStandaloneHtml(list)], name, { type: 'text/html' }) };
+    }
+    function benchDownloadTeam() {
+      const t = benchTeamFile();
+      if (!t) return;
+      downloadBlob(t.file, t.name);
+      showToast(`Página do time gerada com ${t.list.length} movimento(s). Ela não contém o Radar, a Fila nem o endereço do servidor.`, 6500);
+    }
+    async function benchShareWhats() {
+      const t = benchTeamFile();
+      if (!t) return;
+      const msg = `Benchmarking de concorrentes (sistemas de armazenagem) · ${new Date().toLocaleDateString('pt-BR')} · ${t.list.length} movimentos. Uso interno do time comercial.`;
+      try {
+        if (navigator.canShare && navigator.canShare({ files: [t.file] })) {
+          await navigator.share({ files: [t.file], title: 'Benchmarking de concorrentes', text: msg });
+          return;
+        }
+      } catch (err) { if (err && err.name === 'AbortError') return; }
+      // Computador: baixa o arquivo e abre o WhatsApp com a mensagem; o arquivo é anexado manualmente.
+      downloadBlob(t.file, t.name);
+      window.open('https://wa.me/?text=' + encodeURIComponent(msg + ' (arquivo em anexo)'), '_blank', 'noopener');
+      showToast('Arquivo baixado. No WhatsApp, escolha o contato ou grupo e anexe o arquivo como Documento.', 7000);
+    }
+
+
+    // ---------- Notícias recentes do mercado (v3.5) — via servidor PAIM (Google Notícias)
+    const NEWS_API = "https://paim-ia-prospect-2-0-cld.onrender.com/api/news";
+    const NEWS_QUERIES = [{"comp": "Mecalux", "q": "\"Mecalux\"", "langs": ["pt", "en", "es"]}, {"comp": "Águia Sistemas", "q": "\"Águia Sistemas\"", "langs": ["pt"]}, {"comp": "SSI Schaefer", "q": "\"SSI Schaefer\"", "langs": ["pt", "en"]}, {"comp": "Dematic", "q": "\"Dematic\"", "langs": ["pt", "en"]}, {"comp": "Jungheinrich", "q": "\"Jungheinrich\" (armazém OR intralogística OR \"centro de distribuição\")", "langs": ["pt"]}, {"comp": "ISMA", "q": "\"ISMA\" (armazenagem OR porta-paletes)", "langs": ["pt"]}, {"comp": "Longa Industrial", "q": "\"Longa Industrial\"", "langs": ["pt"]}, {"comp": "Scheffer", "q": "\"Scheffer Logística\"", "langs": ["pt"]}, {"comp": "AR Racking", "q": "\"AR Racking\"", "langs": ["pt", "es"]}];
+    const NEWS = { items: [], seen: [], at: null, loading: false, error: '' };
+    const newsKey = it => normalizeText(it.titulo || '').slice(0, 140);
+    const newsRecent = it => it.data && (Date.now() - new Date(it.data + 'T12:00:00').getTime()) / 864e5 <= 30;
+    function newsUnseen() { return NEWS.items.filter(it => newsRecent(it) && !NEWS.seen.includes(newsKey(it))); }
+    async function benchNewsFetch() {
+      if (NEWS.loading) return;
+      NEWS.loading = true; NEWS.error = '';
+      benchNewsRender();
+      const byLang = {};
+      NEWS_QUERIES.forEach(q => q.langs.forEach(l => (byLang[l] = byLang[l] || []).push(q)));
+      const res = await Promise.all(Object.entries(byLang).map(async ([l, qs]) => {
+        try {
+          const r = await fetch(NEWS_API + '?' + qs.map(q => 'q=' + encodeURIComponent(q.q)).join('&') + '&lang=' + l + '&days=30', { cache: 'no-store' });
+          const d = await r.json();
+          return (d.items || []).map(it => ({ ...it, comp: (qs.find(q => q.q === it.consulta) || {}).comp || it.consulta }));
+        } catch (_) { return null; }
+      }));
+      const ok = res.filter(Boolean), seen = new Set(), list = [];
+      ok.flat().sort((a, b) => String(b.data).localeCompare(String(a.data))).forEach(it => { const k = newsKey(it); if (!seen.has(k)) { seen.add(k); list.push(it); } });
+      NEWS.loading = false;
+      if (!ok.length) NEWS.error = 'Não foi possível buscar agora (o servidor pode estar acordando). Tente “Atualizar agora” em 1 minuto.';
+      else { NEWS.items = list; NEWS.at = new Date(); }
+      benchNewsRender();
+      benchFab();
+    }
+    function benchNewsRender() {
+      const box = $('nwListApp'), st = $('nwStatusApp');
+      if (!box) return;
+      if (NEWS.loading) { st.textContent = '· buscando… (o servidor pode levar até 1 minuto para acordar)'; if (!NEWS.items.length) box.innerHTML = '<div class="empty">Buscando notícias recentes…</div>'; return; }
+      if (NEWS.error && !NEWS.items.length) { st.textContent = ''; box.innerHTML = `<div class="empty">${escapeHtml(NEWS.error)}</div>`; return; }
+      st.textContent = NEWS.at ? `· atualizado às ${NEWS.at.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} · ${NEWS.items.length} notícias` : '';
+      box.innerHTML = NEWS.items.slice(0, 40).map((it, i) => {
+        const novo = newsRecent(it) && !NEWS.seen.includes(newsKey(it));
+        const d = it.data ? it.data.split('-').reverse().join('/') : 'data não informada';
+        return `<div class="nw-item"><div>${novo ? '<span class="nw-new" title="Nova"></span>' : ''}<span class="nw-chip">${escapeHtml(it.comp)}</span><a class="t" href="${escapeHtml(safeUrl(it.url))}" target="_blank" rel="noopener">${escapeHtml(it.titulo)}</a><div class="nw-meta">${escapeHtml(it.fonte || 'fonte')} · ${escapeHtml(d)}<span class="nw-nv">NÃO VERIFICADO</span></div></div><button class="btn xs" type="button" data-nw="${i}">Registrar como movimento</button></div>`;
+      }).join('') || '<div class="empty">Nenhuma notícia dos concorrentes nos últimos 30 dias.</div>';
+    }
+    function benchNewsToForm(i) {
+      const it = NEWS.items[i];
+      if (!it) return;
+      $('benchFormPanel').hidden = false;
+      $('bfComp').value = it.comp; $('bfFato').value = it.titulo; $('bfFonte').value = it.fonte || ''; $('bfUrl').value = it.url || ''; $('bfData').value = it.data || '';
+      $('benchFormPanel').scrollIntoView({ behavior: 'smooth' });
+      showToast('Formulário preenchido com a notícia. Leia a matéria, complete cliente, local e solução e salve.', 6000);
+    }
+    async function benchNewsLoadSeen() { try { if (IDB.db) NEWS.seen = (await IDB.get('benchNewsSeen')) || []; } catch (_) {} }
+    function benchNewsMarkSeen() { NEWS.seen = [...new Set([...NEWS.seen, ...NEWS.items.map(newsKey)])].slice(-600); if (IDB.db) IDB.set('benchNewsSeen', NEWS.seen).catch(() => {}); }
+
+    // ---------- Compartilhar a página do time por link (WhatsApp, e-mail, Teams)
+    const DEFAULT_PUBLIC = 'https://paimlab-coder.github.io/BANT.APP.PAIM/benchmarking.html';
+    async function benchPublicUrl() {
+      try { const v = IDB.db && await IDB.get('benchPublicUrl'); if (v) return v; } catch (_) {}
+      return /^https?:$/.test(location.protocol) ? new URL('benchmarking.html', location.href).href : DEFAULT_PUBLIC;
+    }
+    const b64url = str => btoa(unescape(encodeURIComponent(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    async function benchShareLink() {
+      let u = await benchPublicUrl();
+      if (BENCH.custom.length) {
+        const h = b64url(JSON.stringify(BENCH.custom.map(b => ({ concorrente: b.concorrente, tipo: b.tipo, titulo: b.titulo, cliente: b.cliente, local: b.local, regiao: b.regiao, segmento: b.segmento, solucao: b.solucao, numeros: b.numeros, data: b.data, fonte: b.fonte, url: b.url, fato: b.fato, leitura: b.leitura }))));
+        if (h.length < 6000) u += '#m=' + h;
+        else showToast('Você tem muitos movimentos próprios para caber no link. Baixe o benchmarking.html e publique no GitHub para incluí-los.', 8000);
+      }
+      return u;
+    }
+    const shareMsg = () => `Benchmarking de concorrentes (sistemas de armazenagem) · Bertolini BSA · ${new Date().toLocaleDateString('pt-BR')}. Movimentos, CAPEX estimado e notícias recentes do mercado. Uso interno do time comercial.`;
+    $('benchWaBtn').onclick = async () => { const l = await benchShareLink(); window.open('https://wa.me/?text=' + encodeURIComponent(shareMsg() + '\n' + l), '_blank', 'noopener'); };
+    $('benchMailBtn').onclick = async () => { const l = await benchShareLink(); location.href = 'mailto:?subject=' + encodeURIComponent('Benchmarking de concorrentes · ' + new Date().toLocaleDateString('pt-BR')) + '&body=' + encodeURIComponent(shareMsg() + '\n\nAcesse: ' + l); };
+    $('benchTeamsBtn').onclick = async () => { const l = await benchShareLink(); window.open('https://teams.microsoft.com/share?href=' + encodeURIComponent(l) + '&msgText=' + encodeURIComponent(shareMsg()) + '&preview=true', '_blank', 'noopener'); };
+    $('benchCopyBtn').onclick = async () => { const l = await benchShareLink(); try { await navigator.clipboard.writeText(l); showToast('Link copiado. Cole no WhatsApp, e-mail ou Teams.'); } catch (_) { prompt('Copie o link:', l); } };
+    $('benchUrlBtn').onclick = async () => {
+      const cur = await benchPublicUrl();
+      const v = (prompt('Endereço público da página do time (onde você publicou o benchmarking.html no GitHub Pages):', cur) || '').trim();
+      if (v && /^https?:\/\//.test(v) && IDB.db) { await IDB.set('benchPublicUrl', v); showToast('Endereço salvo.'); }
+    };
+    $('benchTeamBtn').onclick = () => {
+      downloadBlob(new File([benchStandaloneHtml(benchAll())], 'benchmarking.html', { type: 'text/html' }), 'benchmarking.html');
+      showToast('benchmarking.html baixado. Suba no mesmo repositório do Radar no GitHub (substituindo o anterior) para o link mostrar esta versão.', 8000);
+    };
+    $('nwRefresh').onclick = benchNewsFetch;
+    $('nwListApp').addEventListener('click', e => { const b = e.target.closest('[data-nw]'); if (b) benchNewsToForm(+b.dataset.nw); });
+    holoTilt($('benchHero'));
+    initMatrix('matrixBenchL'); initMatrix('matrixBenchR'); benchMatrixOn = true;
+    benchLoad().then(benchNewsLoadSeen).then(() => { benchFab(); benchNewsFetch(); });
 
     populateStatesDropdown();
     syncFromCheckboxes(false);
