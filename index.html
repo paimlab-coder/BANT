@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Radar BSA | Inteligência de Mercado & Prospecção B2B</title>
+  <title>Radar BSA v3.0 | BDR Command Center</title>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <style>
     :root {
@@ -792,6 +792,58 @@
         align-items: flex-start;
       }
     }
+
+    /* ===== BDR COMMAND CENTER (v3.0) ===== */
+    .cc-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 18px; padding: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
+    .cc-tab { border: 0; background: transparent; color: var(--muted); padding: 9px 14px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .cc-tab:hover { color: var(--txt); background: var(--card-bg); }
+    .cc-tab.active { background: var(--card-bg); color: var(--brand); box-shadow: inset 0 0 0 1px var(--line); }
+    .cc-tab:focus-visible, .btn:focus-visible, .field:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+    .cc-view { display: none; } .cc-view.active { display: block; }
+    .cc-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .cc-kpis .stat { padding: 16px; } .cc-kpis .stat .n { font-size: 26px; } .cc-kpis .stat small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+    .cc-table-wrap { overflow: auto; max-height: 72vh; border: 1px solid var(--line); border-radius: 10px; }
+    .cc-table { border-collapse: collapse; width: 100%; min-width: 1040px; font-size: 12.5px; }
+    .cc-table th { position: sticky; top: 0; background: var(--card-bg); color: var(--muted); text-align: left; font-size: 11.5px; font-weight: 700; padding: 10px; border-bottom: 1px solid var(--line); white-space: nowrap; z-index: 1; }
+    .cc-table td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--txt); }
+    .cc-table tr:hover td { background: rgba(0, 255, 196, 0.03); }
+    .cc-table small { color: var(--muted); }
+    .cc-link { background: none; border: 0; padding: 0; color: var(--brand); font: inherit; font-weight: 700; cursor: pointer; text-align: left; }
+    .cc-link:hover { text-decoration: underline; }
+    .fx { display: inline-block; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 99px; white-space: nowrap; border: 1px solid transparent; }
+    .fx-1 { background: var(--cta); color: #070D12; } .fx-2 { background: rgba(242, 169, 59, 0.15); color: var(--cta); border-color: rgba(242, 169, 59, 0.4); }
+    .fx-3 { background: rgba(0, 180, 216, 0.12); color: var(--info); border-color: rgba(0, 180, 216, 0.35); } .fx-4 { background: var(--card-bg); color: var(--muted); border-color: var(--line); }
+    .fx-x { background: rgba(255, 99, 99, 0.12); color: #ff8a8a; border-color: rgba(255, 99, 99, 0.35); }
+    .ev { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .04em; padding: 2px 6px; border-radius: 5px; margin-right: 4px; vertical-align: 1px; }
+    .ev-f { background: rgba(0, 245, 212, 0.14); color: var(--success); } .ev-h { background: rgba(242, 169, 59, 0.16); color: var(--cta); }
+    .ev-n { background: var(--card-bg); color: var(--muted); border: 1px solid var(--line); } .ev-r { background: rgba(0, 180, 216, 0.14); color: var(--info); } .ev-s { background: rgba(255, 99, 99, 0.14); color: #ff8a8a; }
+    .sc3 { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .nba b { display: block; font-size: 12px; color: var(--txt); } .nba small { color: var(--muted); }
+    .cc-lead { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 12px; color: var(--muted); }
+    .cc-drawer-back { position: fixed; inset: 0; background: rgba(7, 13, 18, 0.7); z-index: 40; display: none; }
+    .cc-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(580px, 100%); background: var(--bg); border-left: 1px solid var(--line); z-index: 41; transform: translateX(100%); transition: transform .2s ease; display: flex; flex-direction: column; box-shadow: -12px 0 40px rgba(0, 0, 0, 0.5); }
+    .cc-drawer.open { transform: none; }
+    .cc-dhead { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; padding: 18px 20px; background: var(--panel); border-bottom: 1px solid var(--line); }
+    .cc-dhead h2 { margin: 2px 0 0; font-size: 19px; } .cc-dhead small { color: var(--muted); }
+    .cc-dbody { padding: 16px 20px 40px; overflow: auto; flex: 1; }
+    .cc-sec { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+    .cc-sec h3 { margin: 0 0 10px; font-size: 13.5px; font-weight: 700; }
+    .cc-sec p { margin: 0 0 6px; font-size: 13px; }
+    .crit { list-style: none; margin: 0; padding: 0; font-size: 12.5px; }
+    .crit li { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; padding: 7px 0; border-bottom: 1px dashed var(--line); }
+    .crit li small { grid-column: 1 / -1; color: var(--muted); } .crit li small a { color: var(--info); }
+    .cc-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .cc-grid2 label, .cc-sec label.l { font-size: 11.5px; color: var(--muted); font-weight: 600; display: block; }
+    .cc-grid2 .field, .cc-sec .field { margin-top: 4px; min-height: 36px; padding: 7px 10px; font-size: 13px; }
+    .chk { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; padding: 6px 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--card-bg); cursor: pointer; color: var(--txt); }
+    .chk input { accent-color: var(--brand); }
+    .cc-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+    .bar { height: 10px; background: var(--card-bg); border-radius: 99px; overflow: hidden; border: 1px solid var(--line); } .bar i { display: block; height: 100%; background: var(--brand); }
+    .cc-note { font-size: 11.5px; color: var(--muted); margin-top: 8px; }
+    .cc-store { font-size: 12px; color: var(--muted); margin: -6px 0 14px; } .cc-store.warn { color: #ff8a8a; font-weight: 700; }
+    .test-banner { border: 1px solid rgba(255, 99, 99, 0.45); background: rgba(255, 99, 99, 0.1); color: #ffb3b3; border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; font-size: 12.5px; display: none; }
+    @media (max-width: 760px) { .cc-grid2 { grid-template-columns: 1fr; } }
+    @media (prefers-reduced-motion: reduce) { .cc-drawer { transition: none; } }
   </style>
 </head>
 
@@ -866,6 +918,15 @@
       <b>Transparência Operacional Paim BI:</b> Varredura com mais de 15 fontes especializadas de supply chain e intralogística (IMAM, MundoLogística, Logweb, Tecnologística, Logistics Business, Inbound Logistics, FreightWaves, etc.), aplicando paginação profunda, remoção rigorosa de duplicatas e recorte temporal a partir de <b>01/01/2025</b>.
     </div>
 
+    <!-- ===== BDR COMMAND CENTER (v3.0) ===== -->
+    <nav class="cc-tabs" id="ccTabs" aria-label="Áreas do Radar">
+      <button class="cc-tab active" data-view="radar">Radar de sinais</button>
+      <button class="cc-tab" data-view="fila">Fila de prioridade</button>
+      <button class="cc-tab" data-view="funil">Funil do BDR</button>
+      <button class="cc-tab" data-view="regras">Regras do score</button>
+    </nav>
+    <div class="test-banner" id="testBanner"><b>DADOS DE TESTE carregados.</b> As empresas e notícias exibidas são fictícias, só para demonstração. <button class="btn xs" type="button" id="clearTestBtn" style="margin-left:8px">Remover dados de teste</button></div>
+    <div class="cc-view active" id="view-radar">
     <!-- CARDS DE KPIS -->
     <section class="grid">
       <div class="stat">
@@ -1003,9 +1064,114 @@
       <div id="cnpjStatus" class="muted small" style="margin-top: 10px; color: var(--success);">Nenhuma importação realizada nesta sessão.</div>
     </section>
 
+    </div>
+
+    <!-- FILA DE PRIORIDADE -->
+    <div class="cc-view" id="view-fila">
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Fila de prioridade comercial</h2>
+            <div class="muted small">Quem merece seu tempo agora, por quê e qual a próxima ação. Score alto é hipótese comercial, não oportunidade.</div>
+          </div>
+        </div>
+        <div class="cc-store" id="ccStore">Carregando contas…</div>
+        <div class="cc-kpis" id="ccKpis"></div>
+        <div class="toolbar">
+          <div class="field-group wide-field"><label class="field-label" for="ccQ">Busca</label><input class="field" id="ccQ" placeholder="Empresa, UF, CNPJ…"></div>
+          <div class="field-group"><label class="field-label" for="ccFaixa">Faixa</label><select class="field" id="ccFaixa"><option value="">Todas</option><option>Prioridade imediata</option><option>Prospecção ativa</option><option>Enriquecer / nutrir</option><option>Não priorizar agora</option></select></div>
+          <div class="field-group"><label class="field-label" for="ccAcao">Próxima ação</label><select class="field" id="ccAcao"><option value="">Todas</option></select></div>
+          <div class="field-group"><label class="field-label" for="ccEst">Estágio</label><select class="field" id="ccEst"><option value="">Todos</option></select></div>
+        </div>
+        <div class="actions" style="margin-top:14px">
+          <button class="btn" type="button" id="ccNova">+ Conta manual</button>
+          <button class="btn primary" type="button" id="ccExpSf">Exportar para Salesforce (CSV)</button>
+          <button class="btn xlsx" type="button" id="ccExpXlsx">📊 Exportar fila (XLSX)</button>
+          <button class="btn" type="button" id="ccBackup">Backup (JSON)</button>
+          <button class="btn" type="button" id="ccRestore">Restaurar backup</button>
+          <input type="file" id="ccRestoreFile" accept=".json,application/json" hidden>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="cc-table-wrap">
+          <table class="cc-table">
+            <thead><tr><th>Score</th><th>Empresa</th><th>Região</th><th>Segmento</th><th>Faixa</th><th>Sinais</th><th>Razões</th><th>Decisor</th><th>Estágio</th><th>Próxima ação</th></tr></thead>
+            <tbody id="ccRows"></tbody>
+          </table>
+        </div>
+        <div class="cc-note">As contas nascem das empresas identificadas nas notícias do Radar. O vínculo notícia → empresa é automático e vale metade dos pontos até você confirmar na conta.</div>
+      </section>
+    </div>
+
+    <!-- FUNIL -->
+    <div class="cc-view" id="view-funil">
+      <section class="panel">
+        <div class="panel-header"><h2>Funil do BDR</h2></div>
+        <div class="muted small" style="margin-bottom:12px">Volume, denominador e conversões de cada etapa. As quatro primeiras etapas vêm do score; as demais, do estágio registrado em cada conta.</div>
+        <div class="cc-kpis" id="fnKpis"></div>
+        <div class="cc-table-wrap">
+          <table class="cc-table" style="min-width:820px">
+            <thead><tr><th>Etapa</th><th>Volume</th><th>Denominador</th><th>Conversão da etapa</th><th>Desde analisadas</th><th style="min-width:160px"></th></tr></thead>
+            <tbody id="fnRows"></tbody>
+          </table>
+        </div>
+        <div class="cc-note" id="fnNote"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-header"><h2>Quais sinais geram resultado</h2></div>
+        <div class="cc-table-wrap">
+          <table class="cc-table" style="min-width:820px">
+            <thead><tr><th>Tipo de sinal</th><th>Contas com o sinal</th><th>Contatadas</th><th>Resposta humana</th><th>Reuniões</th><th>Oportunidades</th><th>Pipeline (R$)</th></tr></thead>
+            <tbody id="fnSig"></tbody>
+          </table>
+        </div>
+        <div class="cc-note">Correlação, não causalidade. Com poucas contas por tipo, as diferenças são indicativas.</div>
+      </section>
+    </div>
+
+    <!-- REGRAS -->
+    <div class="cc-view" id="view-regras">
+      <section class="panel">
+        <div class="panel-header"><h2>Corte, região e segmentos-alvo</h2></div>
+        <div class="toolbar">
+          <div class="field-group"><label class="field-label" for="cfgPorte">Porte mínimo (Receita, via CNPJ)</label><select class="field" id="cfgPorte"><option value="ME">Aceitar todos (inclui micro)</option><option value="EPP">A partir de pequeno porte (EPP)</option><option value="DEMAIS">Somente “Demais” (médio e grande)</option></select></div>
+          <div class="field-group"><label class="field-label" for="cfgMom">Momento mínimo para “com sinal”</label><select class="field" id="cfgMom"><option value="1">Qualquer sinal com evidência</option><option value="10">10+ pontos</option><option value="15">15+ pontos</option></select></div>
+        </div>
+        <div class="field-label" style="margin:16px 0 6px">Países atendidos</div><div class="actions" id="cfgPaises"></div>
+        <div class="field-label" style="margin:16px 0 6px">UFs atendidas (Brasil)</div><div class="actions" id="cfgUfs"></div>
+        <div class="field-label" style="margin:16px 0 6px">Segmentos-alvo</div><div class="actions" id="cfgSegs"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-header"><h2>Critérios e pesos (v1 — hipóteses a calibrar no piloto)</h2></div>
+        <div class="cc-table-wrap">
+          <table class="cc-table" style="min-width:760px">
+            <thead><tr><th>Dimensão</th><th>Critério</th><th>Pontos</th><th>Quando vale</th></tr></thead>
+            <tbody>
+              <tr><td>Aderência (0–40)</td><td>Segmento-alvo</td><td>15 / 7</td><td>15 se definido pelo analista; 7 se inferido do texto da notícia (HIPÓTESE)</td></tr>
+              <tr><td>Aderência</td><td>Operação com estoque, CD ou fábrica</td><td>10 / 5</td><td>10 se confirmado; 5 se inferido do texto (HIPÓTESE)</td></tr>
+              <tr><td>Aderência</td><td>Porte compatível</td><td>10 / 5</td><td>10 “Demais”; 5 EPP; abaixo do mínimo bloqueia; sem CNPJ = NÃO IDENTIFICADO</td></tr>
+              <tr><td>Aderência</td><td>Região atendida</td><td>5</td><td>Fora das regiões atendidas bloqueia</td></tr>
+              <tr><td>Momento (teto 40)</td><td>Nova unidade, CD ou fábrica</td><td>15</td><td>Exige URL e data · × confiabilidade × idade × vínculo</td></tr>
+              <tr><td>Momento</td><td>Expansão ou ampliação</td><td>15</td><td>Idem · o mesmo link conta uma vez</td></tr>
+              <tr><td>Momento</td><td>Investimento confirmado</td><td>10</td><td>Idem</td></tr>
+              <tr><td>Momento</td><td>Vagas de logística / supply / engenharia</td><td>5</td><td>Idem</td></tr>
+              <tr><td>Momento</td><td>Mudança operacional relevante</td><td>5</td><td>Idem</td></tr>
+              <tr><td>Momento</td><td>Multiplicadores</td><td>—</td><td>Idade: 1 até 6 meses, 0,5 até 12, 0,25 depois · Confiabilidade: alta 1, média 0,85, baixa 0,5 · Vínculo automático 0,5, confirmado 1</td></tr>
+              <tr><td>Acesso (teto 20)</td><td>Decisor identificado</td><td>8</td><td>Registro manual com fonte, ou contato marcado como verificado no Radar</td></tr>
+              <tr><td>Acesso</td><td>E-mail corporativo</td><td>5</td><td>Domínio próprio (não Gmail, Hotmail etc.)</td></tr>
+              <tr><td>Acesso</td><td>Telefone</td><td>4</td><td>Telefone institucional disponível</td></tr>
+              <tr><td>Acesso</td><td>Histórico com a BSA</td><td>3</td><td>Marcado pelo analista</td></tr>
+              <tr><td>Bloqueio</td><td>CNPJ não ativo</td><td>—</td><td>Situação cadastral diferente de ATIVA</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="cc-note">Faixas: 80–100 Prioridade imediata · 60–79 Prospecção ativa · 40–59 Enriquecer / nutrir · 0–39 Não priorizar agora. Engajamento (leitura, resposta) não entra no score: é etapa do funil.</div>
+      </section>
+    </div>
+
     <!-- RODAPÉ -->
     <footer class="footer">
-      <div>RADAR BSA v2.6 · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
+      <div>RADAR BSA v3.0 · BDR Command Center · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
       <a
         class="author-card"
         href="https://www.linkedin.com/in/diogopaimg"
@@ -1036,6 +1202,16 @@
   <!-- LATERAL DIREITA: APENAS MATRIX -->
   <aside class="side-matrix">
     <canvas class="matrix-canvas" id="matrixRight"></canvas>
+  </aside>
+
+  <!-- CONTA (COMMAND CENTER) -->
+  <div class="cc-drawer-back" id="ccBack"></div>
+  <aside class="cc-drawer" id="ccD" aria-hidden="true" aria-labelledby="ccName">
+    <div class="cc-dhead">
+      <div><small id="ccSub"></small><h2 id="ccName">Conta</h2></div>
+      <button class="btn xs" type="button" id="ccClose">Fechar ✕</button>
+    </div>
+    <div class="cc-dbody" id="ccBody"></div>
   </aside>
 
   <div class="toast" id="toast"></div>
@@ -1121,7 +1297,8 @@
           drops[i]++;
         }
       }
-      setInterval(draw, 40);
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { draw(); return; }
+      setInterval(() => { if (!document.hidden) draw(); }, 40);
     }
 
     initMatrix('matrixLeft');
@@ -1141,25 +1318,25 @@
       { uf: 'AM', name: 'Amazonas', keywords: ['amazonas', 'manaus', 'polo industrial de manaus'] },
       { uf: 'BA', name: 'Bahia', keywords: ['bahia', 'salvador', 'feira de santana', 'camacari', 'lauro de freitas', 'simoes filho'] },
       { uf: 'CE', name: 'Ceara', label: 'Ceará', keywords: ['ceara', 'fortaleza', 'itaitinga', 'maracanau', 'pecem', 'juazeiro do norte'] },
-      { uf: 'DF', name: 'Distrito Federal', keywords: ['distrito federal', 'brasilia', 'santa maria df', 'gama'] },
-      { uf: 'ES', name: 'Espirito Santo', label: 'Espírito Santo', keywords: ['espirito santo', 'vitoria', 'viana', 'serra es', 'cariacica', 'vila velha', 'linhares'] },
+      { uf: 'DF', name: 'Distrito Federal', keywords: ['distrito federal', 'brasilia', 'santa maria df'] },
+      { uf: 'ES', name: 'Espirito Santo', label: 'Espírito Santo', keywords: ['espirito santo', 'grande vitoria', 'vitoria es', 'serra es', 'cariacica', 'vila velha', 'linhares'] },
       { uf: 'GO', name: 'Goias', label: 'Goiás', keywords: ['goias', 'goiania', 'anapolis', 'aparecida de goiania', 'hidrolandia', 'rio verde'] },
       { uf: 'MA', name: 'Maranhao', label: 'Maranhão', keywords: ['maranhao', 'sao luis', 'imperatriz', 'itaqui'] },
       { uf: 'MT', name: 'Mato Grosso', keywords: ['mato grosso', 'cuiaba', 'varzea grande', 'rondonopolis', 'sinop', 'sorriso'] },
       { uf: 'MS', name: 'Mato Grosso do Sul', keywords: ['mato grosso do sul', 'campo grande', 'tres lagoas', 'dourados'] },
       { uf: 'MG', name: 'Minas Gerais', keywords: ['minas gerais', 'belo horizonte', 'betim', 'contagem', 'uberlandia', 'uberaba', 'juiz de fora', 'extrema', 'pouso alegre', 'sete lagoas', 'ipatinga'] },
-      { uf: 'PA', name: 'Para', label: 'Pará', keywords: ['para', 'belem', 'ananindeua', 'maraba', 'parauapebas', 'barcarena'] },
+      { uf: 'PA', name: 'Para', label: 'Pará', keywords: ['estado do para', 'belem', 'ananindeua', 'maraba', 'parauapebas', 'barcarena'] },
       { uf: 'PB', name: 'Paraiba', label: 'Paraíba', keywords: ['paraiba', 'joao pessoa', 'campina grande', 'bayeux', 'cabedelo'] },
       { uf: 'PR', name: 'Parana', label: 'Paraná', keywords: ['parana', 'curitiba', 'londrina', 'maringa', 'cascavel', 'foz do iguacu', 'sao jose dos pinhais', 'paranagua', 'ponta grossa'] },
       { uf: 'PE', name: 'Pernambuco', keywords: ['pernambuco', 'recife', 'cabo de santo agostinho', 'suape', 'jaboatao', 'caruaru', 'petrolina', 'goiana'] },
       { uf: 'PI', name: 'Piaui', label: 'Piauí', keywords: ['piaui', 'teresina', 'parnaiba'] },
       { uf: 'RJ', name: 'Rio de Janeiro', keywords: ['rio de janeiro', 'sao joao de meriti', 'duque de caxias', 'nova iguacu', 'macae', 'volta redonda', 'resende', 'itaguai', 'niteroi', 'sao goncalo'] },
-      { uf: 'RN', name: 'Rio Grande do Norte', keywords: ['rio grande do norte', 'natal', 'mossoro', 'parnamirim'] },
+      { uf: 'RN', name: 'Rio Grande do Norte', keywords: ['rio grande do norte', 'mossoro', 'parnamirim'] },
       { uf: 'RS', name: 'Rio Grande do Sul', keywords: ['rio grande do sul', 'porto alegre', 'bento goncalves', 'caxias do sul', 'canoas', 'nova santa rita', 'gravatai', 'rio grande', 'passo fundo', 'pelotas'] },
       { uf: 'RO', name: 'Rondonia', label: 'Rondônia', keywords: ['rondonia', 'porto velho', 'ji-parana'] },
-      { uf: 'RR', name: 'Roraima', keywords: ['roraima', 'boa vista'] },
+      { uf: 'RR', name: 'Roraima', keywords: ['roraima'] },
       { uf: 'SC', name: 'Santa Catarina', keywords: ['santa catarina', 'florianopolis', 'joinville', 'itajai', 'navegantes', 'blumenau', 'sao jose sc', 'chapeco', 'jaragua do sul', 'criciuma'] },
-      { uf: 'SP', name: 'Sao Paulo', label: 'São Paulo', keywords: ['sao paulo', 'cajamar', 'campinas', 'jundiai', 'guarulhos', 'santos', 'ribeirao preto', 'sorocaba', 'sao jose dos campos', 'taubate', 'embu das artes', 'barueri', 'osasco', 'sao bernardo', 'santo andre', 'indaiatuba', 'piracicaba', 'bauru', 'sao jose do rio preto'] },
+      { uf: 'SP', name: 'Sao Paulo', label: 'São Paulo', keywords: ['sao paulo', 'cajamar', 'campinas', 'jundiai', 'guarulhos', 'porto de santos', 'ribeirao preto', 'sorocaba', 'sao jose dos campos', 'taubate', 'embu das artes', 'barueri', 'osasco', 'sao bernardo', 'santo andre', 'indaiatuba', 'piracicaba', 'bauru', 'sao jose do rio preto'] },
       { uf: 'SE', name: 'Sergipe', keywords: ['sergipe', 'aracaju', 'nossa senhora do socorro'] },
       { uf: 'TO', name: 'Tocantins', keywords: ['tocantins', 'palmas', 'araguaina'] }
     ];
@@ -1391,8 +1568,10 @@
         headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
         ...opts
       });
-      const j = await r.json();
-      if (!r.ok) throw new Error(j.error || 'Falha na requisição');
+      const text = await r.text();
+      let j;
+      try { j = text ? JSON.parse(text) : {}; } catch (_) { throw new Error(`Resposta inválida do servidor (HTTP ${r.status})`); }
+      if (!r.ok) throw new Error(j.error || `Falha na requisição (HTTP ${r.status})`);
       return j;
     }
 
@@ -1443,6 +1622,7 @@
                 <span class="tag">${escapeHtml(x.status || 'Novo')}</span>
                 ${x.verified ? '<span class="tag a">Contato verificado</span>' : ''}
               </div>
+              ${ccLeadHtml(x)}
               <div class="links">
                 <a href="${escapeHtml(x.url)}" target="_blank" rel="noopener">Abrir notícia ↗</a>
                 <a href="${googleSearch((x.company || x.title) + ' site oficial contato')}" target="_blank" rel="noopener">Buscar site/contato ↗</a>
@@ -1460,7 +1640,17 @@
       }).join('');
     }
 
-    function filterRecordsClientSide(records) {
+    const RADAR_SEG_KW = {
+      'Armazenagem e Centros de Distribuição': /armazen|centro de distribuicao|\bcds?\b|warehouse|galpao|deposito/,
+      'Movimentação e Automação de Armazéns (AMR, WMS)': /automac|\bamrs?\b|\bagvs?\b|\bwms\b|robo|robot|automation/,
+      'Operadores Logísticos e Fulfillment (3PL)': /operador(es)? logistic|\b3pl\b|fulfillment/,
+      'Condomínios Logísticos, Parques e Infraestrutura': /condominio|parque logistic|infraestrutura|galpoes/,
+      'Transporte, Frete e Comércio Exterior': /transport|frete|freight|porto|comercio exterior|comex|maritim/,
+      'Indústria Automotiva e Autopeças': /automotiv|autopec|montadora/,
+      'Agronegócio e Insumos (Silos e Armazéns)': /agro|silo|graos|fertiliz|insumo/,
+      'Alimentos, Bebidas e Varejo': /aliment|bebida|varejo|supermerc|e-commerce|ecommerce|food|retail/
+    };
+    function filterRecordsClientSide(records, applySegment = false) {
       const checkedCountries = getCheckedCountries();
       const selectedState = $('stateFilter').value;
       const selectedSegment = $('segmentFilter').value;
@@ -1480,6 +1670,7 @@
           if (item.country !== 'BR' || uf !== selectedState) return false;
         }
         if (priority && item.priority !== priority) return false;
+        if (applySegment && selectedSegment && RADAR_SEG_KW[selectedSegment] && !RADAR_SEG_KW[selectedSegment].test(normalizeText(`${item.title || ''} ${item.description || ''}`))) return false;
         return true;
       });
     }
@@ -1504,24 +1695,29 @@
 
           const data = await api('/api/leads?' + params.toString());
           const enriched = (data.leads || []).map(item => ({ ...item, detectedState: detectBrazilianState(item) }));
+          ccSyncFromLeads(enriched);
           render(filterRecordsClientSide(enriched));
           return;
         } catch (_) {}
       }
-      render(filterRecordsClientSide(allLeadsCache));
+      render(filterRecordsClientSide(allLeadsCache, true));
     }
 
     async function load() {
+      await ccReady;
       try {
         const [l, s] = await Promise.all([api('/api/leads'), api('/api/status')]);
         allLeadsCache = (l.leads || []).map(item => ({ ...item, detectedState: detectBrazilianState(item) }));
+        ccSyncFromLeads(allLeadsCache);
+        ccRenderAll();
         $('apiStatus').textContent = 'Backend conectado · ' + (s.storage || 'local');
         $('lastRun').textContent = s.lastRun ? formatDate(s.lastRun.finishedAt) : '—';
         $('lastRunDetail').textContent = s.lastRun ? `${s.lastRun.added} novos · ${s.lastRun.queriesRun} consultas` : 'Aguardando primeira varredura';
         render(filterRecordsClientSide(allLeadsCache));
       } catch (e) {
         $('apiStatus').textContent = 'Backend em cold start / indisponível';
-        $('leads').innerHTML = '<div class="empty">Não foi possível conectar ao servidor Render. Clique em <b>Pesquisar Novas Fontes</b> ou aguarde alguns segundos.</div>';
+        $('leads').innerHTML = '<div class="empty">Não foi possível conectar ao servidor Render. Clique em <b>Pesquisar Novas Fontes</b> ou aguarde alguns segundos.<br><br><button class="btn xs" type="button" id="loadTestBtn">Carregar DADOS DE TESTE (só demonstração)</button></div>';
+        ccRenderAll();
       }
     }
 
@@ -1543,7 +1739,21 @@
         'Data de Publicação': formatDate(item.publishedAt),
         'Prioridade': item.priority || 'C',
         'Score (/20)': Number(item.score ?? 0),
-        'Status CRM': item.status || 'Novo'
+        'Status CRM': item.status || 'Novo',
+        'UF detectada': item.detectedState || '',
+        'URL da notícia': item.url || '',
+        'Resumo': (item.description || '').replace(/<[^>]*>/g, ' ').slice(0, 500),
+        ...(function () {
+          const s = CC.sinais.find(y => y.leadId === item.id);
+          const c = s && s.contaId ? CC.contas.find(y => y.id === s.contaId) : null;
+          const sc = c ? scoreConta(c) : null;
+          return {
+            'Conta (Command Center)': c ? c.nome : 'NÃO IDENTIFICADA',
+            'Tipo de sinal': s ? (SIG_TIPOS[s.tipo] || [s.tipo])[0] + (s.tipoConfirmado ? '' : ' (HIPÓTESE)') : '',
+            'Score da conta (0-100)': sc ? sc.total : '',
+            'Faixa da conta': sc ? (sc.gate ? 'Bloqueada' : sc.faixa) : ''
+          };
+        })()
       }));
       const wb = XLSX.utils.book_new();
       const ws = XLSX.utils.json_to_sheet(rowsData);
@@ -1630,6 +1840,7 @@
         const csv = await f.text();
         const r = await api('/api/import/cnpj', { method: 'POST', body: JSON.stringify({ csv }) });
         showToast(`Importação concluída: ${r.added} novos registros de ${r.rowsRead} linhas.`, 5500);
+        $('cnpjStatus').textContent = `Última importação (${new Date().toLocaleString('pt-BR')}): ${r.rowsRead} linhas lidas, ${r.added} registros novos no backend.`;
       } catch (err) {
         showToast('Erro na importação CSV: ' + err.message, 5500);
       }
@@ -1674,6 +1885,679 @@
       const q = $('company').value || allLeadsCache.find(x => x.id === $('leadId').value)?.title || '';
       window.open(googleSearch(q + ' site oficial contato telefone'), '_blank', 'noopener');
     };
+
+
+    // =====================================================================
+    // BDR COMMAND CENTER (v3.0) — camada de priorização auditável
+    // Dados do Command Center ficam no navegador (IndexedDB). O backend do
+    // Radar continua sendo a fonte das notícias; nada aqui altera o backend.
+    // =====================================================================
+    const CC = { contas: [], sinais: [], cfg: null, ready: false, persist: '', savedAt: null, cur: null };
+    const CC_VERSION = 'v1';
+    const BSA_SEGMENTS = ['Depósitos de mercadorias para terceiros', 'Operador logístico', 'Centro de distribuição', 'Transportadora', 'Alimentos', 'Bebidas', 'Eletrodomésticos', 'Autopeças', 'Metalúrgica', 'Moveleira', 'Farmacêutica', 'Atacadista', 'Supermercado', 'E-commerce', 'Agronegócio', 'Fertilizantes', 'Papel e celulose', 'Plásticos', 'Química', 'Têxtil', 'Construção', 'Siderurgia'];
+    const SEG_KW = [
+      ['Operador logístico', /operador(es)? logistic|\b3pl\b|fulfillment|logistics provider|operador log/],
+      ['Centro de distribuição', /centro de distribuicao|centros de distribuicao|\bcds?\b|distribution cent|\bcedis\b|centro logistico/],
+      ['Depósitos de mercadorias para terceiros', /armazem|armazens|armazenagem|deposito|warehouse|almacen|galpao|galpoes|condominio logistico/],
+      ['Transportadora', /transportadora|frete|trucking|freight|carga rodoviaria/],
+      ['E-commerce', /e-commerce|ecommerce|marketplace|comercio eletronico/],
+      ['Atacadista', /atacad|wholesale|mayorista|distribuidora/],
+      ['Supermercado', /supermercado|hipermercado|varejo alimentar|retail/],
+      ['Alimentos', /alimentos|frigorifico|food|laticinio|carnes/],
+      ['Bebidas', /bebidas|cervej|beverage|refrigerante|vinho/],
+      ['Autopeças', /autopeca|automotiv|montadora|autopart/],
+      ['Fertilizantes', /fertiliz/],
+      ['Agronegócio', /agro|graos|silo|cooperativa|soja|milho/],
+      ['Farmacêutica', /farmac|pharma|medicament/],
+      ['Química', /quimic|chemical|petroquim/],
+      ['Papel e celulose', /celulose|papel|papelao|embalage/],
+      ['Siderurgia', /siderurg|\baco\b|steel|acos/],
+      ['Metalúrgica', /metalurg|metalmecan/],
+      ['Eletrodomésticos', /eletrodomest|linha branca/],
+      ['Construção', /construcao|materiais de construcao|cimento/]
+    ];
+    const OPER_RX = /(centro de distribuicao|\bcd\b|armazem|armazenagem|deposito|galpao|warehouse|fabrica|planta|unidade industrial|plant\b|factory|almacen|bodega|estoque|fulfillment)/;
+    const SIG_TIPOS = { nova_unidade: ['Nova unidade, CD ou fábrica', 15], expansao: ['Expansão ou ampliação', 15], investimento: ['Investimento confirmado', 10], vaga: ['Vagas de logística / supply / engenharia', 5], mudanca: ['Mudança operacional relevante', 5] };
+    const STAGES = ['Identificada', 'Contato planejado', 'Contatada', 'Entregue', 'Lida', 'Respondeu', 'Resposta humana', 'Reunião', 'Qualificada', 'Oportunidade Salesforce', 'Ganha'];
+    const SIDE_STAGES = ['Perdida', 'Nutrição', 'Descartada'];
+    const FREE_MAIL = /@(gmail|hotmail|outlook|live|yahoo|bol|uol|terra|icloud|msn|ig)\./i;
+    const defaultCfg = () => ({ porteMin: 'EPP', momMin: 1, paises: [...ALL_COUNTRIES], ufs: BRAZIL_STATES.map(s => s.uf), segs: [...BSA_SEGMENTS] });
+    const uid = p => p + '-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    const todayStr = () => new Date().toISOString().slice(0, 10);
+    const onlyDigits = v => String(v || '').replace(/\D/g, '');
+    const brl = v => v == null || !isFinite(v) ? '—' : Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+    const fmt1 = v => Number(v).toLocaleString('pt-BR', { maximumFractionDigits: 1 });
+    const optionHtml = (v, label, sel) => `<option value="${escapeHtml(v)}"${sel ? ' selected' : ''}>${escapeHtml(label ?? v)}</option>`;
+    const evTag = k => ({ F: '<span class="ev ev-f">FATO</span>', H: '<span class="ev ev-h">HIPÓTESE</span>', N: '<span class="ev ev-n">NÃO IDENTIFICADO</span>', R: '<span class="ev ev-r">RECOMENDAÇÃO</span>', S: '<span class="ev ev-s">SEM EVIDÊNCIA</span>' }[k] || '');
+    function safeUrl(u) {
+      const v = String(u || '').trim();
+      if (!v) return '';
+      try {
+        const x = new URL(/^https?:\/\//i.test(v) ? v : 'https://' + v);
+        return /^https?:$/.test(x.protocol) ? x.href : '';
+      } catch (_) { return ''; }
+    }
+    function domainOf(u) {
+      const s = safeUrl(u);
+      if (!s) return '';
+      try { return new URL(s).hostname.replace(/^www\./, '').toLowerCase(); } catch (_) { return ''; }
+    }
+
+    // ---------- Persistência (IndexedDB + backup JSON)
+    const IDB = {
+      db: null,
+      open() {
+        return new Promise((res, rej) => {
+          if (!window.indexedDB) return rej(new Error('IndexedDB indisponível'));
+          const r = indexedDB.open('radar-bsa-command-center', 1);
+          r.onupgradeneeded = () => r.result.createObjectStore('state');
+          r.onsuccess = () => { this.db = r.result; res(); };
+          r.onerror = () => rej(r.error);
+        });
+      },
+      get(k) {
+        return new Promise((res, rej) => {
+          const t = this.db.transaction('state', 'readonly').objectStore('state').get(k);
+          t.onsuccess = () => res(t.result);
+          t.onerror = () => rej(t.error);
+        });
+      },
+      set(k, v) {
+        return new Promise((res, rej) => {
+          const t = this.db.transaction('state', 'readwrite');
+          t.objectStore('state').put(v, k);
+          t.oncomplete = () => res();
+          t.onerror = () => rej(t.error);
+        });
+      }
+    };
+    let ccSaveTimer = null;
+    function ccSave() {
+      clearTimeout(ccSaveTimer);
+      ccSaveTimer = setTimeout(async () => {
+        if (!IDB.db) { ccStoreLine(); return; }
+        try {
+          await IDB.set('cc', { contas: CC.contas, sinais: CC.sinais, cfg: CC.cfg, savedAt: new Date().toISOString(), version: CC_VERSION });
+          CC.savedAt = new Date();
+        } catch (e) { CC.persist = 'erro ao salvar: ' + e.message; }
+        ccStoreLine();
+      }, 300);
+    }
+    function ccStoreLine() {
+      const el = $('ccStore');
+      if (!el) return;
+      const ok = !!IDB.db;
+      el.className = 'cc-store' + (ok ? '' : ' warn');
+      el.textContent = ok
+        ? `${CC.contas.length} contas e ${CC.sinais.length} sinais salvos neste navegador${CC.savedAt ? ' · último salvamento ' + CC.savedAt.toLocaleTimeString('pt-BR') : ''}. Faça backup (JSON) toda semana.`
+        : `Atenção: este navegador não permitiu salvar (${CC.persist}). Os dados ficam só nesta aba; use Backup (JSON) antes de fechar.`;
+    }
+    const ccReady = (async () => {
+      CC.cfg = defaultCfg();
+      try {
+        await IDB.open();
+        const st = await IDB.get('cc');
+        if (st) {
+          CC.contas = st.contas || [];
+          CC.sinais = st.sinais || [];
+          CC.cfg = Object.assign(defaultCfg(), st.cfg || {});
+          CC.savedAt = st.savedAt ? new Date(st.savedAt) : null;
+        }
+        CC.persist = 'IndexedDB';
+      } catch (e) { CC.persist = e.message; }
+      CC.ready = true;
+    })();
+
+    // ---------- Contas e sinais a partir das notícias do Radar
+    const nameKey = n => normalizeText(n).replace(/\b(s\.?\s?a\.?|ltda|eireli|me|epp|inc|corp|group|grupo|do brasil|brasil)\b/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+    function inferSegment(text) {
+      const t = normalizeText(text);
+      const hit = SEG_KW.find(([, rx]) => rx.test(t));
+      return hit ? hit[0] : '';
+    }
+    function radarTipo(text) {
+      const t = normalizeText(text);
+      if (/novo cd|novos cds|centro de distribuicao|nova fabrica|nova unidade|nova planta|inaugur|new (plant|facility|warehouse|distribution)|novo galpao|novo armazem/.test(t)) return 'nova_unidade';
+      if (/expans|amplia|aumento de capacidade|aumenta capacidade|expand/.test(t)) return 'expansao';
+      if (/invest|aporte|r\$ ?\d|milh(ao|oes)|bilh|million|billion|usd/.test(t)) return 'investimento';
+      if (/vaga|contrata|hiring|empregos/.test(t)) return 'vaga';
+      return 'mudanca';
+    }
+    function contaKey(c) {
+      const cnpj = onlyDigits(c.cnpj);
+      if (cnpj.length === 14) return 'cnpj:' + cnpj;
+      const d = domainOf(c.website);
+      if (d && !/(facebook|instagram|linktr|wa\.me|whatsapp|google|linkedin)\./.test(d)) return 'dom:' + d;
+      return 'nome:' + nameKey(c.nome);
+    }
+    function findConta(c0) {
+      const cnpj = onlyDigits(c0.cnpj), dom = domainOf(c0.website), nk = nameKey(c0.nome);
+      return CC.contas.find(x => (cnpj.length === 14 && onlyDigits(x.cnpj) === cnpj) || (dom && domainOf(x.website) === dom) || (nk && nameKey(x.nome) === nk));
+    }
+    function upsertConta(c0, origem) {
+      if (!c0.nome) return null;
+      let c = findConta(c0);
+      if (c) {
+        ['cnpj', 'website', 'telefone', 'email', 'pais', 'uf', 'endereco'].forEach(k => { if (!c[k] && c0[k]) c[k] = c0[k]; });
+        if (c0.test) c.test = true;
+        return c;
+      }
+      c = Object.assign({ cnpj: '', website: '', telefone: '', email: '', pais: '', uf: '', endereco: '' }, c0, {
+        id: uid('ct'), segmento: '', operacao: null, cad: null, historicoBSA: false, decisor: null,
+        estagio: 'Identificada', maxIdx: 0, historico: [{ estagio: 'Identificada', data: new Date().toISOString() }],
+        sfId: '', valor: null, grupo: '', notas: '', origem, criadoEm: new Date().toISOString(), atualizadoEm: new Date().toISOString()
+      });
+      c.key = contaKey(c);
+      CC.contas.push(c);
+      return c;
+    }
+    function ccSyncFromLeads(leads) {
+      if (!CC.ready) return;
+      let changed = false;
+      leads.forEach(l => {
+        const empresa = String(l.company || '').trim();
+        const temEmpresa = empresa && !/a identificar/i.test(empresa);
+        let s = CC.sinais.find(x => x.leadId === l.id);
+        const texto = `${l.title || ''} ${(l.description || '').replace(/<[^>]*>/g, ' ')}`;
+        if (!s) {
+          s = { id: uid('sg'), leadId: l.id, contaId: null, vinculo: 'auto', tipo: radarTipo(texto), tipoConfirmado: false, descricao: l.title || '', fonte: l.source || '', url: l.url || '', dataSinal: l.publishedAt ? String(l.publishedAt).slice(0, 10) : '', dataConsulta: todayStr(), confiabilidade: 'media', origem: 'radar', test: !!l.test };
+          CC.sinais.push(s);
+          changed = true;
+        } else {
+          if (!s.url && l.url) { s.url = l.url; changed = true; }
+          if (!s.dataSinal && l.publishedAt) { s.dataSinal = String(l.publishedAt).slice(0, 10); changed = true; }
+        }
+        if (temEmpresa && !s.contaId && s.vinculo !== 'removido') {
+          const uf = l.detectedState || detectBrazilianState(l);
+          const c = upsertConta({ nome: empresa, website: l.website || '', telefone: l.phone || '', email: l.email || '', pais: l.country || '', uf, endereco: l.address || '', segInferido: inferSegment(texto), operInferida: OPER_RX.test(normalizeText(texto)), test: !!l.test }, 'Radar');
+          if (c) {
+            s.contaId = c.id;
+            if (!c.segInferido) c.segInferido = inferSegment(texto);
+            if (!c.operInferida) c.operInferida = OPER_RX.test(normalizeText(texto));
+            if (!c.decisor && l.verified && l.contactName) c.decisor = { nome: l.contactName, cargo: l.contactRole || '', area: '', fonte: 'Radar (contato verificado)', data: todayStr() };
+            changed = true;
+          }
+        }
+      });
+      if (changed) ccSave();
+    }
+
+    // ---------- Score v1 auditável
+    const sinaisDa = c => CC.sinais.filter(s => s.contaId === c.id);
+    function porteClass(c) {
+      const p = normalizeText(c.cad && (c.cad.porte || c.cad.descricao_porte) || '');
+      if (!p) return null;
+      if (p.includes('micro')) return 'ME';
+      if (p.includes('pequeno')) return 'EPP';
+      return 'DEMAIS';
+    }
+    function sinalPts(s) {
+      const t = SIG_TIPOS[s.tipo];
+      if (!t) return { pts: 0, base: 0, semEv: true, motivo: 'tipo desconhecido' };
+      if (!safeUrl(s.url) || !s.dataSinal) return { pts: 0, base: t[1], semEv: true, motivo: 'sem URL ou data' };
+      const meses = (Date.now() - new Date(s.dataSinal + 'T12:00:00').getTime()) / (30.44 * 864e5);
+      const idade = meses <= 6 ? 1 : meses <= 12 ? 0.5 : 0.25;
+      const conf = { alta: 1, media: 0.85, baixa: 0.5 }[s.confiabilidade] || 0.85;
+      const vin = s.vinculo === 'confirmado' ? 1 : 0.5;
+      return { pts: Math.round(t[1] * idade * conf * vin * 10) / 10, base: t[1], idade, conf, vin, meses: Math.max(0, Math.round(meses)) };
+    }
+    function scoreConta(c) {
+      const cfg = CC.cfg || defaultCfg();
+      const A = [], M = [], X = [];
+      let gate = null;
+      const seg = c.segmento || c.segInferido || '';
+      const alvo = seg && cfg.segs.includes(seg);
+      if (!seg) A.push({ crit: 'Segmento-alvo', pts: 0, max: 15, ev: 'N', det: 'Segmento não identificado; defina na conta' });
+      else if (!alvo) A.push({ crit: 'Segmento-alvo', pts: 0, max: 15, ev: c.segmento ? 'F' : 'H', det: `${seg} não está entre os segmentos-alvo` });
+      else if (c.segmento) A.push({ crit: 'Segmento-alvo', pts: 15, max: 15, ev: 'F', det: `${seg} · definido pelo analista` });
+      else A.push({ crit: 'Segmento-alvo', pts: 7, max: 15, ev: 'H', det: `${seg} · inferido do texto da notícia; confirme na conta` });
+      if (c.operacao === true) A.push({ crit: 'Operação com estoque, CD ou fábrica', pts: 10, max: 10, ev: 'F', det: 'Confirmado pelo analista' });
+      else if (c.operacao === false) A.push({ crit: 'Operação com estoque, CD ou fábrica', pts: 0, max: 10, ev: 'F', det: 'Analista indicou que não há' });
+      else if (c.operInferida) A.push({ crit: 'Operação com estoque, CD ou fábrica', pts: 5, max: 10, ev: 'H', det: 'Notícia cita CD, armazém, fábrica ou planta; confirme' });
+      else A.push({ crit: 'Operação com estoque, CD ou fábrica', pts: 0, max: 10, ev: 'N', det: 'Sem indício' });
+      const pc = porteClass(c), rank = { ME: 0, EPP: 1, DEMAIS: 2 };
+      if (!pc) A.push({ crit: 'Porte compatível', pts: 0, max: 10, ev: 'N', det: c.pais && c.pais !== 'BR' ? 'Consulta cadastral automática só para CNPJ brasileiro' : 'CNPJ não consultado' });
+      else {
+        const ok = rank[pc] >= rank[cfg.porteMin];
+        if (!ok) gate = gate || `Porte abaixo do mínimo (${pc})`;
+        A.push({ crit: 'Porte compatível', pts: ok ? (pc === 'DEMAIS' ? 10 : 5) : 0, max: 10, ev: 'F', det: `Receita Federal: ${c.cad.porte || c.cad.descricao_porte}` });
+      }
+      const pais = c.pais || '';
+      const regOk = !pais || (cfg.paises.includes(pais) && (pais !== 'BR' || !c.uf || cfg.ufs.includes(c.uf)));
+      if (!regOk) gate = gate || 'Fora das regiões atendidas';
+      A.push({ crit: 'Região atendida', pts: pais && regOk ? 5 : 0, max: 5, ev: pais ? (c.uf || pais !== 'BR' ? 'F' : 'H') : 'N', det: pais ? `${countryNames[pais] || pais}${c.uf ? ' / ' + c.uf : (pais === 'BR' ? ' · UF não identificada' : '')}` : 'País não identificado' });
+      if (c.cad && c.cad.descricao_situacao_cadastral && normalizeText(c.cad.descricao_situacao_cadastral) !== 'ativa') gate = gate || `CNPJ ${c.cad.descricao_situacao_cadastral}`;
+      // Momento: o mesmo link conta uma vez; teto 40
+      const byUrl = {};
+      sinaisDa(c).forEach(s => {
+        const p = sinalPts(s), k = safeUrl(s.url) ? normalizeText(safeUrl(s.url)) : s.id;
+        if (!byUrl[k] || p.pts > byUrl[k].p.pts) byUrl[k] = { s, p };
+      });
+      let mom = 0;
+      Object.values(byUrl).sort((a, b) => b.p.pts - a.p.pts).forEach(({ s, p }) => {
+        const take = Math.max(0, Math.min(p.pts, 40 - mom));
+        mom += take;
+        const incerto = s.vinculo !== 'confirmado' || !s.tipoConfirmado;
+        M.push({ crit: (SIG_TIPOS[s.tipo] || [s.tipo])[0], pts: Math.round(take * 10) / 10, max: p.base, ev: p.semEv ? 'S' : (incerto ? 'H' : 'F'), sid: s.id,
+          det: p.semEv ? `${s.descricao} · falta ${p.motivo}` : `${s.descricao} · ${s.fonte || 'fonte'} · ${s.dataSinal} (${p.meses} meses; peso idade ${p.idade} × confiab. ${p.conf} × vínculo ${p.vin})${incerto ? ' · vínculo/tipo automáticos: confirme' : ''}`, url: safeUrl(s.url) });
+      });
+      if (!M.length) M.push({ crit: 'Sinais de momento', pts: 0, max: 40, ev: 'N', det: 'Nenhum sinal vinculado' });
+      const dec = c.decisor && c.decisor.nome;
+      X.push({ crit: 'Decisor identificado', pts: dec ? 8 : 0, max: 8, ev: dec ? 'F' : 'N', det: dec ? `${c.decisor.nome} · ${c.decisor.cargo || 'cargo não informado'} · fonte: ${c.decisor.fonte || '—'} (${c.decisor.data || '—'})` : 'Buscar no Sales Navigator' });
+      const corp = c.email && !FREE_MAIL.test(c.email);
+      X.push({ crit: 'E-mail corporativo', pts: corp ? 5 : 0, max: 5, ev: c.email ? 'F' : 'N', det: c.email ? (corp ? c.email : c.email + ' (domínio gratuito)') : 'Sem e-mail' });
+      X.push({ crit: 'Telefone', pts: c.telefone ? 4 : 0, max: 4, ev: c.telefone ? 'F' : 'N', det: c.telefone || 'Sem telefone' });
+      X.push({ crit: 'Histórico com a BSA', pts: c.historicoBSA ? 3 : 0, max: 3, ev: c.historicoBSA ? 'F' : 'N', det: c.historicoBSA ? 'Marcado pelo analista' : 'Não marcado' });
+      const sum = a => Math.round(a.reduce((t, x) => t + x.pts, 0));
+      const ader = sum(A), momR = Math.round(mom), acc = sum(X), total = Math.min(100, ader + momR + acc);
+      let faixa = total >= 80 ? 'Prioridade imediata' : total >= 60 ? 'Prospecção ativa' : total >= 40 ? 'Enriquecer / nutrir' : 'Não priorizar agora';
+      if (gate) faixa = 'Não priorizar agora';
+      return { A, M, X, ader, mom: momR, acc, total, faixa, gate, aderente: !gate && ader >= 25, comSinal: momR >= ((CC.cfg && CC.cfg.momMin) || 1) };
+    }
+    const fxClass = f => ({ 'Prioridade imediata': 'fx-1', 'Prospecção ativa': 'fx-2', 'Enriquecer / nutrir': 'fx-3', 'Não priorizar agora': 'fx-4' }[f] || 'fx-4');
+    function solucaoBSA(seg) {
+      const s = normalizeText(seg);
+      if (/metalurg|siderurg|construc/.test(s)) return 'Cantilever (barras, perfis, tubos) e porta-pallet';
+      if (/e-commerce|autopec|eletrodom|farmac/.test(s)) return 'Mezanino / picking e porta-pallet; avaliar automação';
+      if (/operador|deposito|centro de distrib|atacad|supermerc|transport/.test(s)) return 'Porta-pallet (verticalização) e avaliar automação intralogística';
+      if (/alimento|bebida|agro|fertiliz|quimic|plastic|papel|textil|movele/.test(s)) return 'Porta-pallet para matéria-prima e produto acabado';
+      return 'Porta-pallet (avaliar necessidade)';
+    }
+    function personaBSA(seg) {
+      const s = normalizeText(seg);
+      if (/operador|deposito|centro de distrib|transport/.test(s)) return 'Gerente/Diretor de Operações ou de Logística';
+      if (/atacad|supermerc|e-commerce/.test(s)) return 'Gerente de CD / Supply Chain';
+      return 'Gerente de Logística, Supply Chain ou Engenharia Industrial';
+    }
+    function hipotese(c, sc) {
+      const top = sc.M.find(m => m.pts > 0);
+      if (top) return `O sinal “${top.crit.toLowerCase()}” pode aumentar a necessidade de capacidade de armazenagem ou de reorganização do fluxo interno.`;
+      if (sc.aderente) return 'Perfil aderente ao ICP, mas sem sinal atual: possível necessidade futura, sem urgência identificada.';
+      return 'Aderência ainda incerta: faltam dados para formular hipótese comercial.';
+    }
+    function nba(c, sc) {
+      if (c.estagio === 'Descartada') return { acao: 'DESCARTAR', razao: 'Conta descartada pelo analista' };
+      if (sc.gate) return { acao: 'DESCARTAR', razao: `Bloqueio: ${sc.gate}` };
+      const i = STAGES.indexOf(c.estagio);
+      if (c.estagio === 'Ganha' || c.estagio === 'Perdida') return { acao: 'MONITORAR', razao: `Negócio ${c.estagio.toLowerCase()}; acompanhar no Salesforce` };
+      if (c.estagio === 'Oportunidade Salesforce') return { acao: 'MONITORAR', razao: 'Oportunidade aberta no Salesforce' };
+      if (c.estagio === 'Qualificada') return { acao: 'CRIAR OPORTUNIDADE NO SALESFORCE', razao: 'Qualificada: registrar a oportunidade com o ID do Salesforce' };
+      if (c.estagio === 'Reunião') return { acao: 'QUALIFICAR', razao: 'Validar necessidade, projeto, interlocutor e próximo passo' };
+      if (c.estagio === 'Resposta humana') return { acao: 'AGENDAR REUNIÃO', razao: 'Houve resposta humana' };
+      if (i >= 2 && i <= 5) return { acao: 'REALIZAR FOLLOW-UP', razao: 'Contatada sem resposta humana registrada' };
+      if (c.estagio === 'Nutrição') return { acao: 'NUTRIR', razao: 'Em nutrição: monitorar novos sinais' };
+      const temDec = !!(c.decisor && c.decisor.nome);
+      if (c.estagio === 'Contato planejado') return temDec ? { acao: 'PERSONALIZAR ABORDAGEM', razao: 'Decisor identificado e contato planejado' } : { acao: 'BUSCAR DECISOR NO SALES NAVIGATOR', razao: 'Contato planejado sem decisor' };
+      const incerto = sc.M.some(m => m.ev === 'H');
+      if (sc.aderente && sc.comSinal && incerto) return { acao: 'BUSCAR MAIS INFORMAÇÕES', razao: 'Aderente com sinal, mas vínculo ou tipo do sinal é automático: confirmar na notícia' };
+      if (sc.aderente && sc.comSinal && !temDec) return { acao: 'BUSCAR DECISOR NO SALES NAVIGATOR', razao: `Aderente (${sc.ader}/40) com sinal (${sc.mom}/40) e sem decisor` };
+      if (sc.aderente && sc.comSinal) return { acao: 'PERSONALIZAR ABORDAGEM', razao: 'Aderente, com sinal confirmado e decisor identificado' };
+      if (!sc.aderente && sc.comSinal) return { acao: 'BUSCAR MAIS INFORMAÇÕES', razao: (c.pais === 'BR' && !porteClass(c)) ? 'Tem sinal, mas aderência incerta: consultar CNPJ e definir segmento' : 'Tem sinal, mas aderência baixa: confirmar segmento e operação' };
+      if (sc.aderente) return { acao: 'MONITORAR', razao: 'Aderente, mas sem sinal atual: nutrir e monitorar' };
+      return { acao: 'MONITORAR', razao: 'Baixa aderência e nenhuma evidência atual' };
+    }
+
+    // ---------- Fila de prioridade
+    function ccRows() { return CC.contas.map(c => { const sc = scoreConta(c); return { c, sc, n: nba(c, sc) }; }); }
+    function ccRenderFila() {
+      const tb = $('ccRows');
+      if (!tb || !CC.ready) return;
+      const est = $('ccEst'), aSel = $('ccAcao');
+      if (est.options.length <= 1) est.innerHTML = '<option value="">Todos</option>' + [...STAGES, ...SIDE_STAGES].map(s => optionHtml(s)).join('');
+      const rows = ccRows();
+      const cur = aSel.value, acoes = [...new Set(rows.map(r => r.n.acao))].sort();
+      aSel.innerHTML = '<option value="">Todas</option>' + acoes.map(a => optionHtml(a)).join('');
+      aSel.value = acoes.includes(cur) ? cur : '';
+      const q = normalizeText($('ccQ').value), fx = $('ccFaixa').value, es = est.value, ac = aSel.value;
+      const vis = rows.filter(r => (!q || normalizeText([r.c.nome, r.c.uf, r.c.cnpj, r.c.segmento, r.c.segInferido, countryNames[r.c.pais]].join(' ')).includes(q)) && (!fx || r.sc.faixa === fx) && (!es || r.c.estagio === es) && (!ac || r.n.acao === ac)).sort((a, b) => b.sc.total - a.sc.total);
+      tb.innerHTML = vis.length ? vis.map(({ c, sc, n }) => {
+        const ns = sinaisDa(c), ok = ns.filter(s => !sinalPts(s).semEv).length;
+        const razoes = [...sc.A, ...sc.M, ...sc.X].filter(x => x.pts > 0).sort((a, b) => b.pts - a.pts).slice(0, 3).map(x => `${x.crit} (+${fmt1(x.pts)})`).join('; ') || 'Nenhum critério pontuado';
+        const seg = c.segmento || (c.segInferido ? c.segInferido + ' (inferido)' : '—');
+        return `<tr><td><b style="font-size:17px;color:var(--brand)">${sc.total}</b><div class="sc3">A ${sc.ader} · M ${sc.mom} · Ac ${sc.acc}</div></td>
+          <td><button class="cc-link" data-cc="${escapeHtml(c.id)}">${escapeHtml(c.nome)}</button>${c.test ? ' <span class="ev ev-s">TESTE</span>' : ''}<br><small>${escapeHtml(c.cnpj ? 'CNPJ ' + c.cnpj : (domainOf(c.website) || ''))}</small></td>
+          <td>${escapeHtml(countryFlags[c.pais] || '')} ${escapeHtml(countryNames[c.pais] || c.pais || '—')}<br><small>${escapeHtml(c.uf || '')}</small></td>
+          <td>${escapeHtml(seg)}</td>
+          <td><span class="fx ${sc.gate ? 'fx-x' : fxClass(sc.faixa)}">${escapeHtml(sc.gate ? 'Bloqueada' : sc.faixa)}</span></td>
+          <td>${ns.length ? `${ok} com evidência<br><small>de ${ns.length}</small>` : '—'}</td>
+          <td><small>${escapeHtml(razoes)}</small></td>
+          <td>${c.decisor && c.decisor.nome ? escapeHtml(c.decisor.nome) : '<small>NÃO IDENTIFICADO</small>'}</td>
+          <td>${escapeHtml(c.estagio)}</td>
+          <td class="nba"><b>${escapeHtml(n.acao)}</b><small>${escapeHtml(n.razao)}</small></td></tr>`;
+      }).join('') : `<tr><td colspan="10" class="empty">${CC.contas.length ? 'Nenhuma conta nos filtros atuais.' : 'Nenhuma conta ainda. As contas aparecem quando o Radar identifica a empresa de uma notícia; você também pode usar “+ Conta manual”.'}</td></tr>`;
+      const k = (l, v, n) => `<div class="stat"><div class="muted small">${escapeHtml(l)}</div><div class="n">${v}</div>${n ? `<small>${escapeHtml(n)}</small>` : ''}</div>`;
+      const tot = rows.length, imed = rows.filter(r => r.sc.faixa === 'Prioridade imediata').length, ativa = rows.filter(r => r.sc.faixa === 'Prospecção ativa').length;
+      const conf = rows.filter(r => r.n.acao === 'BUSCAR MAIS INFORMAÇÕES').length, semEmp = CC.sinais.filter(s => !s.contaId).length;
+      $('ccKpis').innerHTML = k('Contas analisadas', tot) + k('Prioridade imediata', imed, tot ? `${imed} de ${tot} = ${fmt1(imed / tot * 100)}%` : '') + k('Prospecção ativa', ativa, tot ? `${ativa} de ${tot} = ${fmt1(ativa / tot * 100)}%` : '') + k('A confirmar / enriquecer', conf, 'próxima ação: buscar informações') + k('Notícias sem empresa', semEmp, 'não entram na fila');
+      ccStoreLine();
+    }
+
+    // ---------- Conta (gaveta lateral)
+    function ccOpen(id) {
+      const c = CC.contas.find(x => x.id === id);
+      if (!c) return;
+      CC.cur = id;
+      const sc = scoreConta(c), n = nba(c, sc), site = safeUrl(c.website), br = !c.pais || c.pais === 'BR';
+      const segAtual = c.segmento || c.segInferido || '';
+      const li = x => `<li><span>${evTag(x.ev)} ${escapeHtml(x.crit)}</span><b>${fmt1(x.pts)} / ${x.max}</b><small>${x.url ? `<a href="${escapeHtml(x.url)}" target="_blank" rel="noopener">${escapeHtml(x.det)}</a>` : escapeHtml(x.det)}</small></li>`;
+      const snav = 'https://www.linkedin.com/sales/search/people?keywords=' + encodeURIComponent(c.nome);
+      const gli = googleSearch(`site:linkedin.com/in "${c.nome}" (logística OR "supply chain" OR operações OR engenharia)`);
+      const d = c.decisor || {};
+      const sigs = sinaisDa(c).map(s => `<div class="cc-sec" style="padding:10px 12px;margin:8px 0 0;background:var(--card-bg)">
+          <div class="small" style="margin-bottom:6px">${safeUrl(s.url) ? `<a href="${escapeHtml(safeUrl(s.url))}" target="_blank" rel="noopener" style="color:var(--info)">${escapeHtml(s.descricao || 'Notícia')}</a>` : escapeHtml(s.descricao || 'Notícia')} · ${escapeHtml(s.fonte || '')} · ${escapeHtml(s.dataSinal || 'sem data')}</div>
+          <div class="cc-grid2">
+            <label>Tipo do sinal<select class="field" data-sig="${escapeHtml(s.id)}" data-k="tipo">${Object.entries(SIG_TIPOS).map(([k, v]) => optionHtml(k, `${v[0]} (${v[1]})`, s.tipo === k)).join('')}</select></label>
+            <label>Confiabilidade da fonte<select class="field" data-sig="${escapeHtml(s.id)}" data-k="confiabilidade">${[['alta', 'Alta · fonte primária'], ['media', 'Média · imprensa'], ['baixa', 'Baixa · agregador / rumor']].map(([v, l]) => optionHtml(v, l, s.confiabilidade === v)).join('')}</select></label>
+          </div>
+          <div class="cc-row"><label class="chk"><input type="checkbox" data-sig="${escapeHtml(s.id)}" data-k="confirmar" ${s.vinculo === 'confirmado' && s.tipoConfirmado ? 'checked' : ''}> Li a notícia: empresa e tipo confirmados</label>
+          <button class="btn xs" type="button" data-unlink="${escapeHtml(s.id)}">Desvincular desta conta</button></div></div>`).join('');
+      $('ccSub').textContent = [segAtual, c.uf, countryNames[c.pais]].filter(Boolean).join(' · ');
+      $('ccName').textContent = c.nome;
+      $('ccBody').innerHTML = `
+        <div class="cc-sec"><h3>Prioridade: <span style="color:var(--brand)">${sc.total}</span>/100 · <span class="fx ${sc.gate ? 'fx-x' : fxClass(sc.faixa)}">${escapeHtml(sc.gate ? 'Bloqueada' : sc.faixa)}</span></h3>
+          <p>${evTag('R')} <b>${escapeHtml(n.acao)}</b> — ${escapeHtml(n.razao)}</p>
+          <p>${evTag('H')} ${escapeHtml(hipotese(c, sc))}</p>
+          <p>${evTag('H')} Solução BSA a investigar: ${escapeHtml(solucaoBSA(segAtual))}.</p>
+          <p>${evTag('R')} Perfil de decisor: ${escapeHtml(personaBSA(segAtual))}.</p></div>
+        <div class="cc-sec"><h3>Aderência ao ICP: ${sc.ader}/40</h3><ul class="crit">${sc.A.map(li).join('')}</ul>
+          <div class="cc-grid2" style="margin-top:10px">
+            <label>Segmento (definido pelo analista)<select class="field" data-f="segmento">${optionHtml('', c.segInferido ? `Não definido (inferido: ${c.segInferido})` : 'Não definido')}${BSA_SEGMENTS.map(s => optionHtml(s, s, c.segmento === s)).join('')}</select></label>
+            <label>Operação com estoque, CD ou fábrica<select class="field" data-f="operacao">${optionHtml('', 'Não verificado', c.operacao == null)}${optionHtml('sim', 'Sim, confirmado', c.operacao === true)}${optionHtml('nao', 'Não', c.operacao === false)}</select></label>
+          </div></div>
+        <div class="cc-sec"><h3>Momento: ${sc.mom}/40</h3><ul class="crit">${sc.M.map(li).join('')}</ul>${sigs}</div>
+        <div class="cc-sec"><h3>Acesso: ${sc.acc}/20</h3><ul class="crit">${sc.X.map(li).join('')}</ul>
+          <div class="cc-grid2" style="margin-top:10px"><label>E-mail institucional<input class="field" data-f="email" value="${escapeHtml(c.email || '')}"></label><label>Telefone<input class="field" data-f="telefone" value="${escapeHtml(c.telefone || '')}"></label></div>
+          <div class="cc-row"><label class="chk"><input type="checkbox" data-f="historicoBSA" ${c.historicoBSA ? 'checked' : ''}> Histórico com a BSA</label></div></div>
+        <div class="cc-sec"><h3>Decisor ${d.nome ? '' : evTag('N')}</h3>
+          <div class="cc-grid2"><label>Nome<input class="field" data-d="nome" value="${escapeHtml(d.nome || '')}"></label><label>Cargo<input class="field" data-d="cargo" value="${escapeHtml(d.cargo || '')}"></label>
+          <label>Área<input class="field" data-d="area" value="${escapeHtml(d.area || '')}"></label><label>Fonte<select class="field" data-d="fonte">${['', 'Sales Navigator', 'LinkedIn', 'Site da empresa', 'Indicação', 'Radar (contato verificado)', 'Outro'].map(f => optionHtml(f, f || 'Selecione', d.fonte === f)).join('')}</select></label></div>
+          <div class="cc-row"><a class="btn xs" href="${escapeHtml(snav)}" target="_blank" rel="noopener">Buscar no Sales Navigator ↗</a><a class="btn xs" href="${escapeHtml(gli)}" target="_blank" rel="noopener">Buscar perfis no Google ↗</a></div>
+          <div class="cc-note">Registre só pessoas confirmadas em fonte. Sem integração com o Sales Navigator: os links apenas abrem a busca.</div></div>
+        <div class="cc-sec"><h3>Estágio e funil</h3>
+          <div class="cc-grid2"><label>Estágio<select class="field" data-f="estagio">${[...STAGES, ...SIDE_STAGES].map(s => optionHtml(s, s, c.estagio === s)).join('')}</select></label>
+          <label>Grupo do teste<select class="field" data-f="grupo">${['', 'A (Radar/score)', 'B (controle)'].map(g => optionHtml(g, g || 'Sem grupo', c.grupo === g)).join('')}</select></label>
+          <label>ID da oportunidade no Salesforce<input class="field" data-f="sfId" value="${escapeHtml(c.sfId || '')}" placeholder="Ex.: 006…"></label>
+          <label>Valor da oportunidade (R$)<input class="field" data-f="valor" type="number" min="0" step="1000" value="${c.valor ?? ''}"></label></div>
+          <div class="cc-note">Histórico: ${escapeHtml((c.historico || []).slice(-6).map(h => `${h.estagio} (${new Date(h.data).toLocaleDateString('pt-BR')})`).join(' → '))}</div></div>
+        <div class="cc-sec"><h3>Cadastro</h3>
+          <div class="cc-grid2"><label>Website<input class="field" data-f="website" value="${escapeHtml(c.website || '')}"></label><label>UF (Brasil)<select class="field" data-f="uf">${optionHtml('', 'Não identificada')}${BRAZIL_STATES.map(s => optionHtml(s.uf, s.uf, c.uf === s.uf)).join('')}</select></label></div>
+          ${site ? `<div class="cc-note"><a href="${escapeHtml(site)}" target="_blank" rel="noopener" style="color:var(--info)">Abrir site ↗</a></div>` : ''}
+          ${br ? `<div class="cc-row"><input class="field" id="ccCnpj" style="flex:1;min-width:200px" placeholder="CNPJ: porte, CNAE e situação" value="${escapeHtml(c.cnpj || '')}"><button class="btn" type="button" data-act="cnpj">Consultar</button></div><div id="ccCnpjOut" class="cc-note">${c.cad ? cadHtml(c.cad) : 'Fonte: BrasilAPI (dados públicos da Receita Federal).'}</div>` : '<div class="cc-note">Consulta cadastral automática só para CNPJ brasileiro.</div>'}</div>
+        <div class="cc-sec"><h3>Notas do analista</h3><textarea class="field" style="min-height:90px" data-f="notas" placeholder="Contexto, objeções, próximo passo...">${escapeHtml(c.notas || '')}</textarea></div>
+        <div class="cc-sec"><div class="actions"><button class="btn xs" type="button" data-act="excluir">Excluir conta</button></div></div>`;
+      $('ccD').classList.add('open');
+      $('ccD').setAttribute('aria-hidden', 'false');
+      $('ccBack').style.display = 'block';
+    }
+    function ccClose() {
+      $('ccD').classList.remove('open');
+      $('ccD').setAttribute('aria-hidden', 'true');
+      $('ccBack').style.display = 'none';
+    }
+    function cadHtml(c) {
+      const row = (k, v) => `<div><b style="color:var(--txt)">${escapeHtml(k)}:</b> ${escapeHtml(v || '—')}</div>`;
+      return row('Razão social', c.razao_social) + row('Capital social', c.capital_social != null ? brl(+c.capital_social) : '') + row('Porte', c.porte || c.descricao_porte) + row('CNAE principal', [c.cnae_fiscal, c.cnae_fiscal_descricao].filter(Boolean).join(' · ')) + row('Abertura', c.data_inicio_atividade) + row('Situação', c.descricao_situacao_cadastral) + row('Município', [c.municipio, c.uf].filter(Boolean).join('/')) + '<div>Fonte: BrasilAPI (dados públicos da Receita Federal).</div>';
+    }
+    function setStage(c, st) {
+      if (c.estagio === st) return true;
+      if (st === 'Oportunidade Salesforce' && !c.sfId) {
+        const id = (prompt('ID da oportunidade no Salesforce (obrigatório para contar como oportunidade):') || '').trim();
+        if (!id) return false;
+        c.sfId = id;
+      }
+      c.estagio = st;
+      const i = STAGES.indexOf(st);
+      if (i > (c.maxIdx || 0)) c.maxIdx = i;
+      if (st === 'Perdida' && c.sfId) c.maxIdx = Math.max(c.maxIdx || 0, STAGES.indexOf('Oportunidade Salesforce'));
+      (c.historico = c.historico || []).push({ estagio: st, data: new Date().toISOString() });
+      return true;
+    }
+    function ccChange(el) {
+      const c = CC.contas.find(x => x.id === CC.cur);
+      if (!c) return;
+      let reopen = true;
+      if (el.dataset.sig) {
+        const s = CC.sinais.find(x => x.id === el.dataset.sig);
+        if (!s) return;
+        if (el.dataset.k === 'confirmar') { s.vinculo = el.checked ? 'confirmado' : 'auto'; s.tipoConfirmado = el.checked; }
+        else { s[el.dataset.k] = el.value; if (el.dataset.k === 'tipo') s.tipoConfirmado = true; }
+      } else if (el.dataset.d) {
+        c.decisor = Object.assign({}, c.decisor || {}, { [el.dataset.d]: el.value.trim() });
+        if (c.decisor.nome && !c.decisor.data) c.decisor.data = todayStr();
+        if (!c.decisor.nome) c.decisor = null;
+        reopen = el.tagName === 'SELECT';
+      } else {
+        const f = el.dataset.f;
+        if (f === 'historicoBSA') c.historicoBSA = el.checked;
+        else if (f === 'operacao') c.operacao = el.value === 'sim' ? true : el.value === 'nao' ? false : null;
+        else if (f === 'estagio') { if (!setStage(c, el.value)) el.value = c.estagio; }
+        else if (f === 'valor') c.valor = el.value === '' ? null : Number(el.value);
+        else { c[f] = f === 'notas' ? el.value : el.value.trim(); reopen = el.tagName === 'SELECT'; }
+        if (f === 'website') c.key = contaKey(c);
+      }
+      c.atualizadoEm = new Date().toISOString();
+      ccSave();
+      ccRenderFila();
+      ccRenderFunil();
+      if (reopen) ccOpen(c.id);
+    }
+    async function ccConsultCnpj() {
+      const c = CC.contas.find(x => x.id === CC.cur);
+      const cnpj = onlyDigits($('ccCnpj').value), out = $('ccCnpjOut');
+      if (cnpj.length !== 14) { out.textContent = 'Informe um CNPJ com 14 dígitos.'; return; }
+      out.textContent = 'Consultando…';
+      try {
+        const r = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        c.cad = await r.json();
+        c.cnpj = cnpj;
+        if (!c.pais) c.pais = 'BR';
+        if (!c.uf && c.cad.uf) c.uf = c.cad.uf;
+        const dup = CC.contas.find(x => x !== c && onlyDigits(x.cnpj) === cnpj);
+        if (dup) showToast(`Atenção: já existe outra conta com este CNPJ (${dup.nome}).`, 6000);
+        c.key = contaKey(c);
+        ccSave();
+        ccRenderFila();
+        ccOpen(c.id);
+      } catch (e) { out.textContent = `Não foi possível consultar (${e.message}).`; }
+    }
+    function ccNovaConta() {
+      const nome = (prompt('Nome da empresa:') || '').trim();
+      if (!nome) return;
+      const pais = ((prompt('País (BR, CL, AR, PY, UY):', 'BR') || 'BR').trim().toUpperCase()).slice(0, 2);
+      const c = upsertConta({ nome, pais }, 'Manual');
+      ccSave();
+      ccRenderAll();
+      if (c) ccOpen(c.id);
+    }
+    function ccOpenFromLead(leadId) {
+      const s = CC.sinais.find(x => x.leadId === leadId);
+      if (s && s.contaId) { ccOpen(s.contaId); return; }
+      const lead = allLeadsCache.find(a => a.id === leadId) || filteredLeadsCache.find(a => a.id === leadId);
+      const nome = (prompt('Esta notícia ainda não tem empresa identificada. Qual empresa ela cita?', lead && lead.company && !/a identificar/i.test(lead.company) ? lead.company : '') || '').trim();
+      if (!nome || !lead) return;
+      lead.company = nome;
+      ccSyncFromLeads([lead]);
+      const s2 = CC.sinais.find(x => x.leadId === leadId);
+      if (s2) { if (!s2.contaId) { const c = upsertConta({ nome, pais: lead.country || '', uf: lead.detectedState || '' }, 'Radar'); s2.contaId = c.id; } s2.vinculo = 'confirmado'; ccSave(); ccRenderAll(); ccOpen(s2.contaId); }
+    }
+    function ccLeadHtml(x) {
+      if (!CC.ready) return '';
+      const s = CC.sinais.find(y => y.leadId === x.id);
+      const c = s && s.contaId ? CC.contas.find(y => y.id === s.contaId) : null;
+      const tipo = s ? (SIG_TIPOS[s.tipo] || [s.tipo])[0] : '';
+      if (!c) return `<div class="cc-lead">${evTag('N')} Empresa da notícia não identificada · <button class="btn xs" type="button" data-leadcc="${escapeHtml(x.id)}">Vincular a uma conta</button></div>`;
+      const sc = scoreConta(c);
+      return `<div class="cc-lead">${s.vinculo === 'confirmado' && s.tipoConfirmado ? evTag('F') : evTag('H')} Sinal: ${escapeHtml(tipo)} · Conta: <b style="color:var(--txt)">${escapeHtml(c.nome)}</b> · <span class="fx ${sc.gate ? 'fx-x' : fxClass(sc.faixa)}">${sc.total} · ${escapeHtml(sc.gate ? 'Bloqueada' : sc.faixa)}</span> <button class="btn xs" type="button" data-cc="${escapeHtml(c.id)}">Abrir conta</button></div>`;
+    }
+
+    // ---------- Funil
+    function ccRenderFunil() {
+      const tb = $('fnRows');
+      if (!tb || !CC.ready) return;
+      const S = CC.contas.map(c => ({ c, sc: scoreConta(c) }));
+      const reached = (c, st) => (c.maxIdx || 0) >= STAGES.indexOf(st);
+      const an = S, ad = an.filter(x => x.sc.aderente), cs = ad.filter(x => x.sc.comSinal), pr = cs.filter(x => x.sc.total >= 60), dc = pr.filter(x => x.c.decisor && x.c.decisor.nome);
+      const etapas = [['Analisadas', an, null], ['Aderentes ao ICP', ad, 0], ['Com sinais', cs, 1], ['Priorizadas (score ≥ 60)', pr, 2], ['Com decisor identificado', dc, 3]];
+      ['Contato planejado', 'Contatada', 'Entregue', 'Lida', 'Respondeu', 'Resposta humana', 'Reunião', 'Qualificada', 'Oportunidade Salesforce', 'Ganha'].forEach(st => etapas.push([st === 'Oportunidade Salesforce' ? 'Oportunidades Salesforce' : st === 'Ganha' ? 'Ganhas' : st, an.filter(x => reached(x.c, st)), etapas.length - 1]));
+      const N0 = an.length;
+      let over = false;
+      tb.innerHTML = etapas.map(([nome, list, prevI]) => {
+        const v = list.length, prev = prevI == null ? null : etapas[prevI], pv = prev ? prev[1].length : null;
+        if (pv != null && v > pv) over = true;
+        return `<tr><td><b>${escapeHtml(nome)}</b></td><td>${v}</td><td>${prev ? `${pv} (${escapeHtml(prev[0])})` : `${N0} (total)`}</td><td>${prev ? (pv ? `${v} / ${pv} = ${fmt1(v / pv * 100)}%` : '—') : '—'}</td><td>${N0 ? `${v} / ${N0} = ${fmt1(v / N0 * 100)}%` : '—'}</td><td><div class="bar"><i style="width:${N0 ? Math.max(1, v / N0 * 100) : 0}%"></i></div></td></tr>`;
+      }).join('');
+      const opp = an.filter(x => reached(x.c, 'Oportunidade Salesforce') && x.c.sfId), won = an.filter(x => x.c.estagio === 'Ganha');
+      const pipe = opp.reduce((t, x) => t + (+x.c.valor || 0), 0), ganho = won.reduce((t, x) => t + (+x.c.valor || 0), 0);
+      const k = (l, v, n) => `<div class="stat"><div class="muted small">${escapeHtml(l)}</div><div class="n">${v}</div>${n ? `<small>${escapeHtml(n)}</small>` : ''}</div>`;
+      $('fnKpis').innerHTML = k('Contas analisadas', N0) + k('Oportunidades Salesforce', opp.length, N0 ? `${opp.length} de ${N0} analisadas` : '') + k('Pipeline originado', brl(pipe), 'soma dos valores informados') + k('Ganho', brl(ganho), `${won.length} negócio(s)`);
+      $('fnNote').textContent = 'Etapas de contato em diante contam contas que chegaram ao estágio em algum momento (resposta implica entrega e leitura).' + (over ? ' Há etapas maiores que a anterior porque algumas contas foram contatadas sem passar por todas as etapas de priorização; isso não é erro de cálculo.' : '');
+      $('fnSig').innerHTML = Object.keys(SIG_TIPOS).map(t => {
+        const cs2 = an.filter(x => sinaisDa(x.c).some(s => s.tipo === t && !sinalPts(s).semEv));
+        const cnt = st => cs2.filter(x => reached(x.c, st)).length;
+        const pp = cs2.filter(x => reached(x.c, 'Oportunidade Salesforce') && x.c.sfId).reduce((t2, x) => t2 + (+x.c.valor || 0), 0);
+        return `<tr><td>${escapeHtml(SIG_TIPOS[t][0])}</td><td>${cs2.length}</td><td>${cnt('Contatada')}</td><td>${cnt('Resposta humana')}</td><td>${cnt('Reunião')}</td><td>${cnt('Oportunidade Salesforce')}</td><td>${brl(pp)}</td></tr>`;
+      }).join('');
+    }
+
+    // ---------- Regras
+    function ccRenderCfg() {
+      if (!$('cfgPaises') || !CC.ready) return;
+      const cfg = CC.cfg;
+      $('cfgPorte').value = cfg.porteMin;
+      $('cfgMom').value = String(cfg.momMin);
+      const box = (id, all, sel, key, label) => $(id).innerHTML = all.map(v => `<label class="chk"><input type="checkbox" data-cfg="${key}" value="${escapeHtml(v)}" ${sel.includes(v) ? 'checked' : ''}> ${escapeHtml(label ? label(v) : v)}</label>`).join('');
+      box('cfgPaises', ALL_COUNTRIES, cfg.paises, 'paises', v => `${countryFlags[v]} ${countryNames[v]}`);
+      box('cfgUfs', BRAZIL_STATES.map(s => s.uf), cfg.ufs, 'ufs');
+      box('cfgSegs', BSA_SEGMENTS, cfg.segs, 'segs');
+    }
+
+    // ---------- Exportações e backup
+    function downloadBlob(blob, name) {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    }
+    function ccExport(xlsx) {
+      if (!CC.contas.length) { showToast('Nenhuma conta para exportar.'); return; }
+      const d = ccRows().sort((a, b) => b.sc.total - a.sc.total).map(({ c, sc, n }) => {
+        const top = sc.M.find(m => m.pts > 0);
+        return { 'Company': c.nome, 'CNPJ': c.cnpj || '', 'Website': c.website || '', 'Phone': c.telefone || '', 'Email': c.email || '', 'State': c.uf || '', 'Country': countryNames[c.pais] || c.pais || '', 'Segmento BSA': c.segmento || (c.segInferido ? c.segInferido + ' (HIPÓTESE)' : ''), 'Lead Source': 'Novos Negócios / BDR - Radar BSA', 'Score': sc.total, 'Faixa': sc.gate ? 'Bloqueada: ' + sc.gate : sc.faixa, 'Aderência (0-40)': sc.ader, 'Momento (0-40)': sc.mom, 'Acesso (0-20)': sc.acc, 'Sinal principal': top ? `${top.crit} - ${top.det}` : 'NÃO IDENTIFICADO', 'URL da evidência': top && top.url || '', 'Hipótese comercial (HIPÓTESE)': hipotese(c, sc), 'Solução BSA (HIPÓTESE)': solucaoBSA(c.segmento || c.segInferido), 'Próxima ação (RECOMENDAÇÃO)': `${n.acao} - ${n.razao}`, 'Decisor': c.decisor && c.decisor.nome || 'NÃO IDENTIFICADO', 'Cargo do decisor': c.decisor && c.decisor.cargo || '', 'Fonte do decisor': c.decisor && c.decisor.fonte || '', 'Estágio': c.estagio, 'Grupo teste': c.grupo || '', 'Salesforce Opportunity ID': c.sfId || '', 'Valor (R$)': c.valor ?? '', 'Dados de teste': c.test ? 'SIM' : '', 'ID Command Center': c.id, 'Atualizado em': c.atualizadoEm || '' };
+      });
+      if (xlsx && typeof XLSX !== 'undefined') {
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(d), 'Fila');
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(CC.sinais.map(s => ({ 'Conta': (CC.contas.find(c => c.id === s.contaId) || {}).nome || 'NÃO IDENTIFICADA', 'Tipo': (SIG_TIPOS[s.tipo] || [s.tipo])[0], 'Tipo confirmado': s.tipoConfirmado ? 'Sim' : 'Não (HIPÓTESE)', 'Vínculo': s.vinculo === 'confirmado' ? 'Confirmado' : 'Automático (HIPÓTESE)', 'Fato (título)': s.descricao, 'Fonte': s.fonte, 'URL': s.url, 'Data do sinal': s.dataSinal, 'Data da consulta': s.dataConsulta, 'Confiabilidade': s.confiabilidade, 'Pontos': sinalPts(s).semEv ? 0 : sinalPts(s).pts }))), 'Sinais');
+        XLSX.writeFile(wb, `radar_fila_prioridade_${todayStr()}.xlsx`);
+        return;
+      }
+      const hs = Object.keys(d[0]);
+      const csv = [hs.join(','), ...d.map(r => hs.map(k => '"' + String(r[k] ?? '').replace(/"/g, '""') + '"').join(','))].join('\n');
+      downloadBlob(new Blob(['\ufeff' + csv], { type: 'text/csv' }), `radar_salesforce_${todayStr()}.csv`);
+    }
+    function ccBackup() {
+      downloadBlob(new Blob([JSON.stringify({ app: 'Radar BSA Command Center', version: CC_VERSION, exportedAt: new Date().toISOString(), contas: CC.contas, sinais: CC.sinais, cfg: CC.cfg }, null, 2)], { type: 'application/json' }), `radar_cc_backup_${todayStr()}.json`);
+    }
+    async function ccRestore(file) {
+      try {
+        const st = JSON.parse(await file.text());
+        if (!Array.isArray(st.contas)) throw new Error('o arquivo não é um backup do Command Center');
+        if (!confirm(`Restaurar ${st.contas.length} contas e ${(st.sinais || []).length} sinais? Os dados atuais deste navegador serão substituídos.`)) return;
+        CC.contas = st.contas;
+        CC.sinais = st.sinais || [];
+        CC.cfg = Object.assign(defaultCfg(), st.cfg || {});
+        ccSave();
+        ccRenderAll();
+        render(filterRecordsClientSide(allLeadsCache));
+        showToast('Backup restaurado.');
+      } catch (e) { showToast('Não foi possível restaurar: ' + e.message, 6000); }
+    }
+    function ccRenderAll() { ccRenderFila(); ccRenderFunil(); ccRenderCfg(); }
+
+    // ---------- DADOS DE TESTE (somente quando o backend não responde; ex.: prévia publicada)
+    function loadTestData() {
+      const d = (m) => { const x = new Date(); x.setMonth(x.getMonth() - m); return x.toISOString(); };
+      const T = [
+        ['t1', 'Empresa Teste Logística A', 'Empresa Teste Logística A inaugura novo centro de distribuição em Cajamar (SP)', 'Operador logístico amplia operação com novo CD de 40 mil m² para e-commerce.', 'BR', 'A', 18, d(1)],
+        ['t2', 'Empresa Teste Alimentos B', 'Empresa Teste Alimentos B anuncia investimento de R$ 120 milhões em nova fábrica em Chapecó (SC)', 'Unidade industrial com armazém de produto acabado.', 'BR', 'A', 17, d(2)],
+        ['t3', 'Empresa Teste Atacado C', 'Empresa Teste Atacado C amplia armazém em Itajaí (SC)', 'Ampliação de capacidade de estocagem.', 'BR', 'B', 13, d(8)],
+        ['t4', 'Empresa Teste Retail D', 'Empresa Teste Retail D abre vagas para supply chain em Santiago', 'Vagas de logística e planejamento.', 'CL', 'C', 8, d(3)],
+        ['t5', '', 'Setor de condomínios logísticos cresce no Paraná', 'Matéria de mercado sem empresa específica.', 'BR', 'C', 6, d(1)]
+      ];
+      const leads = T.map(([id, company, title, description, country, priority, score, publishedAt]) => ({ id: 'TESTE-' + id, test: true, company, title: 'DADOS DE TESTE · ' + title, description, country, countryName: countryNames[country], priority, score, publishedAt, source: 'DADOS DE TESTE', url: 'https://example.com/dados-de-teste/' + id, status: 'Novo' }));
+      allLeadsCache = leads.map(item => ({ ...item, detectedState: detectBrazilianState(item) }));
+      ccSyncFromLeads(allLeadsCache);
+      $('testBanner').style.display = 'block';
+      render(filterRecordsClientSide(allLeadsCache));
+      ccRenderAll();
+      showToast('DADOS DE TESTE carregados (fictícios, só para demonstração).', 6000);
+    }
+    function clearTestData() {
+      const ids = new Set(CC.contas.filter(c => c.test).map(c => c.id));
+      CC.contas = CC.contas.filter(c => !c.test);
+      CC.sinais = CC.sinais.filter(s => !s.test && !ids.has(s.contaId));
+      allLeadsCache = allLeadsCache.filter(l => !l.test);
+      $('testBanner').style.display = 'none';
+      ccSave();
+      ccRenderAll();
+      render(filterRecordsClientSide(allLeadsCache));
+      showToast('Dados de teste removidos.');
+    }
+
+    // ---------- Eventos
+    document.querySelectorAll('#ccTabs .cc-tab').forEach(b => b.addEventListener('click', () => {
+      document.querySelectorAll('#ccTabs .cc-tab').forEach(x => x.classList.toggle('active', x === b));
+      document.querySelectorAll('.cc-view').forEach(v => v.classList.toggle('active', v.id === 'view-' + b.dataset.view));
+      if (b.dataset.view !== 'radar') ccRenderAll();
+    }));
+    ['ccQ'].forEach(id => $(id).addEventListener('input', ccRenderFila));
+    ['ccFaixa', 'ccAcao', 'ccEst'].forEach(id => $(id).addEventListener('change', ccRenderFila));
+    $('ccNova').addEventListener('click', ccNovaConta);
+    $('ccExpSf').addEventListener('click', () => ccExport(false));
+    $('ccExpXlsx').addEventListener('click', () => ccExport(true));
+    $('ccBackup').addEventListener('click', ccBackup);
+    $('ccRestore').addEventListener('click', () => $('ccRestoreFile').click());
+    $('ccRestoreFile').addEventListener('change', e => { if (e.target.files[0]) ccRestore(e.target.files[0]); e.target.value = ''; });
+    $('clearTestBtn').addEventListener('click', clearTestData);
+    document.addEventListener('click', e => {
+      const cc = e.target.closest('[data-cc]');
+      if (cc) { e.preventDefault(); ccOpen(cc.dataset.cc); return; }
+      const lc = e.target.closest('[data-leadcc]');
+      if (lc) { ccOpenFromLead(lc.dataset.leadcc); return; }
+      if (e.target.closest('#loadTestBtn')) loadTestData();
+    });
+    $('ccClose').addEventListener('click', ccClose);
+    $('ccBack').addEventListener('click', ccClose);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') ccClose(); });
+    $('ccBody').addEventListener('change', e => { if (e.target.dataset.f || e.target.dataset.d || e.target.dataset.sig) ccChange(e.target); });
+    $('ccBody').addEventListener('click', e => {
+      const t = e.target.closest('button');
+      if (!t) return;
+      const c = CC.contas.find(x => x.id === CC.cur);
+      if (t.dataset.act === 'cnpj') ccConsultCnpj();
+      else if (t.dataset.unlink) {
+        const s = CC.sinais.find(x => x.id === t.dataset.unlink);
+        if (s && confirm('Desvincular esta notícia da conta? Ela deixa de pontuar aqui.')) { s.contaId = null; s.vinculo = 'removido'; ccSave(); ccRenderAll(); ccOpen(c.id); render(filterRecordsClientSide(allLeadsCache)); }
+      } else if (t.dataset.act === 'excluir' && confirm(`Excluir a conta ${c.nome}? As notícias vinculadas ficam sem conta.`)) {
+        CC.contas = CC.contas.filter(x => x !== c);
+        CC.sinais.forEach(s => { if (s.contaId === c.id) { s.contaId = null; s.vinculo = 'removido'; } });
+        ccSave(); ccClose(); ccRenderAll(); render(filterRecordsClientSide(allLeadsCache));
+      }
+    });
+    $('cfgPorte').addEventListener('change', e => { CC.cfg.porteMin = e.target.value; ccSave(); ccRenderAll(); });
+    $('cfgMom').addEventListener('change', e => { CC.cfg.momMin = +e.target.value; ccSave(); ccRenderAll(); });
+    $('view-regras').addEventListener('change', e => {
+      const k = e.target.dataset && e.target.dataset.cfg;
+      if (!k) return;
+      const set = new Set(CC.cfg[k]);
+      e.target.checked ? set.add(e.target.value) : set.delete(e.target.value);
+      CC.cfg[k] = [...set];
+      ccSave();
+      ccRenderFila();
+      ccRenderFunil();
+    });
 
     populateStatesDropdown();
     syncFromCheckboxes(false);
