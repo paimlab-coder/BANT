@@ -4,13 +4,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Radar BSA v4.0 | BDR Command Center + Benchmarking</title>
+  <title>Radar BSA v4.2 | BDR Command Center + Benchmarking · 46 países</title>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
   <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js"></script>
+  <script>try{var t=localStorage.getItem("paim_radar_theme");if(t&&t!=="verde")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <style>
     :root {
       --bg: #070D12;
@@ -51,7 +52,7 @@
     /* LATERIAS MATRIX PURAS (APENAS A CASCATA DIGITAL) */
     .side-matrix {
       width: 220px;
-      background: #050B10;
+      background: var(--matrix-bg);
       border-right: 1px solid var(--line);
       border-left: 1px solid var(--line);
       position: sticky;
@@ -81,7 +82,7 @@
 
     /* CABEÇALHO EM BLOCO ÚNICO / MINI CAPA DE TEMPLATE */
     .hero-header {
-      background: linear-gradient(135deg, rgba(14, 26, 36, 0.95) 0%, rgba(19, 36, 49, 0.9) 100%);
+      background: linear-gradient(135deg, rgba(var(--panel-rgb), 0.95) 0%, rgba(var(--card-rgb), 0.9) 100%);
       border: 1px solid var(--line);
       border-radius: 16px;
       padding: 24px;
@@ -114,7 +115,7 @@
       border: 2px solid var(--brand);
       display: grid;
       place-items: center;
-      box-shadow: 0 4px 18px rgba(0, 255, 196, 0.3);
+      box-shadow: 0 4px 18px rgba(var(--brand-rgb), 0.3);
       flex-shrink: 0;
       background: var(--panel);
     }
@@ -157,7 +158,7 @@
       gap: 16px;
       flex-wrap: wrap;
       padding-top: 18px;
-      border-top: 1px solid rgba(30, 56, 74, 0.6);
+      border-top: 1px solid rgba(var(--line-rgb), 0.6);
     }
 
     /* CARD DO AUTOR COM LOGO LIMPA (SEM "BOLHA") */
@@ -165,7 +166,7 @@
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      background: rgba(7, 13, 18, 0.6);
+      background: rgba(var(--bg-rgb), 0.6);
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 6px 14px 6px 8px;
@@ -179,7 +180,7 @@
     .author-card:hover {
       border-color: var(--brand);
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 255, 196, 0.15);
+      box-shadow: 0 8px 25px rgba(var(--brand-rgb), 0.15);
     }
 
     .author-logo-badge {
@@ -263,7 +264,7 @@
 
     .btn.primary {
       background: var(--cta);
-      color: #070D12;
+      color: var(--on-cta);
       border-color: var(--cta);
       font-weight: 800;
     }
@@ -271,19 +272,19 @@
     .btn.primary:hover:not(:disabled) {
       background: var(--cta-hover);
       border-color: var(--cta-hover);
-      box-shadow: 0 0 12px rgba(242, 169, 59, 0.3);
-      color: #070D12;
+      box-shadow: 0 0 12px rgba(var(--cta-rgb), 0.3);
+      color: var(--on-cta);
     }
 
     .btn.xlsx {
-      background: rgba(0, 245, 212, 0.15);
+      background: rgba(var(--success-rgb), 0.15);
       border-color: var(--success);
       color: var(--success);
       font-weight: 700;
     }
 
     .btn.xlsx:hover:not(:disabled) {
-      background: rgba(0, 245, 212, 0.25);
+      background: rgba(var(--success-rgb), 0.25);
     }
 
     .btn.xs {
@@ -298,8 +299,8 @@
     }
 
     .notice {
-      border: 1px solid rgba(0, 180, 216, 0.3);
-      background: rgba(0, 180, 216, 0.08);
+      border: 1px solid rgba(var(--info-rgb), 0.3);
+      background: rgba(var(--info-rgb), 0.08);
       color: var(--info);
       border-radius: 12px;
       padding: 14px 18px;
@@ -401,8 +402,8 @@
     .country.active {
       border-color: var(--brand);
       color: var(--brand);
-      background: rgba(0, 255, 196, 0.1);
-      box-shadow: 0 0 10px rgba(0, 255, 196, 0.15);
+      background: rgba(var(--brand-rgb), 0.1);
+      box-shadow: 0 0 10px rgba(var(--brand-rgb), 0.15);
     }
 
     .country input {
@@ -416,8 +417,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(0, 255, 196, 0.12);
-      border: 1px solid rgba(0, 255, 196, 0.3);
+      background: rgba(var(--brand-rgb), 0.12);
+      border: 1px solid rgba(var(--brand-rgb), 0.3);
       color: var(--brand);
       padding: 6px 14px;
       border-radius: 999px;
@@ -466,7 +467,7 @@
     .field:focus {
       outline: none;
       border-color: var(--brand);
-      box-shadow: 0 0 10px rgba(0, 255, 196, 0.25);
+      box-shadow: 0 0 10px rgba(var(--brand-rgb), 0.25);
     }
 
     .field:disabled {
@@ -532,7 +533,7 @@
     .source-chip:hover {
       border-color: var(--brand);
       color: var(--brand);
-      background: rgba(0, 255, 196, 0.1);
+      background: rgba(var(--brand-rgb), 0.1);
     }
 
     .lead {
@@ -583,15 +584,15 @@
 
     .tag.a {
       color: var(--success);
-      border-color: rgba(0, 245, 212, 0.4);
-      background: rgba(0, 245, 212, 0.1);
+      border-color: rgba(var(--success-rgb), 0.4);
+      background: rgba(var(--success-rgb), 0.1);
       font-weight: 700;
     }
 
     .tag.b {
       color: var(--cta);
-      border-color: rgba(242, 169, 59, 0.4);
-      background: rgba(242, 169, 59, 0.1);
+      border-color: rgba(var(--cta-rgb), 0.4);
+      background: rgba(var(--cta-rgb), 0.1);
       font-weight: 700;
     }
 
@@ -603,8 +604,8 @@
 
     .tag.uf {
       color: var(--info);
-      border-color: rgba(0, 180, 216, 0.4);
-      background: rgba(0, 180, 216, 0.1);
+      border-color: rgba(var(--info-rgb), 0.4);
+      background: rgba(var(--info-rgb), 0.1);
       font-weight: 700;
     }
 
@@ -712,7 +713,7 @@
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(7, 13, 18, 0.85);
+      background: rgba(var(--bg-rgb), 0.85);
       backdrop-filter: blur(4px);
       display: none;
       align-items: center;
@@ -811,21 +812,21 @@
     .cc-table { border-collapse: collapse; width: 100%; min-width: 1040px; font-size: 12.5px; }
     .cc-table th { position: sticky; top: 0; background: var(--card-bg); color: var(--muted); text-align: left; font-size: 11.5px; font-weight: 700; padding: 10px; border-bottom: 1px solid var(--line); white-space: nowrap; z-index: 1; }
     .cc-table td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--txt); }
-    .cc-table tr:hover td { background: rgba(0, 255, 196, 0.03); }
+    .cc-table tr:hover td { background: rgba(var(--brand-rgb), 0.03); }
     .cc-table small { color: var(--muted); }
     .cc-link { background: none; border: 0; padding: 0; color: var(--brand); font: inherit; font-weight: 700; cursor: pointer; text-align: left; }
     .cc-link:hover { text-decoration: underline; }
     .fx { display: inline-block; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 99px; white-space: nowrap; border: 1px solid transparent; }
-    .fx-1 { background: var(--cta); color: #070D12; } .fx-2 { background: rgba(242, 169, 59, 0.15); color: var(--cta); border-color: rgba(242, 169, 59, 0.4); }
-    .fx-3 { background: rgba(0, 180, 216, 0.12); color: var(--info); border-color: rgba(0, 180, 216, 0.35); } .fx-4 { background: var(--card-bg); color: var(--muted); border-color: var(--line); }
+    .fx-1 { background: var(--cta); color: var(--on-cta); } .fx-2 { background: rgba(var(--cta-rgb), 0.15); color: var(--cta); border-color: rgba(var(--cta-rgb), 0.4); }
+    .fx-3 { background: rgba(var(--info-rgb), 0.12); color: var(--info); border-color: rgba(var(--info-rgb), 0.35); } .fx-4 { background: var(--card-bg); color: var(--muted); border-color: var(--line); }
     .fx-x { background: rgba(255, 99, 99, 0.12); color: #ff8a8a; border-color: rgba(255, 99, 99, 0.35); }
     .ev { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .04em; padding: 2px 6px; border-radius: 5px; margin-right: 4px; vertical-align: 1px; }
-    .ev-f { background: rgba(0, 245, 212, 0.14); color: var(--success); } .ev-h { background: rgba(242, 169, 59, 0.16); color: var(--cta); }
-    .ev-n { background: var(--card-bg); color: var(--muted); border: 1px solid var(--line); } .ev-r { background: rgba(0, 180, 216, 0.14); color: var(--info); } .ev-s { background: rgba(255, 99, 99, 0.14); color: #ff8a8a; }
+    .ev-f { background: rgba(var(--success-rgb), 0.14); color: var(--success); } .ev-h { background: rgba(var(--cta-rgb), 0.16); color: var(--cta); }
+    .ev-n { background: var(--card-bg); color: var(--muted); border: 1px solid var(--line); } .ev-r { background: rgba(var(--info-rgb), 0.14); color: var(--info); } .ev-s { background: rgba(255, 99, 99, 0.14); color: #ff8a8a; }
     .sc3 { font-size: 11px; color: var(--muted); white-space: nowrap; }
     .nba b { display: block; font-size: 12px; color: var(--txt); } .nba small { color: var(--muted); }
     .cc-lead { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 12px; color: var(--muted); }
-    .cc-drawer-back { position: fixed; inset: 0; background: rgba(7, 13, 18, 0.7); z-index: 40; display: none; }
+    .cc-drawer-back { position: fixed; inset: 0; background: rgba(var(--bg-rgb), 0.7); z-index: 40; display: none; }
     .cc-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(580px, 100%); background: var(--bg); border-left: 1px solid var(--line); z-index: 41; transform: translateX(100%); transition: transform .2s ease; display: flex; flex-direction: column; box-shadow: -12px 0 40px rgba(0, 0, 0, 0.5); }
     .cc-drawer.open { transform: none; }
     .cc-dhead { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; padding: 18px 20px; background: var(--panel); border-bottom: 1px solid var(--line); }
@@ -888,11 +889,11 @@
     @media (prefers-reduced-motion: reduce) { .bench-fab.alert, .bench-fab.alert::before, .bench-fab.alert::after { animation: none; } body > .side-matrix, body > main.main-container, .bench-screen { transition: none; } }
 
     /* ===== Botão giroscópio 3D + compartilhamento (v3.2) ===== */
-    .bench-fab.gyro { width: 74px; height: 74px; top: 16px; right: 16px; border: 0; background: radial-gradient(circle at 35% 30%, #3a1b1e 0%, #14090b 60%, #070D12 100%); overflow: visible; }
+    .bench-fab.gyro { width: 74px; height: 74px; top: 16px; right: 16px; border: 0; background: radial-gradient(circle at 35% 30%, #3a1b1e 0%, #14090b 60%, var(--bg) 100%); overflow: visible; }
     .gyro-scene { position: absolute; inset: -8px; perspective: 260px; transform-style: preserve-3d; pointer-events: none; }
     .gyro-scene .ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid transparent; transform-style: preserve-3d; }
     .gyro-scene .r1 { border-top-color: #ff5c5c; border-bottom-color: #ff5c5c; animation: gyro1 2.8s linear infinite; box-shadow: 0 0 10px rgba(255, 92, 92, .45); }
-    .gyro-scene .r2 { inset: 6px; border-left-color: var(--brand); border-right-color: var(--brand); animation: gyro2 3.6s linear infinite; box-shadow: 0 0 10px rgba(0, 255, 196, .35); }
+    .gyro-scene .r2 { inset: 6px; border-left-color: var(--brand); border-right-color: var(--brand); animation: gyro2 3.6s linear infinite; box-shadow: 0 0 10px rgba(var(--brand-rgb), .35); }
     .gyro-scene .r3 { inset: 12px; border-top-color: var(--cta); border-left-color: var(--cta); animation: gyro3 2.2s linear infinite; }
     .gyro-scene .core { position: absolute; inset: 24px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffd0d0, #ff3b3b 45%, #6b0f0f 100%); box-shadow: 0 0 16px rgba(255, 59, 59, .8); animation: gyroCore 1.4s ease-in-out infinite; }
     @keyframes gyro1 { from { transform: rotateX(70deg) rotateZ(0deg); } to { transform: rotateX(70deg) rotateZ(360deg); } }
@@ -902,7 +903,7 @@
     .bench-fab.gyro .gyro-txt { position: relative; z-index: 2; font-weight: 900; font-size: 14px; color: #fff; text-shadow: 0 1px 6px rgba(0, 0, 0, .9); line-height: 1; text-align: center; }
     .bench-fab.gyro .lbl { margin-top: 2px; }
     .bench-fab.gyro:not(.alert) .gyro-scene .ring { animation-duration: 9s; }
-    .bench-fab.gyro:not(.alert) .gyro-scene .core { background: radial-gradient(circle at 35% 30%, #c9fff1, #00bfa5 50%, #04332c 100%); box-shadow: 0 0 12px rgba(0, 255, 196, .5); }
+    .bench-fab.gyro:not(.alert) .gyro-scene .core { background: radial-gradient(circle at 35% 30%, #c9fff1, #00bfa5 50%, #04332c 100%); box-shadow: 0 0 12px rgba(var(--brand-rgb), .5); }
     .bench-fab.gyro .badge { z-index: 3; }
     @media (prefers-reduced-motion: reduce) { .gyro-scene .ring, .gyro-scene .core { animation: none !important; } }
     .btn.wa { background: rgba(37, 211, 102, .14); border-color: rgba(37, 211, 102, .55); color: #5ff59b; font-weight: 800; }
@@ -910,56 +911,56 @@
 
     /* ===== Cabeçalho holográfico (v3.3) ===== */
     .holo-wrap{perspective:1400px;margin-bottom:24px}
-    .holo-hero{position:relative;overflow:hidden;border-radius:18px;padding:26px 26px 20px;background:radial-gradient(120% 140% at 0% 0%,rgba(0,255,196,.10),transparent 55%),radial-gradient(120% 140% at 100% 0%,rgba(0,180,216,.10),transparent 55%),linear-gradient(160deg,#0B1620 0%,#0E1A24 55%,#0A141C 100%);border:1px solid rgba(0,255,196,.22);box-shadow:0 30px 70px -20px rgba(0,0,0,.75),0 0 0 1px rgba(0,180,216,.06) inset,0 0 40px rgba(0,255,196,.06);transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out;animation:holoIn 1.1s cubic-bezier(.2,.8,.2,1) both}
+    .holo-hero{position:relative;overflow:hidden;border-radius:18px;padding:26px 26px 20px;background:radial-gradient(120% 140% at 0% 0%,rgba(var(--brand-rgb),.10),transparent 55%),radial-gradient(120% 140% at 100% 0%,rgba(var(--info-rgb),.10),transparent 55%),linear-gradient(160deg,var(--card-bg) 0%,var(--panel) 55%,var(--bg) 100%);border:1px solid rgba(var(--brand-rgb),.22);box-shadow:0 30px 70px -20px rgba(0,0,0,.75),0 0 0 1px rgba(var(--info-rgb),.06) inset,0 0 40px rgba(var(--brand-rgb),.06);transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out;animation:holoIn 1.1s cubic-bezier(.2,.8,.2,1) both}
     @keyframes holoIn{from{opacity:0;transform:translateZ(-260px) rotateX(16deg) scale(.96)}to{opacity:1;transform:none}}
-    .holo-hero::before{content:"";position:absolute;inset:0;border-radius:18px;padding:1px;background:conic-gradient(from var(--ang,0deg),transparent 0 60%,rgba(0,255,196,.75) 72%,rgba(0,180,216,.6) 80%,transparent 92%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:holoSpin 8s linear infinite;pointer-events:none}
+    .holo-hero::before{content:"";position:absolute;inset:0;border-radius:18px;padding:1px;background:conic-gradient(from var(--ang,0deg),transparent 0 60%,rgba(var(--brand-rgb),.75) 72%,rgba(var(--info-rgb),.6) 80%,transparent 92%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:holoSpin 8s linear infinite;pointer-events:none}
     @property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}
     @keyframes holoSpin{to{--ang:360deg}}
-    .holo-grid{position:absolute;left:-20%;right:-20%;bottom:-40%;height:120%;background-image:linear-gradient(rgba(0,255,196,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,196,.10) 1px,transparent 1px);background-size:44px 44px;transform:rotateX(68deg);transform-origin:50% 100%;-webkit-mask-image:linear-gradient(to top,#000 10%,transparent 75%);mask-image:linear-gradient(to top,#000 10%,transparent 75%);animation:holoFloor 6s linear infinite;pointer-events:none}
+    .holo-grid{position:absolute;left:-20%;right:-20%;bottom:-40%;height:120%;background-image:linear-gradient(rgba(var(--brand-rgb),.10) 1px,transparent 1px),linear-gradient(90deg,rgba(var(--brand-rgb),.10) 1px,transparent 1px);background-size:44px 44px;transform:rotateX(68deg);transform-origin:50% 100%;-webkit-mask-image:linear-gradient(to top,#000 10%,transparent 75%);mask-image:linear-gradient(to top,#000 10%,transparent 75%);animation:holoFloor 6s linear infinite;pointer-events:none}
     @keyframes holoFloor{to{background-position:0 44px,0 0}}
-    .holo-scan{position:absolute;left:0;right:0;top:-30%;height:30%;background:linear-gradient(180deg,transparent,rgba(0,255,196,.07) 45%,rgba(0,255,196,.16) 50%,transparent);animation:holoScan 7s ease-in-out infinite;pointer-events:none}
+    .holo-scan{position:absolute;left:0;right:0;top:-30%;height:30%;background:linear-gradient(180deg,transparent,rgba(var(--brand-rgb),.07) 45%,rgba(var(--brand-rgb),.16) 50%,transparent);animation:holoScan 7s ease-in-out infinite;pointer-events:none}
     @keyframes holoScan{0%{top:-30%}60%,100%{top:110%}}
-    .hud{position:absolute;width:18px;height:18px;border:2px solid rgba(0,255,196,.55);pointer-events:none}
+    .hud{position:absolute;width:18px;height:18px;border:2px solid rgba(var(--brand-rgb),.55);pointer-events:none}
     .hud.tl{top:10px;left:10px;border-right:0;border-bottom:0;border-top-left-radius:6px}.hud.tr{top:10px;right:10px;border-left:0;border-bottom:0;border-top-right-radius:6px}
     .hud.bl{bottom:10px;left:10px;border-right:0;border-top:0;border-bottom-left-radius:6px}.hud.br{bottom:10px;right:10px;border-left:0;border-top:0;border-bottom-right-radius:6px}
     .holo-inner{position:relative;transform:translateZ(46px);transform-style:preserve-3d}
     .holo-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
-    .holo-eyebrow{font-size:11.5px;letter-spacing:2px;font-weight:800;text-transform:uppercase;color:#00FFC4;display:flex;align-items:center;gap:8px}
-    .holo-eyebrow .dot{width:8px;height:8px;border-radius:50%;background:#00FFC4;box-shadow:0 0 10px #00FFC4;animation:holoDot 2s ease-in-out infinite}
+    .holo-eyebrow{font-size:11.5px;letter-spacing:2px;font-weight:800;text-transform:uppercase;color:var(--brand);display:flex;align-items:center;gap:8px}
+    .holo-eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--brand);box-shadow:0 0 10px var(--brand);animation:holoDot 2s ease-in-out infinite}
     @keyframes holoDot{50%{opacity:.35}}
-    .holo-title{margin:8px 0 6px;font-size:clamp(24px,3.4vw,34px);font-weight:800;letter-spacing:-.5px;line-height:1.15;color:#F2FBFF;text-shadow:0 0 18px rgba(0,255,196,.25),0 10px 30px rgba(0,0,0,.6);transform:translateZ(30px)}
-    .holo-title span{font-weight:400;font-size:.55em;color:#8AA8B8;letter-spacing:0;text-shadow:none}
-    .holo-sub{color:#9FB9C7;font-size:13px;max-width:720px}
-    .holo-term{margin-top:14px;font:12.5px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#7FE9D4;background:rgba(0,0,0,.28);border:1px solid rgba(0,255,196,.18);border-radius:10px;padding:8px 12px;display:inline-block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-    .holo-term .p{color:#00B4D8;margin-right:6px}.holo-term .cur{animation:holoDot 1s steps(1) infinite}
-    .holo-actions{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid rgba(30,56,74,.7)}
+    .holo-title{margin:8px 0 6px;font-size:clamp(24px,3.4vw,34px);font-weight:800;letter-spacing:-.5px;line-height:1.15;color:var(--txt);text-shadow:0 0 18px rgba(var(--brand-rgb),.25),0 10px 30px rgba(0,0,0,.6);transform:translateZ(30px)}
+    .holo-title span{font-weight:400;font-size:.55em;color:var(--muted);letter-spacing:0;text-shadow:none}
+    .holo-sub{color:var(--muted);font-size:13px;max-width:720px}
+    .holo-term{margin-top:14px;font:12.5px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--brand);background:rgba(0,0,0,.28);border:1px solid rgba(var(--brand-rgb),.18);border-radius:10px;padding:8px 12px;display:inline-block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+    .holo-term .p{color:var(--info);margin-right:6px}.holo-term .cur{animation:holoDot 1s steps(1) infinite}
+    .holo-actions{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid rgba(var(--line-rgb),.7)}
     @media (prefers-reduced-motion:reduce){.holo-hero,.holo-hero::before,.holo-grid,.holo-scan,.holo-eyebrow .dot,.holo-term .cur{animation:none!important}.holo-hero{transform:none!important}}
     
 
     /* ===== Produto e CAPEX (v3.4) ===== */
-    .bench-prod{grid-column:1/-1;display:grid;grid-template-columns:240px minmax(0,1fr);gap:14px;align-items:stretch;margin-top:4px;padding:12px;border:1px solid rgba(0,255,196,.16);border-radius:12px;background:linear-gradient(135deg,rgba(0,255,196,.04),rgba(0,180,216,.03))}
-    .pc-ilu{margin:0;color:#00FFC4;background:rgba(0,0,0,.25);border:1px solid #1E384A;border-radius:10px;padding:8px}.pc-ilu svg{display:block;width:100%;height:auto}
-    .pc-ilu figcaption{font-size:10.5px;color:#8AA8B8;margin-top:4px;line-height:1.35}
-    .pc-box{font-size:12.5px;color:#8AA8B8}.pc-t{font-weight:700;color:#E2F1F8;font-size:12.5px}.pc-v{font-size:22px;font-weight:800;color:#E2F1F8;margin:4px 0;letter-spacing:-.3px}
-    .pc-m{line-height:1.5}.pc-m a,.pc-links a{color:#00B4D8;font-weight:600;text-decoration:none}.pc-links{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+    .bench-prod{grid-column:1/-1;display:grid;grid-template-columns:240px minmax(0,1fr);gap:14px;align-items:stretch;margin-top:4px;padding:12px;border:1px solid rgba(var(--brand-rgb),.16);border-radius:12px;background:linear-gradient(135deg,rgba(var(--brand-rgb),.04),rgba(var(--info-rgb),.03))}
+    .pc-ilu{margin:0;color:var(--brand);background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;padding:8px}.pc-ilu svg{display:block;width:100%;height:auto}
+    .pc-ilu figcaption{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.35}
+    .pc-box{font-size:12.5px;color:var(--muted)}.pc-t{font-weight:700;color:var(--txt);font-size:12.5px}.pc-v{font-size:22px;font-weight:800;color:var(--txt);margin:4px 0;letter-spacing:-.3px}
+    .pc-m{line-height:1.5}.pc-m a,.pc-links a{color:var(--info);font-weight:600;text-decoration:none}.pc-links{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
     .pev{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 6px;border-radius:5px;margin-right:4px}
-    .pev-f{background:rgba(0,245,212,.14);color:#00F5D4}.pev-e{background:rgba(170,130,255,.16);color:#c9b2ff}.pev-n{background:#132431;color:#8AA8B8;border:1px solid #1E384A}
+    .pev-f{background:rgba(var(--success-rgb),.14);color:var(--success)}.pev-e{background:rgba(170,130,255,.16);color:#c9b2ff}.pev-n{background:var(--card-bg);color:var(--muted);border:1px solid var(--line)}
     @media(max-width:760px){.bench-prod{grid-template-columns:1fr}}
     
 
     /* ===== Notícias e compartilhamento (v3.5) ===== */
-    .nw-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start;padding:10px 0;border-top:1px solid #1E384A}.nw-item:first-child{border-top:0}
-    .nw-item a.t{color:#E2F1F8;font-weight:700;text-decoration:none;font-size:13.5px;line-height:1.4}.nw-item a.t:hover{color:#00FFC4;text-decoration:underline}
-    .nw-meta{font-size:12px;color:#8AA8B8;margin-top:3px}.nw-chip{display:inline-block;font-weight:800;font-size:10.5px;padding:2px 7px;border-radius:7px;background:rgba(255,92,92,.12);color:#ff9c9c;border:1px solid rgba(255,92,92,.35);margin-right:6px}
-    .nw-nv{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 6px;border-radius:5px;background:#132431;color:#8AA8B8;border:1px solid #1E384A;margin-left:6px}
+    .nw-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line)}.nw-item:first-child{border-top:0}
+    .nw-item a.t{color:var(--txt);font-weight:700;text-decoration:none;font-size:13.5px;line-height:1.4}.nw-item a.t:hover{color:var(--brand);text-decoration:underline}
+    .nw-meta{font-size:12px;color:var(--muted);margin-top:3px}.nw-chip{display:inline-block;font-weight:800;font-size:10.5px;padding:2px 7px;border-radius:7px;background:rgba(255,92,92,.12);color:#ff9c9c;border:1px solid rgba(255,92,92,.35);margin-right:6px}
+    .nw-nv{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 6px;border-radius:5px;background:var(--card-bg);color:var(--muted);border:1px solid var(--line);margin-left:6px}
     .nw-new{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff3b3b;margin-right:6px;vertical-align:1px}
-    .nw-status{font-size:12px;color:#8AA8B8;font-weight:400;margin-left:8px}
+    .nw-status{font-size:12px;color:var(--muted);font-weight:400;margin-left:8px}
     .share-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
     
 
     /* ===== Mapa de projetos dos concorrentes (v3.6) ===== */
     .heat-fab { position: fixed; top: 16px; right: 16px; z-index: 55; width: 74px; height: 74px; border-radius: 50%; border: 2px solid rgba(255, 170, 60, .8); cursor: pointer; color: #fff; font-weight: 900; font-size: 13px; letter-spacing: .5px; display: grid; place-items: center; overflow: hidden; box-shadow: 0 6px 22px rgba(0, 0, 0, .55), 0 0 18px rgba(255, 120, 40, .35); background: #0b0f14; }
-    .heat-fab::before { content: ""; position: absolute; inset: -30%; background: radial-gradient(circle at 30% 35%, rgba(255, 50, 30, .95) 0 14%, transparent 34%), radial-gradient(circle at 68% 30%, rgba(255, 190, 40, .9) 0 12%, transparent 30%), radial-gradient(circle at 55% 70%, rgba(255, 110, 30, .9) 0 16%, transparent 36%), radial-gradient(circle at 28% 72%, rgba(40, 140, 255, .85) 0 12%, transparent 30%), radial-gradient(circle at 78% 66%, rgba(0, 255, 196, .7) 0 10%, transparent 28%); filter: blur(6px) saturate(1.2); animation: heatSpin 9s linear infinite, heatPulse 2.4s ease-in-out infinite; }
+    .heat-fab::before { content: ""; position: absolute; inset: -30%; background: radial-gradient(circle at 30% 35%, rgba(255, 50, 30, .95) 0 14%, transparent 34%), radial-gradient(circle at 68% 30%, rgba(255, 190, 40, .9) 0 12%, transparent 30%), radial-gradient(circle at 55% 70%, rgba(255, 110, 30, .9) 0 16%, transparent 36%), radial-gradient(circle at 28% 72%, rgba(40, 140, 255, .85) 0 12%, transparent 30%), radial-gradient(circle at 78% 66%, rgba(var(--brand-rgb), .7) 0 10%, transparent 28%); filter: blur(6px) saturate(1.2); animation: heatSpin 9s linear infinite, heatPulse 2.4s ease-in-out infinite; }
     .heat-fab span { position: relative; z-index: 1; text-shadow: 0 1px 6px rgba(0, 0, 0, .95); line-height: 1; text-align: center; }
     .heat-fab span small { display: block; font-size: 8.5px; font-weight: 800; color: #ffe0b8; margin-top: 2px; }
     .heat-fab:hover { transform: scale(1.06); } .heat-fab:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
@@ -972,9 +973,9 @@
     .map-screen .side-matrix { position: sticky; top: 0; }
     #compMap { height: 600px; border-radius: 12px; border: 1px solid var(--line); background: #e8eaed; overflow: hidden; }
     .map-dark .leaflet-container { background: #e8eaed; font: 12px/1.45 Inter, system-ui, sans-serif; }
-    .map-dark .leaflet-popup-content-wrapper, .map-dark .leaflet-popup-tip { background: #0E1A24; color: #E2F1F8; border: 1px solid #1E384A; }
-    .map-dark .leaflet-popup-content a { color: #00B4D8; }
-    .map-dark .leaflet-control-attribution { background: rgba(7, 13, 18, .8); color: #8AA8B8; } .map-dark .leaflet-control-attribution a { color: #8AA8B8; }
+    .map-dark .leaflet-popup-content-wrapper, .map-dark .leaflet-popup-tip { background: var(--panel); color: var(--txt); border: 1px solid var(--line); }
+    .map-dark .leaflet-popup-content a { color: var(--info); }
+    .map-dark .leaflet-control-attribution { background: rgba(var(--bg-rgb), .8); color: var(--muted); } .map-dark .leaflet-control-attribution a { color: var(--muted); }
     .flow-line { stroke-dasharray: 7 7; animation: flowDash 1.6s linear infinite; }
     @keyframes flowDash { to { stroke-dashoffset: -28; } }
     .wh-icon svg { filter: drop-shadow(0 0 6px rgba(0, 230, 120, .6)); }
@@ -986,20 +987,59 @@
 
     /* ===== Diretório de concorrentes (v4.0) ===== */
     .dir-filters{display:grid;grid-template-columns:minmax(220px,2fr) repeat(4,minmax(140px,1fr));gap:10px;margin-bottom:14px}
-    .dir-filters input,.dir-filters select{background:#132431;color:#E2F1F8;border:1px solid #1E384A;border-radius:10px;padding:9px 12px;font:inherit;font-size:13px;min-height:40px}
-    .dir-filters input:focus,.dir-filters select:focus{outline:2px solid #00FFC4;outline-offset:1px}
+    .dir-filters input,.dir-filters select{background:var(--card-bg);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:13px;min-height:40px}
+    .dir-filters input:focus,.dir-filters select:focus{outline:2px solid var(--brand);outline-offset:1px}
     .dir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;align-items:start}
-    .dir-card{background:#132431;border:1px solid #1E384A;border-radius:12px;padding:0;font-size:12.5px;color:#8AA8B8}
-    .dir-card[open]{border-color:rgba(0,255,196,.35)}
+    .dir-card{background:var(--card-bg);border:1px solid var(--line);border-radius:12px;padding:0;font-size:12.5px;color:var(--muted)}
+    .dir-card[open]{border-color:rgba(var(--brand-rgb),.35)}
     .dir-card summary{cursor:pointer;list-style:none;padding:12px 14px}.dir-card summary::-webkit-details-marker{display:none}
-    .dir-card summary b{display:block;color:#E2F1F8;font-size:14px;margin-bottom:6px}
-    .dir-card .dc-body{padding:0 14px 12px;border-top:1px solid #1E384A}.dir-card .dc-body div{margin-top:7px}.dir-card .dc-body b{color:#E2F1F8}
-    .dc-chip{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;margin:0 4px 4px 0;background:#0E1A24;border:1px solid #1E384A;color:#9FB9C7}
-    .dc-chip.alta{background:rgba(255,92,92,.12);color:#ff9c9c;border-color:rgba(255,92,92,.35)}.dc-chip.media{background:rgba(242,169,59,.12);color:#F2A93B;border-color:rgba(242,169,59,.35)}.dc-chip.ref{background:rgba(0,255,196,.1);color:#00FFC4;border-color:rgba(0,255,196,.35)}
-    .dc-tag{display:inline-block;font:11px ui-monospace,Menlo,Consolas,monospace;color:#7FE9D4;margin-right:6px}
-    .dir-card a{color:#00B4D8;font-weight:600;text-decoration:none}
+    .dir-card summary b{display:block;color:var(--txt);font-size:14px;margin-bottom:6px}
+    .dir-card .dc-body{padding:0 14px 12px;border-top:1px solid var(--line)}.dir-card .dc-body div{margin-top:7px}.dir-card .dc-body b{color:var(--txt)}
+    .dc-chip{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;margin:0 4px 4px 0;background:var(--panel);border:1px solid var(--line);color:var(--muted)}
+    .dc-chip.alta{background:rgba(255,92,92,.12);color:#ff9c9c;border-color:rgba(255,92,92,.35)}.dc-chip.media{background:rgba(var(--cta-rgb),.12);color:var(--cta);border-color:rgba(var(--cta-rgb),.35)}.dc-chip.ref{background:rgba(var(--brand-rgb),.1);color:var(--brand);border-color:rgba(var(--brand-rgb),.35)}
+    .dc-tag{display:inline-block;font:11px ui-monospace,Menlo,Consolas,monospace;color:var(--brand);margin-right:6px}
+    .dir-card a{color:var(--info);font-weight:600;text-decoration:none}
     @media(max-width:900px){.dir-filters{grid-template-columns:1fr 1fr}.dir-filters input{grid-column:1/-1}}
-  </style>
+  
+    html[data-theme="claro"] .holo-term{background:var(--card-bg)} html[data-theme="claro"] .holo-title{text-shadow:none} html[data-theme="claro"] .holo-hero{box-shadow:0 20px 40px -20px rgba(10,30,58,.25)}
+    /* ===== v2.8: temas de cor (Verde Neon é o padrão) ===== */
+    :root { --brand-rgb: 0, 255, 196; --success-rgb: 0, 245, 212; --cta-rgb: 242, 169, 59; --info-rgb: 0, 180, 216; --bg-rgb: 7, 13, 18; --panel-rgb: 14, 26, 36; --card-rgb: 19, 36, 49; --line-rgb: 30, 56, 74; --on-cta: #070D12; --matrix-bg: #050B10; --matrix-trail: 5, 11, 16; --shadow: rgba(0, 0, 0, 0.3); }
+    html[data-theme="azul"] { --bg: #0A1020; --panel: #111A2E; --card-bg: #16223A; --line: #24375A; --line-focus: #4DA3FF; --txt: #E6EEFA; --muted: #93A4C3; --brand: #4DA3FF; --brand-dark: #2B7FE0; --cta: #F58220; --cta-hover: #DB6F12; --info: #7CC4FF; --success: #5BE3A1; --brand-rgb: 77, 163, 255; --success-rgb: 91, 227, 161; --cta-rgb: 245, 130, 32; --info-rgb: 124, 196, 255; --bg-rgb: 10, 16, 32; --panel-rgb: 17, 26, 46; --card-rgb: 22, 34, 58; --line-rgb: 36, 55, 90; --on-cta: #0A1020; --matrix-bg: #070C18; --matrix-trail: 7, 12, 24; }
+    html[data-theme="grafite"] { --bg: #0F0F10; --panel: #18181A; --card-bg: #222224; --line: #34343A; --line-focus: #FFB020; --txt: #EDEDED; --muted: #A3A3A8; --brand: #FFB020; --brand-dark: #E09400; --cta: #FF6B3D; --cta-hover: #E85A2E; --info: #6CB4FF; --success: #4ADE80; --brand-rgb: 255, 176, 32; --success-rgb: 74, 222, 128; --cta-rgb: 255, 107, 61; --info-rgb: 108, 180, 255; --bg-rgb: 15, 15, 16; --panel-rgb: 24, 24, 26; --card-rgb: 34, 34, 36; --line-rgb: 52, 52, 58; --on-cta: #111111; --matrix-bg: #0A0A0B; --matrix-trail: 10, 10, 11; }
+    html[data-theme="claro"] { --bg: #EEF2F7; --panel: #FFFFFF; --card-bg: #F6F8FB; --line: #D5DDE8; --line-focus: #0A3D7A; --txt: #172536; --muted: #5D6B7C; --brand: #0A3D7A; --brand-dark: #06418A; --cta: #F58220; --cta-hover: #DB6F12; --info: #0369A1; --success: #15803D; --brand-rgb: 10, 61, 122; --success-rgb: 21, 128, 61; --cta-rgb: 245, 130, 32; --info-rgb: 3, 105, 161; --bg-rgb: 238, 242, 247; --panel-rgb: 255, 255, 255; --card-rgb: 246, 248, 251; --line-rgb: 213, 221, 232; --on-cta: #FFFFFF; --matrix-bg: #E3E9F1; --matrix-trail: 227, 233, 241; --shadow: rgba(10, 30, 58, 0.08); }
+    html[data-theme="claro"] .matrix-canvas { opacity: .25; }
+    .theme-wrap { position: relative; }
+    .theme-btn .dot { width: 16px; height: 16px; border-radius: 50%; background: conic-gradient(var(--bg) 0 33%, var(--brand) 0 66%, var(--cta) 0); box-shadow: 0 0 0 1px var(--line); display: inline-block; }
+    .theme-menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 40; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 30px rgba(0, 0, 0, .35); padding: 6px; min-width: 230px; display: none; }
+    .theme-menu.open { display: block; }
+    .theme-opt { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: 0; padding: 9px 10px; border-radius: 8px; color: var(--txt); cursor: pointer; text-align: left; font-size: 13px; }
+    .theme-opt:hover { background: var(--card-bg); }
+    .theme-opt[aria-checked="true"] { font-weight: 700; color: var(--brand); }
+    .theme-opt[aria-checked="true"]::after { content: "✓"; margin-left: auto; }
+    .theme-opt .sw { display: inline-flex; border-radius: 5px; overflow: hidden; box-shadow: 0 0 0 1px rgba(127, 127, 127, .35); }
+    .theme-opt .sw i { width: 12px; height: 20px; display: block; }
+    /* Países agrupados por continente */
+    .countries { flex-direction: column; gap: 10px; flex: 1 1 100%; }
+    .cont-group { display: flex; flex-direction: column; gap: 6px; }
+    .cont-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; }
+    .cont-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .cont-chips .country { padding: 5px 9px; font-size: 12px; border-radius: 8px; }
+    .country .idh { font-size: 10px; opacity: .7; font-weight: 600; }
+    .country-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    .country-table th { text-align: left; color: var(--muted); font-weight: 600; font-size: 11.5px; padding: 8px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--panel); }
+    .country-table td { padding: 8px; border-bottom: 1px solid var(--line); color: var(--txt); vertical-align: top; }
+    .country-scroll { max-height: 380px; overflow: auto; margin-top: 10px; }
+    /* Contato imediato */
+    .contact-box { border-style: solid; border-color: rgba(var(--brand-rgb), .35); }
+    .cx-title { width: 100%; font-size: 10.5px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; color: var(--brand); }
+    .cx-main a { font-size: 13px; }
+    .cx-none { color: var(--muted) !important; }
+    .cx-copy { border: 1px solid var(--line); background: var(--panel); color: var(--muted); border-radius: 6px; font-size: 10.5px; padding: 1px 7px; cursor: pointer; }
+    .pais-chip { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 7px; margin-right: 6px; background: rgba(var(--info-rgb), .12); color: var(--info); border: 1px solid rgba(var(--info-rgb), .35); white-space: nowrap; }
+    .pais-chip.off { background: var(--card-bg); color: var(--muted); border-color: var(--line); }
+    .bench-card .contact-box { margin: 10px 0 4px; }
+    .cx-copy:hover { color: var(--brand); border-color: var(--brand); }
+</style>
 </head>
 
 <body>
@@ -1018,12 +1058,12 @@
             <!-- SUA FOTO DO LINKEDIN -->
             <img src="https://media.licdn.com/dms/image/v2/D4D03AQGg0pmvygVbBQ/profile-displayphoto-crop_800_800/B4DaBdg.K6KkAI-/0/1788275320478?e=1796256000&v=beta&t=n4mb4r01yrd7n92awbnvGfLUl7q1KhUK8VcltfeZycw" alt="Diogo Paim" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
             <svg style="display:none;height:34px;width:auto" viewBox="0 0 68 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diogo Paim">
-              <circle cx="34" cy="34" r="32" fill="#00FFC4"/>
+              <circle cx="34" cy="34" r="32" style="fill:var(--brand)"/>
             </svg>
           </div>
           <div>
             <div class="eyebrow">Paim Business Intelligence Consultant</div>
-            <h1>RADAR BSA <span class="muted" style="font-weight: 400; font-size: 17px;">/ Inteligência de Mercado LATAM & Global</span></h1>
+            <h1>RADAR BSA <span class="muted" style="font-weight: 400; font-size: 17px;">/ Inteligência de Mercado · 46 países</span></h1>
             <div class="muted small" style="margin-top: 3px;">Monitoramento executivo de investimentos, expansão fabril e centros de distribuição</div>
           </div>
         </div>
@@ -1044,8 +1084,8 @@
               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
             >
             <svg style="display:none;height:26px;width:auto" viewBox="0 0 215 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paim Business Intelligence">
-              <circle cx="34" cy="34" r="26" fill="#00FFC4"/>
-              <text x="70" y="38" fill="#E2F1F8" font-family="Inter, sans-serif" font-weight="700" font-size="31" letter-spacing="-0.8">Paim</text>
+              <circle cx="34" cy="34" r="26" style="fill:var(--brand)"/>
+              <text x="70" y="38" style="fill:var(--txt)" font-family="Inter, sans-serif" font-weight="700" font-size="31" letter-spacing="-0.8">Paim</text>
             </svg>
           </span>
           <span class="author-info">
@@ -1060,6 +1100,10 @@
       <div class="hero-actions-row">
         <div class="muted small">Ferramentas de Exportação, Importação e Varredura de Mercado</div>
         <div class="actions">
+          <div class="theme-wrap">
+            <button class="btn theme-btn" type="button" id="themeBtn" aria-haspopup="menu" aria-expanded="false" title="Mudar as cores do painel"><span class="dot"></span> Tema: <span id="themeLabel">Verde Neon</span></button>
+            <div class="theme-menu" id="themeMenu" role="menu"></div>
+          </div>
           <button class="btn xlsx" id="exportXlsxBtn">📊 Exportar XLSX (Filtrado)</button>
           <button class="btn" id="exportBtn">Exportar Backup</button>
           <button class="btn" id="importBtn">Importar CNPJs</button>
@@ -1115,13 +1159,7 @@
       <div class="muted small">Selecione o segmento e os países para refinar a inteligência comercial de armazenagem e intralogística.</div>
 
       <div class="countries-bar">
-        <div class="countries" id="countriesCheckboxes">
-          <label class="country active"><input type="checkbox" value="BR" checked> 🇧🇷 Brasil</label>
-          <label class="country active"><input type="checkbox" value="CL" checked> 🇨🇱 Chile</label>
-          <label class="country active"><input type="checkbox" value="AR" checked> 🇦🇷 Argentina</label>
-          <label class="country active"><input type="checkbox" value="PY" checked> 🇵🇾 Paraguai</label>
-          <label class="country active"><input type="checkbox" value="UY" checked> 🇺🇾 Uruguai</label>
-        </div>
+        <div class="countries" id="countriesCheckboxes"></div>
         <div class="actions">
           <button class="btn xs" type="button" id="selectAllCountriesBtn">Selecionar Todos</button>
           <button class="btn xs" type="button" id="clearCountriesBtn">Limpar Países</button>
@@ -1147,14 +1185,22 @@
 
         <div class="field-group">
           <label class="field-label" for="countryFilter">País (Sincronizado)</label>
-          <select class="field" id="countryFilter">
-            <option value="">Todos os países (5)</option>
-            <option value="BR">🇧🇷 Brasil</option>
-            <option value="CL">🇨🇱 Chile</option>
-            <option value="AR">🇦🇷 Argentina</option>
-            <option value="PY">🇵🇾 Paraguai</option>
-            <option value="UY">🇺🇾 Uruguai</option>
-          </select>
+          <select class="field" id="countryFilter"></select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="contFilter">Continente</label>
+          <select class="field" id="contFilter"></select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="idhFilter">Nível de IDH do país</label>
+          <select class="field" id="idhFilter"></select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="rendaFilter">Renda média per capita</label>
+          <select class="field" id="rendaFilter"></select>
         </div>
 
         <div class="field-group">
@@ -1198,10 +1244,33 @@
       <div id="latamSourcesContainer" class="sources-grid"></div>
     </section>
 
+    <!-- PAÍSES: IDH E RENDA -->
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Países Monitorados · IDH e Renda per Capita</h2>
+          <div class="muted small">Segue os filtros de continente, IDH e renda. Ordenado do maior para o menor IDH.</div>
+        </div>
+        <span class="period-pill" id="countryCount"></span>
+      </div>
+      <div class="country-scroll">
+        <table class="country-table">
+          <thead><tr><th>País</th><th>Continente</th><th>IDH (2023)</th><th>Renda per capita (RNB)</th><th>Sinais no filtro</th></tr></thead>
+          <tbody id="countryRows"></tbody>
+        </table>
+      </div>
+      <div class="muted small" style="margin-top:10px">IDH: PNUD, Relatório de Desenvolvimento Humano 2025 (dados de 2023). Faixas PNUD: muito alto ≥ 0,800 · alto 0,700–0,799 · médio 0,550–0,699 · baixo &lt; 0,550. Renda: RNB per capita, método Atlas, Banco Mundial (US$), atualizada pela API ao abrir a página quando houver internet. As faixas de renda são do painel.</div>
+    </section>
+
     <!-- LISTA DE SINAIS -->
     <section class="panel">
       <div class="panel-header">
         <h2>Empresas e Sinais de Mercado Detectados (Mais Recentes no Topo)</h2>
+        <div class="actions">
+          <button class="btn xlsx xs" type="button" id="exportAllXlsxBtn">📊 Exportar todas as empresas (XLSX)</button>
+          <button class="btn xs" type="button" id="exportAllCsvBtn">Exportar CSV</button>
+          <button class="btn xs" type="button" id="enrichBtn" title="Consulta razão social, fantasia, matriz/filial, CEP e porte dos registros com CNPJ (BrasilAPI)">🏢 Enriquecer CNPJs</button>
+        </div>
         <div class="status" style="display: flex; align-items: center; gap: 8px;">
           <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block;"></span>
           <span id="apiStatus" class="muted small">Conectando ao backend...</span>
@@ -1326,7 +1395,7 @@
 
     <!-- RODAPÉ -->
     <footer class="footer">
-      <div>RADAR BSA v4.0 · BDR Command Center · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
+      <div>RADAR BSA v4.2 · 46 países · BDR Command Center · Inteligência Comercial B2B · Paim Business Intelligence Consultant · Recorte Jan/2025+</div>
       <a
         class="author-card"
         href="https://www.linkedin.com/in/diogopaimg"
@@ -1341,8 +1410,8 @@
             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
           >
           <svg style="display:none;height:26px;width:auto" viewBox="0 0 215 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paim Business Intelligence">
-            <circle cx="34" cy="34" r="26" fill="#00FFC4"/>
-            <text x="70" y="38" fill="#E2F1F8" font-family="Inter, sans-serif" font-weight="700" font-size="31" letter-spacing="-0.8">Paim</text>
+            <circle cx="34" cy="34" r="26" style="fill:var(--brand)"/>
+            <text x="70" y="38" style="fill:var(--txt)" font-family="Inter, sans-serif" font-weight="700" font-size="31" letter-spacing="-0.8">Paim</text>
           </svg>
         </span>
         <span class="author-info">
@@ -1407,7 +1476,7 @@
 
       <section class="panel">
         <div class="panel-header"><h2>Notícias recentes do mercado <span class="nw-status" id="nwStatusApp"></span></h2><button class="btn xs" type="button" id="nwRefresh">↻ Atualizar agora</button></div>
-        <div class="muted small" style="margin-bottom:8px">Buscadas automaticamente ao abrir o Radar (últimos 30 dias, Google Notícias). São NÃO VERIFICADAS: leia a matéria e use “Registrar como movimento” quando for relevante.</div>
+        <div class="muted small" style="margin-bottom:8px">Buscadas automaticamente ao abrir o Radar (últimos 30 dias, Google Notícias, em português, inglês, espanhol, francês, alemão, italiano, holandês e polonês). O país é identificado pelo título; os filtros de país abaixo valem também para esta lista. São NÃO VERIFICADAS: leia a matéria e use “Registrar como movimento” quando for relevante.</div>
         <div id="nwListApp"><div class="empty">Carregando notícias…</div></div>
       </section>
 
@@ -1417,6 +1486,10 @@
           <div class="field-group"><label class="field-label" for="bnComp">Concorrente</label><select class="field" id="bnComp"><option value="">Todos</option></select></div>
           <div class="field-group"><label class="field-label" for="bnReg">Região</label><select class="field" id="bnReg"><option value="">Todas</option><option>Brasil</option><option>América Latina</option><option>Exterior</option><option>Não identificado</option></select></div>
           <div class="field-group"><label class="field-label" for="bnTipo">Tipo</label><select class="field" id="bnTipo"><option value="">Todos</option><option>Projeto em cliente</option><option>Investimento do concorrente</option><option>Lançamento / feira</option><option>Estratégia / mercado</option></select></div>
+          <div class="field-group"><label class="field-label" for="bnPaisIso">País</label><select class="field" id="bnPaisIso"><option value="">Todos os países</option></select></div>
+          <div class="field-group"><label class="field-label" for="bnCont">Continente</label><select class="field" id="bnCont"><option value="">Todos</option></select></div>
+          <div class="field-group"><label class="field-label" for="bnIdh">Nível de IDH</label><select class="field" id="bnIdh"><option value="">Todas</option></select></div>
+          <div class="field-group"><label class="field-label" for="bnRenda">Renda per capita</label><select class="field" id="bnRenda"><option value="">Todas</option></select></div>
           <div class="field-group wide-field"><label class="field-label" for="bnQ">Busca</label><input class="field" id="bnQ" placeholder="Cliente, cidade, segmento, tecnologia…"></div>
         </div>
       </section>
@@ -1448,6 +1521,7 @@
           <label>Tipo<select class="field" id="bfTipo"><option>Projeto em cliente</option><option>Investimento do concorrente</option><option>Lançamento / feira</option><option>Estratégia / mercado</option></select></label>
           <label>Cliente / empresa atendida<input class="field" id="bfCli"></label>
           <label>Local (cidade, UF/país)<input class="field" id="bfLocal"></label>
+          <label>País<select class="field" id="bfPais"><option value="">Não identificado</option></select></label>
           <label>Região<select class="field" id="bfReg"><option>Brasil</option><option>América Latina</option><option>Exterior</option><option>Não identificado</option></select></label>
           <label>Segmento do cliente<input class="field" id="bfSeg"></label>
           <label>Solução / tecnologia<input class="field" id="bfSol" placeholder="Ex.: autoportante, shuttle, porta-paletes"></label>
@@ -1462,7 +1536,7 @@
         <div class="actions" style="margin-top:14px;justify-content:flex-end"><button class="btn" type="button" id="bfCancel">Cancelar</button><button class="btn primary" type="button" id="bfSave">Salvar movimento</button></div>
       </section>
 
-      <footer class="footer"><div>RADAR BSA v4.0 · Benchmarking de concorrentes · Paim Business Intelligence Consultant</div></footer>
+      <footer class="footer"><div>RADAR BSA v4.2 · Benchmarking de concorrentes · 46 países · Paim Business Intelligence Consultant</div></footer>
     </main>
     <aside class="side-matrix"><canvas class="matrix-canvas" id="matrixBenchR"></canvas></aside>
   </section>
@@ -1495,6 +1569,9 @@
         <div class="panel-header"><h2>Filtros</h2></div>
         <div class="toolbar">
           <div class="field-group"><label class="field-label" for="mpPais">País do cliente</label><select class="field" id="mpPais"><option value="">Todos</option></select></div>
+          <div class="field-group"><label class="field-label" for="mpCont">Continente</label><select class="field" id="mpCont"><option value="">Todos</option></select></div>
+          <div class="field-group"><label class="field-label" for="mpIdh">Nível de IDH</label><select class="field" id="mpIdh"><option value="">Todas</option></select></div>
+          <div class="field-group"><label class="field-label" for="mpRenda">Renda per capita</label><select class="field" id="mpRenda"><option value="">Todas</option></select></div>
           <div class="field-group"><label class="field-label" for="mpUf">UF (Brasil)</label><select class="field" id="mpUf"><option value="">Todas</option></select></div>
           <div class="field-group wide-field"><label class="field-label" for="mpSku">SKU / produto</label><select class="field" id="mpSku"><option value="">Todos os produtos</option></select></div>
           <div class="field-group"><label class="field-label" for="mpComp">Concorrente</label><select class="field" id="mpComp"><option value="">Todos</option></select></div>
@@ -1518,7 +1595,7 @@
         <div class="cc-note" id="mapOut"></div>
       </section>
 
-      <footer class="footer"><div>RADAR BSA v4.0 · Mapa de projetos dos concorrentes · Paim Business Intelligence Consultant</div></footer>
+      <footer class="footer"><div>RADAR BSA v4.2 · Mapa de projetos dos concorrentes · 46 países · Paim Business Intelligence Consultant</div></footer>
     </main>
     <aside class="side-matrix"><canvas class="matrix-canvas" id="matrixMapR"></canvas></aside>
   </section>
@@ -1578,6 +1655,7 @@
   </div>
 
   <script>
+    const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
     // ANIMAÇÃO MATRIX (CASCATA DIGITAL) NAS LATERAIS
     function initMatrix(canvasId) {
       const canvas = document.getElementById(canvasId);
@@ -1600,10 +1678,10 @@
       }
 
       function draw() {
-        ctx.fillStyle = 'rgba(5, 11, 16, 0.15)';
+        ctx.fillStyle = `rgba(${cssVar('--matrix-trail') || '5, 11, 16'}, 0.15)`;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = '#00FFC4';
+        ctx.fillStyle = cssVar('--brand') || '#00FFC4';
         ctx.font = 'bold ' + fontSize + 'px monospace';
 
         for (let i = 0; i < drops.length; i++) {
@@ -1624,11 +1702,60 @@
     initMatrix('matrixRight');
 
     const API_BASE = 'https://bant-app-paim.onrender.com';
-    const ALL_COUNTRIES = ['BR', 'CL', 'AR', 'PY', 'UY'];
     const MIN_DATE_STR = '2025-01-01';
-
-    const countryNames = { BR: 'Brasil', CL: 'Chile', AR: 'Argentina', PY: 'Paraguai', UY: 'Uruguai' };
-    const countryFlags = { BR: '🇧🇷', CL: '🇨🇱', AR: '🇦🇷', PY: '🇵🇾', UY: '🇺🇾' };
+    // ===== v2.8: 46 países monitorados (IDH, renda per capita e fontes de notícias por país) =====
+    // IDH: PNUD, Relatório de Desenvolvimento Humano 2025 (dados de 2023).
+    // Renda: RNB per capita, método Atlas (US$ correntes), Banco Mundial. Valor de referência embutido,
+    // atualizado ao vivo pela API do Banco Mundial quando a página tem acesso à internet.
+    const COUNTRY_DATA = [
+      ['BR', 'Brasil', 'América do Sul', 0.786, 10550, 'pt'], ['AR', 'Argentina', 'América do Sul', 0.865, 14650, 'es'],
+      ['BO', 'Bolívia', 'América do Sul', 0.733, 4420, 'es'], ['CL', 'Chile', 'América do Sul', 0.878, 16960, 'es'],
+      ['CO', 'Colômbia', 'América do Sul', 0.788, 7900, 'es'], ['EC', 'Equador', 'América do Sul', 0.777, 6890, 'es'],
+      ['PY', 'Paraguai', 'América do Sul', 0.756, 6750, 'es'], ['PE', 'Peru', 'América do Sul', 0.794, 8430, 'es'],
+      ['UY', 'Uruguai', 'América do Sul', 0.862, 24020, 'es'], ['VE', 'Venezuela', 'América do Sul', 0.709, 3860, 'es'],
+      ['MX', 'México', 'América do Norte', 0.789, 13730, 'es'], ['US', 'Estados Unidos', 'América do Norte', 0.938, 88810, 'en'],
+      ['CA', 'Canadá', 'América do Norte', 0.939, 56420, 'en'],
+      ['GT', 'Guatemala', 'América Central e Caribe', 0.662, 6360, 'es'], ['HN', 'Honduras', 'América Central e Caribe', 0.645, 3270, 'es'],
+      ['SV', 'El Salvador', 'América Central e Caribe', 0.678, 5410, 'es'], ['NI', 'Nicarágua', 'América Central e Caribe', 0.706, 2850, 'es'],
+      ['CR', 'Costa Rica', 'América Central e Caribe', 0.833, 17930, 'es'], ['PA', 'Panamá', 'América Central e Caribe', 0.839, 19140, 'es'],
+      ['DO', 'República Dominicana', 'América Central e Caribe', 0.776, 10620, 'es'], ['JM', 'Jamaica', 'América Central e Caribe', 0.720, 7790, 'en'],
+      ['TT', 'Trinidad e Tobago', 'América Central e Caribe', 0.807, 18550, 'en'],
+      ['PT', 'Portugal', 'Europa', 0.890, 29930, 'pt'], ['ES', 'Espanha', 'Europa', 0.918, 37120, 'es'],
+      ['FR', 'França', 'Europa', 0.920, 48630, 'fr'], ['DE', 'Alemanha', 'Europa', 0.959, 60200, 'de'],
+      ['IT', 'Itália', 'Europa', 0.915, 42080, 'it'], ['GB', 'Reino Unido', 'Europa', 0.946, 54550, 'en'],
+      ['NL', 'Países Baixos', 'Europa', 0.955, 68530, 'nl'], ['BE', 'Bélgica', 'Europa', 0.951, 59500, 'nl'],
+      ['PL', 'Polônia', 'Europa', 0.906, 25520, 'pl'],
+      ['AO', 'Angola', 'África', 0.616, 2860, 'pt'], ['MZ', 'Moçambique', 'África', 0.493, 570, 'pt'],
+      ['ZA', 'África do Sul', 'África', 0.741, 6270, 'en'], ['MA', 'Marrocos', 'África', 0.710, 4360, 'fr'],
+      ['EG', 'Egito', 'África', 0.754, 3260, 'en'],
+      ['AE', 'Emirados Árabes Unidos', 'Oriente Médio', 0.940, 51550, 'en', 2024], ['SA', 'Arábia Saudita', 'Oriente Médio', 0.900, 36070, 'en'],
+      ['TR', 'Turquia', 'Oriente Médio', 0.853, 16300, 'en'],
+      ['CN', 'China', 'Ásia', 0.797, 14230, 'en'], ['IN', 'Índia', 'Ásia', 0.685, 2760, 'en'],
+      ['JP', 'Japão', 'Ásia', 0.925, 38340, 'en'], ['KR', 'Coreia do Sul', 'Ásia', 0.937, 37880, 'en'],
+      ['ID', 'Indonésia', 'Ásia', 0.728, 5120, 'en'], ['VN', 'Vietnã', 'Ásia', 0.766, 4970, 'en'],
+      ['AU', 'Austrália', 'Oceania', 0.958, 64120, 'en']
+    ];
+    const COUNTRY_META = {};
+    COUNTRY_DATA.forEach(([iso, nome, cont, idh, rpc, lang, ano]) => {
+      COUNTRY_META[iso] = { iso, nome, cont, idh, idhAno: 2023, rpc, rpcAno: ano || 2025, rpcFonte: 'referência embutida', lang };
+    });
+    const flagOf = iso => String.fromCodePoint(...[...iso].map(c => 0x1F1E6 + c.charCodeAt(0) - 65));
+    const ALL_COUNTRIES = COUNTRY_DATA.map(c => c[0]);
+    const countryNames = Object.fromEntries(COUNTRY_DATA.map(c => [c[0], c[1]]));
+    const countryFlags = Object.fromEntries(COUNTRY_DATA.map(c => [c[0], flagOf(c[0])]));
+    const CONTINENTS = [...new Set(COUNTRY_DATA.map(c => c[2]))];
+    const idhFaixa = v => v == null ? 'Sem dado' : v >= 0.8 ? 'Muito alto' : v >= 0.7 ? 'Alto' : v >= 0.55 ? 'Médio' : 'Baixo';
+    const rendaFaixa = v => v == null ? 'Sem dado' : v >= 40000 ? 'Acima de US$ 40 mil' : v >= 15000 ? 'US$ 15 a 40 mil' : v >= 5000 ? 'US$ 5 a 15 mil' : 'Abaixo de US$ 5 mil';
+    const IDH_FAIXAS = ['Muito alto', 'Alto', 'Médio', 'Baixo'];
+    const RENDA_FAIXAS = ['Acima de US$ 40 mil', 'US$ 15 a 40 mil', 'US$ 5 a 15 mil', 'Abaixo de US$ 5 mil'];
+    const fmtIdh = v => v == null ? '—' : Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+    const fmtUsd = v => v == null ? '—' : 'US$ ' + Number(v).toLocaleString('pt-BR', { maximumFractionDigits: 0 });
+    // Busca no Google Notícias por país e idioma (complementa as fontes fixas)
+    const GN_LANG = { pt: ['pt-BR', 'armazém OR "centro de distribuição" OR fábrica investimento'], es: ['es-419', 'almacén OR "centro de distribución" OR planta inversión'], en: ['en', 'warehouse OR "distribution center" OR plant investment'], fr: ['fr', 'entrepôt OR "centre de distribution" OR usine investissement'], de: ['de', 'Lager OR Logistikzentrum OR Werk Investition'], it: ['it', 'magazzino OR "centro distribuzione" OR stabilimento investimento'], nl: ['nl', 'magazijn OR distributiecentrum OR fabriek investering'], pl: ['pl', 'magazyn OR "centrum dystrybucyjne" OR fabryka inwestycja'] };
+    const googleNewsUrl = iso => {
+      const m = COUNTRY_META[iso], g = GN_LANG[m.lang] || GN_LANG.en, hl = iso === 'PT' ? 'pt-PT' : g[0];
+      return `https://news.google.com/search?q=${encodeURIComponent(g[1])}&hl=${hl}&gl=${iso}`;
+    };
 
     const BRAZIL_STATES = [
       { uf: 'AC', name: 'Acre', keywords: ['acre', 'rio branco'] },
@@ -1692,6 +1819,54 @@
         { name: 'Transporte Carretero', sector: 'Logística & Carga Uruguay', url: 'https://transportecarretero.com.uy' }
       ]
     };
+
+    // Fontes por país (v2.8). Cada país também recebe uma busca no Google Notícias no idioma local.
+    Object.assign(LATAM_SOURCES, {
+      BO: [{ name: 'El Deber', sector: 'Economía & Empresas', url: 'https://eldeber.com.bo' }, { name: 'Los Tiempos', sector: 'Economía', url: 'https://www.lostiempos.com' }],
+      CO: [{ name: 'Portafolio', sector: 'Economía & Negocios', url: 'https://www.portafolio.co' }, { name: 'La República', sector: 'Empresas & Inversión', url: 'https://www.larepublica.co' }],
+      EC: [{ name: 'Primicias', sector: 'Economía', url: 'https://www.primicias.ec' }, { name: 'El Universo', sector: 'Economía', url: 'https://www.eluniverso.com' }],
+      PE: [{ name: 'Gestión', sector: 'Economía & Negocios', url: 'https://gestion.pe' }, { name: 'El Comercio', sector: 'Economía', url: 'https://elcomercio.pe' }],
+      VE: [{ name: 'Banca y Negocios', sector: 'Economía & Empresas', url: 'https://www.bancaynegocios.com' }],
+      MX: [{ name: 'El Economista', sector: 'Industria & Inversión', url: 'https://www.eleconomista.com.mx' }, { name: 'Expansión', sector: 'Empresas', url: 'https://expansion.mx' }, { name: 'T21', sector: 'Logística & Transporte', url: 'https://t21.com.mx' }],
+      US: [{ name: 'Supply Chain Dive', sector: 'Supply Chain & Warehousing', url: 'https://www.supplychaindive.com' }, { name: 'DC Velocity', sector: 'Distribution Centers', url: 'https://www.dcvelocity.com' }, { name: 'Modern Materials Handling', sector: 'Materials Handling & Automation', url: 'https://www.mmh.com' }],
+      CA: [{ name: 'Inside Logistics', sector: 'Logistics & Warehousing', url: 'https://www.insidelogistics.ca' }, { name: 'The Globe and Mail – Business', sector: 'Business', url: 'https://www.theglobeandmail.com/business/' }],
+      GT: [{ name: 'Prensa Libre', sector: 'Economía', url: 'https://www.prensalibre.com' }],
+      HN: [{ name: 'La Prensa', sector: 'Economía', url: 'https://www.laprensa.hn' }],
+      SV: [{ name: 'La Prensa Gráfica', sector: 'Economía', url: 'https://www.laprensagrafica.com' }],
+      NI: [{ name: 'La Prensa', sector: 'Economía', url: 'https://www.laprensani.com' }],
+      CR: [{ name: 'La República', sector: 'Negocios', url: 'https://www.larepublica.net' }, { name: 'El Financiero', sector: 'Economía', url: 'https://www.elfinancierocr.com' }],
+      PA: [{ name: 'La Prensa', sector: 'Economía & Logística', url: 'https://www.prensa.com' }],
+      DO: [{ name: 'Diario Libre', sector: 'Economía', url: 'https://www.diariolibre.com' }],
+      JM: [{ name: 'Jamaica Gleaner', sector: 'Business', url: 'https://jamaica-gleaner.com' }, { name: 'Jamaica Observer', sector: 'Business', url: 'https://www.jamaicaobserver.com' }],
+      TT: [{ name: 'Trinidad Express', sector: 'Business', url: 'https://trinidadexpress.com' }, { name: 'Newsday', sector: 'Business', url: 'https://newsday.co.tt' }],
+      PT: [{ name: 'Jornal de Negócios', sector: 'Economia & Empresas', url: 'https://www.jornaldenegocios.pt' }, { name: 'ECO', sector: 'Economia', url: 'https://eco.sapo.pt' }],
+      ES: [{ name: 'Expansión', sector: 'Empresas', url: 'https://www.expansion.com' }, { name: 'Cinco Días', sector: 'Economía', url: 'https://cincodias.elpais.com' }, { name: 'Cadena de Suministro', sector: 'Logística & Almacenaje', url: 'https://www.cadenadesuministro.es' }],
+      FR: [{ name: 'Les Echos', sector: 'Économie & Industrie', url: 'https://www.lesechos.fr' }, { name: 'Supply Chain Magazine', sector: 'Logistique & Entrepôts', url: 'https://www.supplychainmagazine.fr' }, { name: 'Voxlog', sector: 'Logistique', url: 'https://www.voxlog.fr' }],
+      DE: [{ name: 'Handelsblatt', sector: 'Wirtschaft & Industrie', url: 'https://www.handelsblatt.com' }, { name: 'DVZ', sector: 'Logistik & Transport', url: 'https://www.dvz.de' }, { name: 'Logistik Heute', sector: 'Lager & Intralogistik', url: 'https://logistik-heute.de' }],
+      IT: [{ name: 'Il Sole 24 Ore', sector: 'Economia & Industria', url: 'https://www.ilsole24ore.com' }, { name: 'Shipping Italy', sector: 'Logistica & Porti', url: 'https://www.shippingitaly.it' }],
+      GB: [{ name: 'Logistics Manager', sector: 'Warehousing & Logistics', url: 'https://www.logisticsmanager.com' }, { name: 'Financial Times', sector: 'Business', url: 'https://www.ft.com' }],
+      NL: [{ name: 'Het Financieele Dagblad', sector: 'Economie', url: 'https://fd.nl' }, { name: 'Logistiek.nl', sector: 'Logistiek & Warehousing', url: 'https://www.logistiek.nl' }],
+      BE: [{ name: 'De Tijd', sector: 'Economie', url: 'https://www.tijd.be' }, { name: "L'Echo", sector: 'Économie', url: 'https://www.lecho.be' }, { name: 'Flows', sector: 'Logistiek', url: 'https://www.flows.be' }],
+      PL: [{ name: 'Rzeczpospolita', sector: 'Gospodarka', url: 'https://www.rp.pl' }, { name: 'Puls Biznesu', sector: 'Biznes', url: 'https://www.pb.pl' }],
+      AO: [{ name: 'Jornal de Angola', sector: 'Economia', url: 'https://www.jornaldeangola.ao' }, { name: 'Expansão', sector: 'Economia & Negócios', url: 'https://expansao.co.ao' }],
+      MZ: [{ name: 'Club of Mozambique', sector: 'Economia & Negócios', url: 'https://clubofmozambique.com' }],
+      ZA: [{ name: 'BusinessLIVE', sector: 'Business', url: 'https://www.businesslive.co.za' }, { name: 'Freight News', sector: 'Logistics & Freight', url: 'https://www.freightnews.co.za' }],
+      MA: [{ name: 'Médias24', sector: 'Économie', url: 'https://medias24.com' }, { name: "L'Economiste", sector: 'Économie', url: 'https://www.leconomiste.com' }],
+      EG: [{ name: 'Ahram Online – Business', sector: 'Business', url: 'https://english.ahram.org.eg' }, { name: 'Daily News Egypt', sector: 'Business', url: 'https://www.dailynewsegypt.com' }],
+      AE: [{ name: 'Gulf News – Business', sector: 'Business', url: 'https://gulfnews.com' }, { name: 'The National', sector: 'Business', url: 'https://www.thenationalnews.com' }],
+      SA: [{ name: 'Arab News – Business', sector: 'Business', url: 'https://www.arabnews.com' }, { name: 'Argaam', sector: 'Markets & Companies', url: 'https://www.argaam.com/en' }],
+      TR: [{ name: 'Daily Sabah – Business', sector: 'Business', url: 'https://www.dailysabah.com' }, { name: 'Hürriyet Daily News', sector: 'Economy', url: 'https://www.hurriyetdailynews.com' }],
+      CN: [{ name: 'Caixin Global', sector: 'Business & Industry', url: 'https://www.caixinglobal.com' }, { name: 'South China Morning Post', sector: 'Business', url: 'https://www.scmp.com' }],
+      IN: [{ name: 'The Economic Times', sector: 'Industry & Logistics', url: 'https://economictimes.indiatimes.com' }, { name: 'Business Standard', sector: 'Companies', url: 'https://www.business-standard.com' }],
+      JP: [{ name: 'Nikkei Asia', sector: 'Business', url: 'https://asia.nikkei.com' }, { name: 'The Japan Times', sector: 'Business', url: 'https://www.japantimes.co.jp' }],
+      KR: [{ name: 'The Korea Herald', sector: 'Business', url: 'https://www.koreaherald.com' }, { name: 'Korea JoongAng Daily', sector: 'Business', url: 'https://koreajoongangdaily.joins.com' }],
+      ID: [{ name: 'The Jakarta Post', sector: 'Business', url: 'https://www.thejakartapost.com' }, { name: 'Kontan', sector: 'Bisnis', url: 'https://www.kontan.co.id' }],
+      VN: [{ name: 'VnExpress International', sector: 'Business', url: 'https://e.vnexpress.net' }, { name: 'Vietnam Investment Review', sector: 'Investment', url: 'https://vir.com.vn' }],
+      AU: [{ name: 'Australian Financial Review', sector: 'Business', url: 'https://www.afr.com' }, { name: 'MHD Supply Chain Solutions', sector: 'Warehousing & Materials Handling', url: 'https://www.mhdsupplychain.com.au' }]
+    });
+    ALL_COUNTRIES.forEach(iso => {
+      LATAM_SOURCES[iso] = [...(LATAM_SOURCES[iso] || []), { name: `Google Notícias · ${countryNames[iso]}`, sector: 'Busca de notícias de armazéns, CDs e fábricas no idioma local', url: googleNewsUrl(iso) }];
+    });
 
     const GLOBAL_SOURCES = [
       { name: 'Logistics Insights Magazine', sector: 'Logística Global & Armazenagem', url: 'https://logisticsinsightsmag.com' },
@@ -1790,8 +1965,9 @@
 
     function renderLatamSources(activeCountries) {
       const container = $('latamSourcesContainer');
-      let html = ALL_COUNTRIES.map(code => {
-        const isActive = activeCountries.includes(code);
+      const shown = ALL_COUNTRIES.filter(c => activeCountries.includes(c));
+      let html = (shown.length ? '' : '<div class="muted small">Nenhum país marcado.</div>') + shown.map(code => {
+        const isActive = true;
         const sources = LATAM_SOURCES[code] || [];
         return `
           <div class="source-card ${isActive ? 'active-country' : 'dimmed'}">
@@ -1857,7 +2033,7 @@
       if (val) {
         checkboxes.forEach(cb => { cb.checked = (cb.value === val); });
       } else {
-        checkboxes.forEach(cb => { cb.checked = true; });
+        checkboxes.forEach(cb => { cb.checked = countryEligible(cb.value); });
       }
       syncFromCheckboxes(triggerFilter);
     }
@@ -1894,6 +2070,289 @@
       return j;
     }
 
+    // ===== v2.8: temas, filtros de país por IDH/renda, contato imediato e exportação completa =====
+    const THEMES = [
+      { id: 'verde', nome: 'Verde Neon', cores: ['#070D12', '#132431', '#00FFC4', '#F2A93B'] },
+      { id: 'azul', nome: 'Azul Corporativo', cores: ['#0A1020', '#16223A', '#4DA3FF', '#F58220'] },
+      { id: 'grafite', nome: 'Grafite & Âmbar', cores: ['#0F0F10', '#222224', '#FFB020', '#FF6B3D'] },
+      { id: 'claro', nome: 'Claro Executivo', cores: ['#F3F6FA', '#FFFFFF', '#0A3D7A', '#F58220'] }
+    ];
+    function applyTheme(id) {
+      const t = THEMES.find(x => x.id === id) || THEMES[0];
+      if (t.id === 'verde') document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme', t.id);
+      try { localStorage.setItem('paim_radar_theme', t.id); } catch {}
+      document.querySelectorAll('.theme-opt').forEach(b => b.setAttribute('aria-checked', String(b.dataset.theme === t.id)));
+      if ($('themeLabel')) $('themeLabel').textContent = t.nome;
+    }
+    function setupThemes() {
+      const menu = $('themeMenu'), btn = $('themeBtn');
+      menu.innerHTML = THEMES.map(t => `<button type="button" class="theme-opt" role="menuitemradio" data-theme="${t.id}"><span class="sw">${t.cores.map(c => `<i style="background:${c}"></i>`).join('')}</span>${escapeHtml(t.nome)}</button>`).join('');
+      btn.addEventListener('click', e => { e.stopPropagation(); btn.setAttribute('aria-expanded', String(menu.classList.toggle('open'))); });
+      menu.addEventListener('click', e => { const b = e.target.closest('.theme-opt'); if (!b) return; applyTheme(b.dataset.theme); menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); });
+      document.addEventListener('click', e => { if (!e.target.closest('.theme-wrap')) { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); } });
+      let saved = 'verde';
+      try { saved = localStorage.getItem('paim_radar_theme') || 'verde'; } catch {}
+      applyTheme(saved);
+    }
+
+    // ---- Países: chips, seletor e filtros por continente / IDH / renda
+    function countryLabel(iso) {
+      const m = COUNTRY_META[iso];
+      return `${countryFlags[iso]} ${countryNames[iso]}`;
+    }
+    function countryFilterState() {
+      return { cont: $('contFilter')?.value || '', idh: $('idhFilter')?.value || '', renda: $('rendaFilter')?.value || '' };
+    }
+    function countryEligible(iso, f = countryFilterState()) {
+      const m = COUNTRY_META[iso];
+      if (!m) return true;
+      if (f.cont && m.cont !== f.cont) return false;
+      if (f.idh && idhFaixa(m.idh) !== f.idh) return false;
+      if (f.renda && rendaFaixa(m.rpc) !== f.renda) return false;
+      return true;
+    }
+    function buildCountryControls() {
+      const box = $('countriesCheckboxes');
+      box.innerHTML = CONTINENTS.map(cont => `
+        <div class="cont-group" data-cont="${escapeHtml(cont)}">
+          <div class="cont-title">${escapeHtml(cont)}</div>
+          <div class="cont-chips">
+            ${ALL_COUNTRIES.filter(iso => COUNTRY_META[iso].cont === cont).map(iso => {
+              const m = COUNTRY_META[iso];
+              return `<label class="country active" data-iso="${iso}" title="IDH ${fmtIdh(m.idh)} (${idhFaixa(m.idh)}) · Renda per capita ${fmtUsd(m.rpc)} (${m.rpcAno})"><input type="checkbox" value="${iso}" checked> ${countryLabel(iso)} <small class="idh">${fmtIdh(m.idh)}</small></label>`;
+            }).join('')}
+          </div>
+        </div>`).join('');
+      $('countryFilter').innerHTML = `<option value="">Todos os países (${ALL_COUNTRIES.length})</option>` + ALL_COUNTRIES.map(iso => `<option value="${iso}">${countryLabel(iso)} · IDH ${fmtIdh(COUNTRY_META[iso].idh)}</option>`).join('');
+      $('contFilter').innerHTML = '<option value="">Todos os continentes</option>' + CONTINENTS.map(c => `<option>${escapeHtml(c)}</option>`).join('');
+      $('idhFilter').innerHTML = '<option value="">Todas as faixas de IDH</option>' + IDH_FAIXAS.map(c => `<option>${c}</option>`).join('');
+      $('rendaFilter').innerHTML = '<option value="">Todas as faixas de renda</option>' + RENDA_FAIXAS.map(c => `<option>${c}</option>`).join('');
+    }
+    // Ao mudar continente/IDH/renda: mostra e marca só os países da faixa
+    function applyCountryFaixas() {
+      const f = countryFilterState();
+      document.querySelectorAll('#countriesCheckboxes .country').forEach(l => {
+        const ok = countryEligible(l.dataset.iso, f);
+        l.style.display = ok ? '' : 'none';
+        l.querySelector('input').checked = ok;
+      });
+      document.querySelectorAll('#countriesCheckboxes .cont-group').forEach(g => {
+        g.style.display = [...g.querySelectorAll('.country')].some(l => l.style.display !== 'none') ? '' : 'none';
+      });
+      [...$('countryFilter').options].forEach(o => { if (o.value) o.hidden = !countryEligible(o.value, f); });
+      syncFromCheckboxes(true);
+    }
+    function renderCountryPanel(rows) {
+      const tb = $('countryRows');
+      if (!tb) return;
+      const f = countryFilterState(), cnt = {};
+      (rows || filteredLeadsCache).forEach(r => { if (r.country) cnt[r.country] = (cnt[r.country] || 0) + 1; });
+      const list = ALL_COUNTRIES.filter(iso => countryEligible(iso, f)).sort((a, b) => COUNTRY_META[b].idh - COUNTRY_META[a].idh);
+      $('countryCount').textContent = `${list.length} de ${ALL_COUNTRIES.length} países`;
+      tb.innerHTML = list.map(iso => {
+        const m = COUNTRY_META[iso];
+        return `<tr><td>${countryLabel(iso)} <span class="muted small">${iso}</span></td><td>${escapeHtml(m.cont)}</td><td>${fmtIdh(m.idh)} <span class="tag">${idhFaixa(m.idh)}</span></td><td>${fmtUsd(m.rpc)} <span class="muted small">${m.rpcAno}</span><br><span class="muted small">${rendaFaixa(m.rpc)}</span></td><td><b>${cnt[iso] || 0}</b></td></tr>`;
+      }).join('') || '<tr><td colspan="5" class="empty">Nenhum país na faixa selecionada.</td></tr>';
+    }
+    async function refreshIncome() {
+      try {
+        const r = await fetch(`https://api.worldbank.org/v2/country/${ALL_COUNTRIES.join(';')}/indicator/NY.GNP.PCAP.CD?format=json&mrnev=1&per_page=200`);
+        const d = await r.json();
+        let n = 0;
+        ((d && d[1]) || []).forEach(x => {
+          const m = COUNTRY_META[x.country && x.country.id];
+          if (m && x.value != null) { m.rpc = Math.round(x.value); m.rpcAno = +x.date; m.rpcFonte = 'Banco Mundial (API)'; n++; }
+        });
+        if (n) { renderCountryPanel(); }
+      } catch {}
+    }
+
+    // ---- Contato imediato no card da notícia
+    const safeHref = u => {
+      const v = String(u || '').trim();
+      if (!v) return '';
+      try { const x = new URL(/^https?:\/\//i.test(v) ? v : 'https://' + v); return /^https?:$/.test(x.protocol) ? x.href : ''; } catch { return ''; }
+    };
+    function contactHtml(x, companyName, linkedInUrl) {
+      const site = safeHref(x.website), out = [];
+      if (x.contactName) out.push(`<span class="decisor-item">👤 <strong>Decisor:</strong> ${escapeHtml(x.contactName)}${x.contactRole ? ' · ' + escapeHtml(x.contactRole) : ''}</span>`);
+      else if (x.contactRole) out.push(`<span class="decisor-item">💼 <strong>Cargo:</strong> ${escapeHtml(x.contactRole)}</span>`);
+      if (x.email) out.push(`<span class="decisor-item cx-main">✉️ <strong>E-mail:</strong> <a href="mailto:${escapeHtml(x.email)}">${escapeHtml(x.email)}</a> <button type="button" class="cx-copy" data-copy="${escapeHtml(x.email)}">Copiar</button></span>`);
+      else out.push(`<span class="decisor-item cx-none">✉️ E-mail não informado na fonte · <a href="${googleSearch(`"${companyName}" email contato`)}" target="_blank" rel="noopener">buscar e-mail ↗</a></span>`);
+      if (x.phone) {
+        const wa = onlyDigits(x.phone);
+        out.push(`<span class="decisor-item">📞 <strong>Tel:</strong> <a href="tel:${escapeHtml(String(x.phone).replace(/[^\d+]/g, ''))}">${escapeHtml(x.phone)}</a>${wa.length >= 10 ? ` · <a href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>` : ''} <button type="button" class="cx-copy" data-copy="${escapeHtml(x.phone)}">Copiar</button></span>`);
+      }
+      if (site) out.push(`<span class="decisor-item">🌐 <a href="${escapeHtml(site)}" target="_blank" rel="noopener">${escapeHtml(domainOf(site))}</a></span>`);
+      if (x.address) out.push(`<span class="decisor-item">📍 ${escapeHtml(x.address)}</span>`);
+      out.push(`<span class="decisor-item">🔗 <a href="${escapeHtml(linkedInUrl)}" target="_blank" rel="noopener">Decisores no LinkedIn ↗</a></span>`);
+      return `<div class="decisor-box contact-box"><span class="cx-title">Contato imediato</span>${out.join('')}</div>`;
+    }
+    document.addEventListener('click', e => {
+      const c = e.target.closest('[data-copy]');
+      if (!c) return;
+      e.preventDefault();
+      const v = c.dataset.copy;
+      (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(() => { c.textContent = 'Copiado ✓'; setTimeout(() => c.textContent = 'Copiar', 1400); }).catch(() => prompt('Copie:', v));
+    });
+
+    // ---- Exportação completa (uma linha por sinal + aba consolidada por empresa)
+    function matrizFilial(x) {
+      const c = x.cad;
+      if (c && (c.descricao_identificador_matriz_filial || c.identificador_matriz_filial)) return [c.descricao_identificador_matriz_filial || (String(c.identificador_matriz_filial) === '1' ? 'MATRIZ' : 'FILIAL'), 'Receita Federal (BrasilAPI)'];
+      const own = x.matrizFilial || x.headquarters || x.hq;
+      if (own) return [String(own), 'Campo da fonte'];
+      const d = onlyDigits(x.cnpj || x.taxId);
+      if (d.length === 14) return [d.slice(8, 12) === '0001' ? 'Matriz (provável)' : 'Filial (provável)', 'Ordem do CNPJ (/0001 = matriz)'];
+      return ['Não identificado', 'Sem CNPJ / registro fiscal na fonte'];
+    }
+    function cepOf(x) {
+      if (x.cad?.cep) return [String(x.cad.cep).replace(/^(\d{5})(\d{3})$/, '$1-$2'), 'Receita Federal (BrasilAPI)'];
+      const own = x.cep || x.zip || x.zipCode || x.postalCode || x.postcode;
+      if (own) return [String(own), 'Campo da fonte'];
+      const m = String(x.address || '').match(/\b\d{5}-?\d{3}\b/);
+      return m ? [m[0], 'Extraído do endereço'] : ['', ''];
+    }
+    function fullRow(x) {
+      const c = x.cad || {}, m = COUNTRY_META[x.country] || {}, mf = matrizFilial(x), cep = cepOf(x);
+      const uf = x.detectedState || detectBrazilianState(x), companyName = x.company || '';
+      return {
+        'ID': x.id || '',
+        'Nome da empresa': companyName || 'A identificar',
+        'Razão social': c.razao_social || x.razaoSocial || x.legalName || '',
+        'Nome fantasia': c.nome_fantasia || x.nomeFantasia || x.tradeName || companyName,
+        'Matriz ou filial': mf[0],
+        'Fonte matriz/filial': mf[1],
+        'CNPJ / documento fiscal': x.cnpj || x.taxId || '',
+        'Situação cadastral': c.descricao_situacao_cadastral || '',
+        'Porte': c.porte || c.descricao_porte || '',
+        'CNAE principal': [c.cnae_fiscal, c.cnae_fiscal_descricao].filter(Boolean).join(' · '),
+        'Capital social': c.capital_social != null ? Number(c.capital_social) : '',
+        'Data de abertura': c.data_inicio_atividade || '',
+        'Endereço': x.address || [c.logradouro, c.numero, c.bairro].filter(Boolean).join(', '),
+        'Logradouro': c.logradouro || '',
+        'Número': c.numero || '',
+        'Bairro': c.bairro || '',
+        'Cidade': x.city || c.municipio || '',
+        'UF / Estado': uf || x.state || c.uf || '',
+        'CEP / ZIP code': cep[0],
+        'Fonte do CEP': cep[1],
+        'País': x.countryName || countryNames[x.country] || x.country || '',
+        'ISO país': x.country || '',
+        'Continente': m.cont || '',
+        'IDH do país': m.idh ?? '',
+        'Faixa IDH': idhFaixa(m.idh),
+        'Renda per capita país (US$)': m.rpc ?? '',
+        'Ano renda': m.rpcAno || '',
+        'Faixa de renda': rendaFaixa(m.rpc),
+        'Contato (nome)': x.contactName || '',
+        'Cargo': x.contactRole || '',
+        'E-mail': x.email || c.email || '',
+        'Telefone': x.phone || c.ddd_telefone_1 || '',
+        'WhatsApp (link)': onlyDigits(x.phone).length >= 10 ? 'https://wa.me/' + onlyDigits(x.phone) : '',
+        'Website': x.website || '',
+        'Domínio': domainOf(x.website),
+        'Contato verificado': x.verified ? 'Sim' : 'Não',
+        'Tem e-mail': x.email ? 'Sim' : 'Não',
+        'Tem telefone': x.phone ? 'Sim' : 'Não',
+        'Título da notícia': x.title || '',
+        'Resumo': String(x.description || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 800),
+        'Fonte da notícia': x.source || 'Fonte pública',
+        'URL da notícia': x.url || '',
+        'Data de publicação': formatDate(x.publishedAt),
+        'Ano/mês': x.publishedAt && !isNaN(new Date(x.publishedAt)) ? new Date(x.publishedAt).toISOString().slice(0, 7) : '',
+        'Segmento filtrado': $('segmentFilter').value || 'Todos',
+        'Prioridade': x.priority || 'C',
+        'Score (/20)': Number(x.score ?? 0),
+        'Status CRM': x.status || 'Novo',
+        'Notas / Hipótese BSA': x.notes || '',
+        'Busca LinkedIn': googleSearch(`site:linkedin.com/in "${companyName || x.title || ''}" (logistica OR supply chain OR diretor OR gerente)`)
+      };
+    }
+    const SKIP_KEYS = new Set(['id', 'company', 'razaoSocial', 'legalName', 'nomeFantasia', 'tradeName', 'matrizFilial', 'headquarters', 'hq', 'cnpj', 'taxId', 'address', 'city', 'state', 'uf', 'cep', 'zip', 'zipCode', 'postalCode', 'postcode', 'country', 'countryName', 'contactName', 'contactRole', 'email', 'phone', 'website', 'verified', 'title', 'description', 'source', 'url', 'publishedAt', 'priority', 'score', 'status', 'notes', 'detectedState', 'cad', 'updatedAt']);
+    function exportAll(xlsx) {
+      const rows = filteredLeadsCache;
+      if (!rows.length) { showToast('Não há registros filtrados para exportação no momento.'); return; }
+      const extra = [...new Set(rows.flatMap(r => Object.keys(r)))].filter(k => !SKIP_KEYS.has(k));
+      const data = rows.map(x => {
+        const o = fullRow(x);
+        extra.forEach(k => { const v = x[k]; o['Fonte · ' + k] = v == null ? '' : typeof v === 'object' ? JSON.stringify(v) : v; });
+        return o;
+      });
+      const stamp = new Date().toISOString().slice(0, 10);
+      if (!xlsx || typeof XLSX === 'undefined') {
+        if (xlsx) showToast('Biblioteca XLSX indisponível; exportando em CSV.');
+        const hs = Object.keys(data[0]);
+        const csv = [hs.map(h => '"' + h.replace(/"/g, '""') + '"').join(';'), ...data.map(r => hs.map(k => '"' + String(r[k] ?? '').replace(/"/g, '""') + '"').join(';'))].join('\n');
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' }));
+        a.download = `radar_bsa_empresas_${stamp}.csv`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+        showToast(`${data.length} registros exportados em CSV.`);
+        return;
+      }
+      // Consolidado: uma linha por empresa
+      const byCo = new Map();
+      data.forEach(r => {
+        const k = normalizeText(r['Nome da empresa']) + '|' + r['ISO país'];
+        const g = byCo.get(k) || { 'Nome da empresa': r['Nome da empresa'], 'Razão social': '', 'Nome fantasia': '', 'Matriz ou filial': '', 'CNPJ / documento fiscal': '', 'País': r['País'], 'UF / Estado': '', 'Cidade': '', 'CEP / ZIP code': '', 'E-mail': '', 'Telefone': '', 'Website': '', 'Contato (nome)': '', 'Cargo': '', 'Qtd. sinais': 0, 'Maior score': 0, 'Prioridade mais alta': 'C', 'Último sinal': '', 'Última notícia': '', 'IDH do país': r['IDH do país'], 'Renda per capita país (US$)': r['Renda per capita país (US$)'] };
+        ['Razão social', 'Nome fantasia', 'CNPJ / documento fiscal', 'UF / Estado', 'Cidade', 'CEP / ZIP code', 'E-mail', 'Telefone', 'Website', 'Contato (nome)', 'Cargo'].forEach(f => { if (!g[f] && r[f]) g[f] = r[f]; });
+        if (!g['Matriz ou filial'] || g['Matriz ou filial'] === 'Não identificado') g['Matriz ou filial'] = r['Matriz ou filial'];
+        g['Qtd. sinais']++;
+        g['Maior score'] = Math.max(g['Maior score'], r['Score (/20)']);
+        if (r['Prioridade'] < g['Prioridade mais alta']) g['Prioridade mais alta'] = r['Prioridade'];
+        if (!g['Último sinal']) { g['Último sinal'] = r['Data de publicação']; g['Última notícia'] = r['URL da notícia']; }
+        byCo.set(k, g);
+      });
+      const wb = XLSX.utils.book_new();
+      const addSheet = (rowsX, name) => {
+        const ws = XLSX.utils.json_to_sheet(rowsX), hs = Object.keys(rowsX[0] || {});
+        if (hs.length) {
+          ws['!autofilter'] = { ref: XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: rowsX.length, c: hs.length - 1 } }) };
+          ws['!cols'] = hs.map(h => ({ wch: Math.min(50, Math.max(12, h.length + 2, ...rowsX.slice(0, 200).map(x => String(x[h] ?? '').length))) }));
+        }
+        XLSX.utils.book_append_sheet(wb, ws, name);
+      };
+      addSheet(data, 'Sinais_Detalhados');
+      addSheet([...byCo.values()], 'Empresas_Consolidado');
+      addSheet(ALL_COUNTRIES.map(iso => { const m = COUNTRY_META[iso]; return { 'País': countryNames[iso], 'ISO': iso, 'Continente': m.cont, 'IDH': m.idh, 'Ano IDH': m.idhAno, 'Faixa IDH': idhFaixa(m.idh), 'Renda per capita (US$)': m.rpc, 'Ano renda': m.rpcAno, 'Fonte renda': m.rpcFonte, 'Faixa de renda': rendaFaixa(m.rpc), 'Sinais exportados': rows.filter(r => r.country === iso).length }; }), 'Paises');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([
+        ['Leia-me'], ['Gerado em', new Date().toLocaleString('pt-BR')], ['Sinais exportados', data.length], ['Empresas distintas', byCo.size],
+        ['Sinais_Detalhados: uma linha por notícia/sinal, com filtros no cabeçalho, pronta para Tabela Dinâmica.'],
+        ['Empresas_Consolidado: uma linha por empresa + país, somando sinais e reunindo os contatos encontrados.'],
+        ['Razão social, porte e matriz/filial oficiais só existem quando há CNPJ consultado (botão Enriquecer CNPJs). Matriz/filial "provável" vem da ordem do CNPJ (/0001).'],
+        ['CEP "Extraído do endereço" foi lido do texto do endereço; confira antes de usar em mala direta.'],
+        ['IDH: PNUD, Relatório de Desenvolvimento Humano 2025 (dados 2023). Renda: RNB per capita, método Atlas, Banco Mundial (US$ correntes).'],
+        ['Colunas "Fonte · ..." são campos extras enviados pelo backend, preservados sem alteração.']
+      ]), 'Leia-me');
+      XLSX.writeFile(wb, `radar_bsa_empresas_${stamp}.xlsx`);
+      showToast(`${data.length} sinais e ${byCo.size} empresas exportados.`);
+    }
+    async function enrichCnpjs() {
+      const list = filteredLeadsCache.filter(x => onlyDigits(x.cnpj || x.taxId).length === 14 && !x.cad);
+      if (!list.length) { showToast('Nenhum registro filtrado tem CNPJ ainda não consultado. Informe o CNPJ na ficha ou importe uma base de CNPJs.', 6000); return; }
+      const btn = $('enrichBtn');
+      btn.disabled = true;
+      let ok = 0;
+      for (let i = 0; i < list.length; i++) {
+        btn.textContent = `Consultando ${i + 1}/${list.length}...`;
+        try {
+          const r = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${onlyDigits(list[i].cnpj || list[i].taxId)}`);
+          if (r.ok) {
+            const cad = await r.json();
+            [list[i], allLeadsCache.find(a => a.id === list[i].id)].forEach(o => { if (o) o.cad = cad; });
+            ok++;
+          }
+        } catch {}
+        await new Promise(res => setTimeout(res, 400));
+      }
+      btn.disabled = false;
+      btn.textContent = '🏢 Enriquecer CNPJs';
+      showToast(`Enriquecimento: ${ok} de ${list.length} CNPJs consultados na BrasilAPI.`, 6000);
+    }
+
     function render(rows) {
       // ORDEM CRONOLÓGICA DECRESCENTE (Mais recentes no topo)
       rows.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0));
@@ -1902,6 +2361,7 @@
       $('total').textContent = rows.length;
       $('priorityA').textContent = rows.filter(x => x.priority === 'A').length;
       $('companies').textContent = rows.filter(x => x.company).length;
+      renderCountryPanel(rows);
 
       if (!rows.length) {
         $('leads').innerHTML = '<div class="empty">Nenhum registro encontrado no recorte atual (Jan/2025 em diante e filtros selecionados). Ajuste os filtros ou clique em <b>Pesquisar Novas Fontes</b>.</div>';
@@ -1910,28 +2370,16 @@
 
       $('leads').innerHTML = rows.map(x => {
         const detectedUf = x.detectedState || detectBrazilianState(x);
-        let decisorHtml = '';
-        const hasContact = x.contactName || x.contactRole || x.phone || x.email;
         const companyName = x.company || x.title || 'Empresa';
         const linkedInQuery = x.contactName ? `${x.contactName} ${companyName} LinkedIn` : `site:linkedin.com/in "${companyName}" (logistica OR supply chain OR diretor OR gerente)`;
         const linkedInUrl = `https://www.google.com/search?q=` + encodeURIComponent(linkedInQuery);
-
-        if (hasContact || companyName) {
-          decisorHtml = `
-            <div class="decisor-box">
-              ${x.contactName ? `<span class="decisor-item">👤 <strong>Decisor:</strong> ${escapeHtml(x.contactName)}</span>` : ''}
-              ${x.contactRole ? `<span class="decisor-item">💼 <strong>Cargo:</strong> ${escapeHtml(x.contactRole)}</span>` : ''}
-              <span class="decisor-item">🔗 <a href="${escapeHtml(linkedInUrl)}" target="_blank" rel="noopener">Buscar Decisores no LinkedIn ↗</a></span>
-              ${x.phone ? `<span class="decisor-item">📞 <strong>Tel:</strong> <a href="tel:${escapeHtml(x.phone)}">${escapeHtml(x.phone)}</a></span>` : ''}
-            </div>
-          `;
-        }
-
+        const decisorHtml = contactHtml(x, x.company || companyName, linkedInUrl);
+        const cm = COUNTRY_META[x.country];
         return `
           <article class="lead">
             <div>
               <h3>${escapeHtml(x.company || 'Empresa a identificar')} — ${escapeHtml(x.title)}</h3>
-              <p>${countryFlags[x.country] || ''} ${escapeHtml(x.countryName || countryNames[x.country] || x.country)}${detectedUf ? ` (${escapeHtml(detectedUf)})` : ''} · ${escapeHtml(x.source || 'Fonte pública')} · Publicado: ${formatDate(x.publishedAt)}</p>
+              <p>${countryFlags[x.country] || ''} ${escapeHtml(x.countryName || countryNames[x.country] || x.country)}${detectedUf ? ` (${escapeHtml(detectedUf)})` : ''}${cm ? ` · IDH ${fmtIdh(cm.idh)} · Renda ${fmtUsd(cm.rpc)}` : ''} · ${escapeHtml(x.source || 'Fonte pública')} · Publicado: ${formatDate(x.publishedAt)}</p>
               <p>${escapeHtml((x.description || '').replace(/<[^>]*>/g, ' ').slice(0, 260))}</p>
               ${decisorHtml}
               <div class="leadmeta">
@@ -1980,6 +2428,7 @@
       return records.filter(item => {
         if (checkedCountries.length === 0) return false;
         if (item.country && !checkedCountries.includes(item.country)) return false;
+        if (item.country && !countryEligible(item.country)) return false;
         if (item.publishedAt) {
           const pubTs = new Date(item.publishedAt).getTime();
           if (!isNaN(pubTs) && pubTs < minTimestamp) return false;
@@ -2093,7 +2542,7 @@
     $('filterBtn').addEventListener('click', () => applyFilters(true));
 
     $('selectAllCountriesBtn').addEventListener('click', () => {
-      document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => { cb.checked = true; });
+      document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => { cb.checked = countryEligible(cb.value); });
       syncFromCheckboxes(true);
     });
 
@@ -2105,6 +2554,9 @@
     $('resetFiltersBtn').addEventListener('click', () => {
       document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => { cb.checked = true; });
       $('segmentFilter').value = '';
+      ['contFilter', 'idhFilter', 'rendaFilter'].forEach(id => { $(id).value = ''; });
+      document.querySelectorAll('#countriesCheckboxes .country, #countriesCheckboxes .cont-group').forEach(el => { el.style.display = ''; });
+      [...$('countryFilter').options].forEach(o => { o.hidden = false; });
       $('priorityFilter').value = '';
       $('stateFilter').value = '';
       $('dateFromFilter').value = MIN_DATE_STR;
@@ -2131,24 +2583,38 @@
       countries.forEach(code => { activeSourcesPayload[code] = [...(LATAM_SOURCES[code] || []), ...GLOBAL_SOURCES]; });
 
       $('searchBtn').disabled = true;
-      $('searchBtn').textContent = 'Varrendo fontes...';
-
+      const lots = [];
+      for (let k = 0; k < countries.length; k += 8) lots.push(countries.slice(k, k + 8));
+      let found = 0, added = 0, fails = [];
       try {
-        const r = await api('/api/search', {
-          method: 'POST',
-          body: JSON.stringify({ countries, state, dateFrom, latamSources: activeSourcesPayload })
-        });
-        showToast(`Varredura concluída: ${r.run.found} notícias processadas, ${r.run.added} novos registros.`, 6000);
+        for (let k = 0; k < lots.length; k++) {
+          $('searchBtn').textContent = `Varrendo fontes... lote ${k + 1}/${lots.length}`;
+          const payload = {};
+          lots[k].forEach(code => { payload[code] = activeSourcesPayload[code]; });
+          try {
+            const r = await api('/api/search', {
+              method: 'POST',
+              body: JSON.stringify({ countries: lots[k], state: lots[k].includes('BR') ? state : '', dateFrom, latamSources: payload })
+            });
+            found += r.run?.found || 0;
+            added += r.run?.added || 0;
+          } catch (e) {
+            fails.push(`${lots[k].join(', ')} (${e.message})`);
+          }
+        }
+        showToast(`Varredura concluída: ${found} notícias processadas, ${added} novos registros em ${countries.length} países.` + (fails.length ? ` Falharam ${fails.length} lote(s): ${fails.join('; ')}` : ''), 8000);
         await load();
-      } catch (e) {
-        showToast('Não foi possível concluir a varredura: ' + e.message, 6000);
       } finally {
         $('searchBtn').disabled = false;
         $('searchBtn').textContent = '⌕ Pesquisar Novas Fontes';
       }
     };
 
-    $('exportXlsxBtn').onclick = exportFilteredToXLSX;
+    $('exportXlsxBtn').onclick = () => exportAll(true);
+    $('exportAllXlsxBtn').onclick = () => exportAll(true);
+    $('exportAllCsvBtn').onclick = () => exportAll(false);
+    $('enrichBtn').onclick = enrichCnpjs;
+    ['contFilter', 'idhFilter', 'rendaFilter'].forEach(id => $(id).addEventListener('change', applyCountryFaixas));
     $('exportBtn').onclick = () => { location.href = API_BASE + '/api/export'; };
     $('importBtn').onclick = () => $('csvFile').click();
 
@@ -2943,11 +3409,11 @@
     const BENCH_ILU = {
       rack: `<svg viewBox="0 0 220 120" role="img" aria-label="Porta-paletes"><g ${S}><path d="M20 110V14M80 110V14M140 110V14M200 110V14M20 44H200M20 78H200M10 110H210"/></g>${[30,52,92,112,152,172].map(x => PAL(x, 26) + PAL(x, 60) + PAL(x, 94)).join('')}</svg>`,
       clad: `<svg viewBox="0 0 220 120" role="img" aria-label="Autoportante"><g ${S}><path d="M14 112V26L110 8l96 18v86M14 112h192"/><path d="M40 106V40M76 106V36M144 106V36M180 106V40M40 62h36M40 84h36M144 62h36M144 84h36" opacity=".8"/><path d="M110 104V28M100 104h20M104 60h12"/></g>${PAL(46,46)+PAL(46,68)+PAL(46,90)+PAL(150,46)+PAL(150,68)+PAL(150,90)}<rect x="102" y="52" width="16" height="10" fill="#00B4D8" opacity=".8"/></svg>`,
-      shuttle: `<svg viewBox="0 0 220 120" role="img" aria-label="Pallet shuttle"><g ${S}><path d="M14 20h192M14 50h192M14 80h192M14 110h192M14 20v90M206 20v90"/></g>${[24,50,76,102,128].map(x => PAL(x, 32) + PAL(x, 62)).join('')}${[24,50,76].map(x => PAL(x, 92)).join('')}<rect x="150" y="92" width="26" height="12" rx="3" fill="#00FFC4" opacity=".85"/><g stroke="#00FFC4" stroke-width="2" fill="none"><path d="M182 98h16M192 92l6 6-6 6M163 88v-8M159 84l4-6 4 6"/></g></svg>`,
-      miniload: `<svg viewBox="0 0 220 120" role="img" aria-label="Miniload"><g ${S}><path d="M20 112V10M90 112V10M130 112V10M200 112V10M20 30h70M20 50h70M20 70h70M20 90h70M130 30h70M130 50h70M130 70h70M130 90h70M110 112V12"/></g>${[26,50,74-10].map(x => [18,38,58,78].map(y => `<rect x="${x}" y="${y}" width="16" height="10" rx="1" fill="rgba(0,180,216,.35)" stroke="#00B4D8"/>`).join('')).join('')}${[136,160,180].map(x => [18,38,58,78].map(y => `<rect x="${x}" y="${y}" width="14" height="10" rx="1" fill="rgba(0,180,216,.35)" stroke="#00B4D8"/>`).join('')).join('')}<rect x="102" y="44" width="16" height="12" fill="#00FFC4" opacity=".85"/></svg>`,
+      shuttle: `<svg viewBox="0 0 220 120" role="img" aria-label="Pallet shuttle"><g ${S}><path d="M14 20h192M14 50h192M14 80h192M14 110h192M14 20v90M206 20v90"/></g>${[24,50,76,102,128].map(x => PAL(x, 32) + PAL(x, 62)).join('')}${[24,50,76].map(x => PAL(x, 92)).join('')}<rect x="150" y="92" width="26" height="12" rx="3" style="fill:var(--brand)" opacity=".85"/><g stroke="#00FFC4" stroke-width="2" fill="none"><path d="M182 98h16M192 92l6 6-6 6M163 88v-8M159 84l4-6 4 6"/></g></svg>`,
+      miniload: `<svg viewBox="0 0 220 120" role="img" aria-label="Miniload"><g ${S}><path d="M20 112V10M90 112V10M130 112V10M200 112V10M20 30h70M20 50h70M20 70h70M20 90h70M130 30h70M130 50h70M130 70h70M130 90h70M110 112V12"/></g>${[26,50,74-10].map(x => [18,38,58,78].map(y => `<rect x="${x}" y="${y}" width="16" height="10" rx="1" fill="rgba(0,180,216,.35)" stroke="#00B4D8"/>`).join('')).join('')}${[136,160,180].map(x => [18,38,58,78].map(y => `<rect x="${x}" y="${y}" width="14" height="10" rx="1" fill="rgba(0,180,216,.35)" stroke="#00B4D8"/>`).join('')).join('')}<rect x="102" y="44" width="16" height="12" style="fill:var(--brand)" opacity=".85"/></svg>`,
       robots: `<svg viewBox="0 0 220 120" role="img" aria-label="Robôs móveis"><g ${S}><path d="M10 108h200"/><rect x="24" y="78" width="46" height="22" rx="5"/><rect x="92" y="78" width="46" height="22" rx="5"/><rect x="160" y="78" width="40" height="22" rx="5"/><circle cx="34" cy="102" r="4"/><circle cx="60" cy="102" r="4"/><circle cx="102" cy="102" r="4"/><circle cx="128" cy="102" r="4"/><circle cx="168" cy="102" r="4"/><circle cx="192" cy="102" r="4"/></g><rect x="32" y="60" width="30" height="18" fill="rgba(242,169,59,.35)" stroke="#F2A93B"/><rect x="100" y="54" width="30" height="24" fill="rgba(242,169,59,.35)" stroke="#F2A93B"/><g stroke="#00FFC4" stroke-width="1.5" fill="none" opacity=".8"><path d="M70 90h22M138 90h22M30 30q80-30 160 0" stroke-dasharray="4 4"/></g></svg>`,
       factory: `<svg viewBox="0 0 220 120" role="img" aria-label="Fábrica"><g ${S}><path d="M14 110V60l40 20V60l40 20V60l40 20V30h22v80M14 110h192M156 30v-14h12v14M178 110V46h28v64"/><path d="M30 92h14M70 92h14M110 92h14" opacity=".8"/></g><path d="M162 12q8-8 18-4" stroke="#8AA8B8" fill="none" stroke-width="2"/></svg>`,
-      asrs: `<svg viewBox="0 0 220 120" role="img" aria-label="Armazém automático"><g ${S}><path d="M14 112V10M62 112V10M104 112V10M152 112V10M200 112V10M14 34h48M14 58h48M14 82h48M104 34h48M104 58h48M104 82h48M152 34h48M152 58h48M152 82h48M83 112V12"/></g>${[20,38].map(x => PAL(x,20)+PAL(x,44)+PAL(x,68)+PAL(x,92)).join('')}${[110,128,158,176].map(x => PAL(x,20)+PAL(x,44)+PAL(x,68)).join('')}<rect x="74" y="58" width="18" height="12" fill="#00FFC4" opacity=".85"/></svg>`
+      asrs: `<svg viewBox="0 0 220 120" role="img" aria-label="Armazém automático"><g ${S}><path d="M14 112V10M62 112V10M104 112V10M152 112V10M200 112V10M14 34h48M14 58h48M14 82h48M104 34h48M104 58h48M104 82h48M152 34h48M152 58h48M152 82h48M83 112V12"/></g>${[20,38].map(x => PAL(x,20)+PAL(x,44)+PAL(x,68)+PAL(x,92)).join('')}${[110,128,158,176].map(x => PAL(x,20)+PAL(x,44)+PAL(x,68)).join('')}<rect x="74" y="58" width="18" height="12" style="fill:var(--brand)" opacity=".85"/></svg>`
     };
     function benchIluKey(b) {
       if (b.ilu) return b.ilu;
@@ -3006,10 +3472,11 @@
       sel.innerHTML = '<option value="">Todos</option>' + comps.map(c => optionHtml(c)).join('');
       sel.value = comps.includes(cur) ? cur : '';
       const fc = sel.value, fr = $('bnReg').value, ft = $('bnTipo').value, q = normalizeText($('bnQ').value);
-      const list = all.filter(b => (!fc || b.concorrente === fc) && (!fr || b.regiao === fr) && (!ft || b.tipo === ft) && (!q || normalizeText([b.titulo, b.cliente, b.local, b.segmento, b.solucao, b.fato].join(' ')).includes(q)));
+      fillGeoFilters('bn');
+      const list = all.filter(b => geoPass('bn', benchCountry(b)) && (!fc || b.concorrente === fc) && (!fr || b.regiao === fr) && (!ft || b.tipo === ft) && (!q || normalizeText([b.titulo, b.cliente, b.local, b.segmento, b.solucao, b.fato].join(' ')).includes(q)));
       const st = (l, v, n) => `<div class="stat"><div class="muted small">${escapeHtml(l)}</div><div class="n">${v}</div><div class="muted small">${escapeHtml(n)}</div></div>`;
       const br = all.filter(b => b.regiao === 'Brasil').length, ext = all.filter(b => b.regiao === 'Exterior' || b.regiao === 'América Latina').length, rec = all.filter(benchIsRecent).length;
-      $('benchKpis').innerHTML = st('Movimentos registrados', all.length, `${BENCH.custom.length} adicionados por você`) + st('Últimos 90 dias', rec, `${rec} de ${all.length} = ${all.length ? fmt1(rec / all.length * 100) : 0}%`) + st('Brasil', br, `${br} de ${all.length}`) + st('Exterior e América Latina', ext, `${ext} de ${all.length}`);
+      $('benchKpis').innerHTML = st('Movimentos registrados', all.length, `${BENCH.custom.length} adicionados por você`) + st('Últimos 90 dias', rec, `${rec} de ${all.length} = ${all.length ? fmt1(rec / all.length * 100) : 0}%`) + st('Brasil', br, `${br} de ${all.length}`) + st('Exterior e América Latina', ext, `${ext} de ${all.length}`) + st('Países com movimentos', new Set(all.map(benchCountry).filter(Boolean)).size, `de ${ALL_COUNTRIES.length} monitorados · ${list.length} no filtro`);
       $('benchCount').textContent = `${list.length} de ${all.length} movimentos`;
       $('benchList').innerHTML = list.length ? list.map(b => {
         const novo = benchIsRecent(b) && !BENCH.seen.includes(b.id);
@@ -3019,10 +3486,11 @@
         return `<article class="bench-card">
           <div>
             <h3>${novo ? '<span class="new-dot" title="Novo"></span>' : ''}<span class="comp-chip">${escapeHtml(b.concorrente)}</span>${escapeHtml(b.titulo)}</h3>
-            <p>${escapeHtml(b.tipo)} · ${escapeHtml(b.local || 'Local não informado')} · ${escapeHtml(b.regiao)} · ${escapeHtml(benchDate(b))} · ${escapeHtml(b.fonte || '')}</p>
+            <p>${countryChip(benchCountry(b))} ${escapeHtml(b.tipo)} · ${escapeHtml(b.local || 'Local não informado')} · ${escapeHtml(b.regiao)} · ${escapeHtml(benchDate(b))} · ${escapeHtml(b.fonte || '')}</p>
             <p>${evTag('F')} ${escapeHtml(b.fato)}</p>
             ${b.leitura ? `<p>${evTag('H')} ${escapeHtml(b.leitura)}</p>` : ''}
             ${b.acao ? `<p>${evTag('R')} ${escapeHtml(b.acao)}</p>` : ''}
+            ${benchContactHtml(b)}
             <div class="links">${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener">Abrir matéria (fotos e detalhes) ↗</a>` : ''}<a href="${escapeHtml(gImg)}" target="_blank" rel="noopener">Buscar imagens do projeto ↗</a>${b.cliente ? `<a href="#" data-bench-cli="${escapeHtml(b.id)}">Adicionar cliente à Fila ↗</a>` : ''}${b.custom ? `<a href="#" data-bench-del="${escapeHtml(b.id)}">Excluir</a>` : ''}</div>
           </div>
           <div class="bench-side">
@@ -3079,9 +3547,9 @@
       const v = id => $(id).value.trim();
       if (!v('bfComp') || !v('bfFato')) { showToast('Informe pelo menos o concorrente e o fato publicado.'); return; }
       const pes = v('bfPes') ? v('bfPes').split(';').map(x => { const [nome, papel] = x.split(/—|-/).map(y => (y || '').trim()); return nome ? { nome, papel: papel || 'papel não informado' } : null; }).filter(Boolean) : [];
-      BENCH.custom.push({ id: uid('bm'), custom: true, concorrente: v('bfComp'), tipo: $('bfTipo').value, titulo: v('bfCli') ? `${v('bfComp')} · ${v('bfCli')}` : v('bfComp') + ' · ' + $('bfTipo').value, cliente: v('bfCli'), local: v('bfLocal'), regiao: $('bfReg').value, segmento: v('bfSeg'), solucao: v('bfSol'), numeros: v('bfNum'), pessoas: pes, data: $('bfData').value, aprox: false, fonte: v('bfFonte'), url: v('bfUrl'), fato: v('bfFato'), leitura: v('bfLeit'), acao: '' });
+      BENCH.custom.push({ id: uid('bm'), custom: true, concorrente: v('bfComp'), tipo: $('bfTipo').value, titulo: v('bfCli') ? `${v('bfComp')} · ${v('bfCli')}` : v('bfComp') + ' · ' + $('bfTipo').value, cliente: v('bfCli'), local: v('bfLocal'), regiao: $('bfReg').value, paisIso: $('bfPais').value || countryFromText(v('bfLocal')), segmento: v('bfSeg'), solucao: v('bfSol'), numeros: v('bfNum'), pessoas: pes, data: $('bfData').value, aprox: false, fonte: v('bfFonte'), url: v('bfUrl'), fato: v('bfFato'), leitura: v('bfLeit'), acao: '' });
       benchSave();
-      ['bfComp', 'bfCli', 'bfLocal', 'bfSeg', 'bfSol', 'bfNum', 'bfPes', 'bfData', 'bfFonte', 'bfUrl', 'bfFato', 'bfLeit'].forEach(id => $(id).value = '');
+      ['bfPais', 'bfComp', 'bfCli', 'bfLocal', 'bfSeg', 'bfSol', 'bfNum', 'bfPes', 'bfData', 'bfFonte', 'bfUrl', 'bfFato', 'bfLeit'].forEach(id => $(id).value = '');
       $('benchFormPanel').hidden = true;
       benchRender();
       showToast('Movimento registrado.');
@@ -3090,7 +3558,7 @@
       const b = benchAll().find(x => x.id === id);
       if (!b || !b.cliente) return;
       const paisMap = { 'Brasil': 'BR' };
-      const c = upsertConta({ nome: b.cliente, pais: paisMap[b.regiao] || '' }, 'Benchmarking');
+      const c = upsertConta({ nome: b.cliente, pais: benchCountry(b) || paisMap[b.regiao] || '' }, 'Benchmarking');
       if (c) {
         c.notas = (c.notas ? c.notas + '\n' : '') + `[Benchmarking] Cliente de ${b.concorrente}: ${b.titulo} (${benchDate(b)}). HIPÓTESE: pode haver demanda complementar (ampliação, picking, mezanino, retrofit).`;
         ccSave();
@@ -3098,12 +3566,140 @@
         showToast(`${b.cliente} adicionado à Fila de prioridade (veja a nota na conta).`, 5000);
       }
     }
+    // ===== v4.2: VS Concorrência e Mapa com os 46 países (país detectado, IDH, renda, contato) =====
+    const COUNTRY_ALIASES = {
+      BR: ['brasil', 'brazil'], AR: ['argentina', 'buenos aires'], BO: ['bolivia', 'bolívia'], CL: ['chile', 'santiago de chile'], CO: ['colombia', 'colômbia', 'bogota', 'bogotá', 'medellin'],
+      EC: ['ecuador', 'equador', 'guayaquil'], PY: ['paraguay', 'paraguai', 'asuncion', 'asunción'], PE: ['peru', 'perú', 'lima'], UY: ['uruguay', 'uruguai', 'montevideo', 'montevidéu'],
+      VE: ['venezuela', 'caracas'], MX: ['mexico', 'méxico', 'guadalajara', 'monterrey', 'cidade do mexico', 'ciudad de mexico'], US: ['eua', 'estados unidos', 'united states', 'usa', 'u.s.', 'texas', 'california', 'ohio', 'georgia', 'spartanburg'],
+      CA: ['canada', 'canadá', 'toronto', 'ontario', 'quebec'], GT: ['guatemala'], HN: ['honduras'], SV: ['el salvador'], NI: ['nicaragua', 'nicarágua'], CR: ['costa rica'], PA: ['panama', 'panamá'],
+      DO: ['republica dominicana', 'república dominicana', 'dominican republic'], JM: ['jamaica'], TT: ['trinidad'],
+      PT: ['portugal', 'lisboa', 'lisbon', 'porto, portugal'], ES: ['espanha', 'españa', 'espana', 'spain', 'madrid', 'barcelona', 'zaragoza', 'valencia', 'cornella'], FR: ['franca', 'frança', 'france', 'francia', 'paris', 'lyon', 'billy-berclau'],
+      DE: ['alemanha', 'germany', 'deutschland', 'alemania', 'hamburg', 'berlin', 'munchen', 'münchen', 'neunkirchen'], IT: ['italia', 'itália', 'italy', 'milano', 'milão', 'torino'], GB: ['reino unido', 'united kingdom', 'inglaterra', 'england', 'uk', 'london', 'londres'],
+      NL: ['holanda', 'paises baixos', 'países baixos', 'netherlands', 'nederland', 'rotterdam', 'amsterdam'], BE: ['belgica', 'bélgica', 'belgium', 'belgique', 'antwerp', 'antuerpia'], PL: ['polonia', 'polônia', 'poland', 'polska', 'katowice', 'michrow', 'michrów', 'warsaw', 'varsovia'],
+      AO: ['angola', 'luanda'], MZ: ['mocambique', 'moçambique', 'mozambique', 'maputo'], ZA: ['africa do sul', 'áfrica do sul', 'south africa', 'johannesburg', 'joanesburgo'], MA: ['marrocos', 'morocco', 'maroc', 'casablanca', 'tanger'], EG: ['egito', 'egypt', 'cairo'],
+      AE: ['emirados', 'uae', 'dubai', 'abu dhabi'], SA: ['arabia saudita', 'arábia saudita', 'saudi', 'riyadh', 'jeddah'], TR: ['turquia', 'turkey', 'türkiye', 'istanbul', 'istambul'],
+      CN: ['china', 'shanghai', 'xangai', 'shenzhen', 'beijing', 'pequim'], IN: ['india', 'índia', 'mumbai', 'delhi', 'bengaluru'], JP: ['japao', 'japão', 'japan', 'tokyo', 'tóquio'], KR: ['coreia do sul', 'south korea', 'korea', 'seoul'],
+      ID: ['indonesia', 'indonésia', 'jakarta'], VN: ['vietna', 'vietnã', 'vietnam', 'hanoi', 'ho chi minh'], AU: ['australia', 'austrália', 'sydney', 'melbourne', 'brisbane']
+    };
+    const ALIAS_RX = Object.entries(COUNTRY_ALIASES).flatMap(([iso, list]) => list.map(a => [iso, new RegExp(`(?:^|[^a-z0-9])${normalizeText(a).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:$|[^a-z0-9])`)]));
+    function countryFromText(t) {
+      const s = normalizeText(t || '');
+      if (!s) return '';
+      for (const [iso, rx] of ALIAS_RX) if (rx.test(s)) return iso;
+      if (/\((ac|al|ap|am|ba|ce|df|es|go|ma|mt|ms|mg|pa|pb|pr|pe|pi|rj|rn|rs|ro|rr|sc|sp|se|to)\)/i.test(t)) return 'BR';
+      return '';
+    }
+    const regiaoOf = iso => !iso ? 'Não identificado' : iso === 'BR' ? 'Brasil' : /América/.test(COUNTRY_META[iso]?.cont || '') ? 'América Latina' : 'Exterior';
+    function benchCountry(b) {
+      if (b.paisIso) return b.paisIso;
+      return countryFromText(b.local) || (b.regiao === 'Brasil' ? 'BR' : '') || countryFromText(`${b.titulo} ${b.fato}`);
+    }
+    function newsCountry(it) { return it.paisIso || countryFromText(it.titulo); }
+    const countryChip = iso => {
+      const m = COUNTRY_META[iso];
+      return m ? `<span class="pais-chip" title="IDH ${fmtIdh(m.idh)} (${idhFaixa(m.idh)}) · Renda per capita ${fmtUsd(m.rpc)} (${m.rpcAno})">${countryFlags[iso]} ${escapeHtml(m.nome)} · IDH ${fmtIdh(m.idh)}</span>` : '<span class="pais-chip off">País não identificado</span>';
+    };
+    // filtros compartilhados (prefixo bn = VS Concorrência, mp = Mapa)
+    function fillGeoFilters(prefix) {
+      const p = $(prefix + 'PaisIso');
+      if (p && p.options.length <= 1) p.innerHTML = '<option value="">Todos os países</option>' + ALL_COUNTRIES.map(iso => `<option value="${iso}">${countryFlags[iso]} ${escapeHtml(countryNames[iso])}</option>`).join('') + '<option value="__none">País não identificado</option>';
+      const c = $(prefix + 'Cont');
+      if (c && c.options.length <= 1) c.innerHTML = '<option value="">Todos</option>' + CONTINENTS.map(x => `<option>${escapeHtml(x)}</option>`).join('');
+      const i = $(prefix + 'Idh');
+      if (i && i.options.length <= 1) i.innerHTML = '<option value="">Todas</option>' + IDH_FAIXAS.map(x => `<option>${x}</option>`).join('');
+      const r = $(prefix + 'Renda');
+      if (r && r.options.length <= 1) r.innerHTML = '<option value="">Todas</option>' + RENDA_FAIXAS.map(x => `<option>${x}</option>`).join('');
+    }
+    function geoPass(prefix, iso) {
+      const p = $(prefix + 'PaisIso')?.value || '', c = $(prefix + 'Cont')?.value || '', i = $(prefix + 'Idh')?.value || '', r = $(prefix + 'Renda')?.value || '';
+      if (p === '__none') return !iso;
+      if (p && iso !== p) return false;
+      if (!c && !i && !r) return true;
+      const m = COUNTRY_META[iso];
+      if (!m) return false;
+      return (!c || m.cont === c) && (!i || idhFaixa(m.idh) === i) && (!r || rendaFaixa(m.rpc) === r);
+    }
+    // contato imediato do cliente citado no movimento (só dados reais: Fila/CC ou links de busca)
+    function benchContactHtml(b) {
+      if (!b.cliente) return '';
+      const nome = b.cliente.replace(/\s*\(.*\)$/, '');
+      const conta = CC.contas.find(c => normalizeText(c.nome) === normalizeText(nome) || normalizeText(c.nome) === normalizeText(b.cliente));
+      const out = [];
+      if (conta && conta.email) out.push(`<span class="decisor-item cx-main">✉️ <strong>E-mail:</strong> <a href="mailto:${escapeHtml(conta.email)}">${escapeHtml(conta.email)}</a> <button type="button" class="cx-copy" data-copy="${escapeHtml(conta.email)}">Copiar</button></span>`);
+      else out.push(`<span class="decisor-item cx-none">✉️ E-mail do cliente não informado · <a href="${googleSearch(`"${nome}" email contato compras OR logística`)}" target="_blank" rel="noopener">buscar e-mail ↗</a></span>`);
+      if (conta && conta.telefone) out.push(`<span class="decisor-item">📞 <a href="tel:${escapeHtml(String(conta.telefone).replace(/[^\d+]/g, ''))}">${escapeHtml(conta.telefone)}</a> <button type="button" class="cx-copy" data-copy="${escapeHtml(conta.telefone)}">Copiar</button></span>`);
+      if (conta && conta.website) out.push(`<span class="decisor-item">🌐 <a href="${escapeHtml(safeUrl(conta.website))}" target="_blank" rel="noopener">${escapeHtml(domainOf(conta.website))}</a></span>`);
+      else out.push(`<span class="decisor-item">🌐 <a href="${googleSearch(`"${nome}" site oficial`)}" target="_blank" rel="noopener">site oficial ↗</a></span>`);
+      out.push(`<span class="decisor-item">🔗 <a href="${googleSearch(`site:linkedin.com/in "${nome}" (logística OR supply chain OR diretor OR gerente OR logistics)`)}" target="_blank" rel="noopener">Decisores no LinkedIn ↗</a></span>`);
+      return `<div class="decisor-box contact-box"><span class="cx-title">Contato imediato · ${escapeHtml(nome)}${conta ? ' (dados da sua Fila)' : ''}</span>${out.join('')}</div>`;
+    }
+    // ---- Geocodificação dos movimentos registrados (cidade → ponto no mapa), OpenStreetMap Nominatim
+    const GEO = { cache: {}, busy: false };
+    async function geoLoad() { try { if (IDB.db) GEO.cache = (await IDB.get('benchGeo')) || {}; } catch (_) {} }
+    async function geocodePending() {
+      if (GEO.busy) return 0;
+      const mapped = new Set(MAP_LINKS.map(l => l.id));
+      const todo = benchAll().filter(b => !mapped.has(b.id) && b.cliente && b.local && !/não identificado|nao identificado/i.test(b.local) && !(b.id in GEO.cache));
+      if (!todo.length) return 0;
+      GEO.busy = true;
+      let n = 0;
+      for (const b of todo) {
+        $('mapCount').textContent = `Localizando ${b.local}…`;
+        try {
+          const iso = benchCountry(b);
+          const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=pt-BR&q=${encodeURIComponent(b.local)}${iso ? '&countrycodes=' + iso.toLowerCase() : ''}`);
+          const d = await r.json();
+          GEO.cache[b.id] = d && d[0] ? { lat: +d[0].lat, lon: +d[0].lon, nome: d[0].display_name } : null;
+          n++;
+        } catch (_) { /* sem rede: tenta de novo na próxima abertura */ }
+        await new Promise(res => setTimeout(res, 1100)); // limite de uso do Nominatim: 1 consulta por segundo
+      }
+      GEO.busy = false;
+      if (IDB.db) IDB.set('benchGeo', GEO.cache).catch(() => {});
+      return todo.length;
+    }
+    function geoEntries() {
+      const mapped = new Set(MAP_LINKS.map(l => l.id));
+      return benchAll().filter(b => !mapped.has(b.id) && GEO.cache[b.id]).map(b => {
+        const iso = benchCountry(b), g = GEO.cache[b.id];
+        const fs = Object.entries(MAP_FACTORIES).filter(([, f]) => normalizeText(b.concorrente).includes(normalizeText(f.comp)) || normalizeText(f.comp).includes(normalizeText(b.concorrente.split(' ')[0])));
+        const pick = fs.find(([, f]) => countryFromText(f.pais) === iso) || fs[0];
+        const f = pick ? pick[1] : { comp: b.concorrente, nome: 'Origem do concorrente não mapeada', cidade: '—', lat: null, lon: null };
+        return { id: b.id, origem: pick ? pick[0] : null, b, f, sku: ILU_LABEL[benchIluKey(b)], geo: true, clientes: [{ nome: b.cliente, cidade: b.local, uf: '', pais: iso ? countryNames[iso] : 'Não identificado', lat: g.lat, lon: g.lon, aprox: true }] };
+      });
+    }
+    function benchExportFull() {
+      if (typeof XLSX === 'undefined') { showToast('Biblioteca XLSX carregando. Tente novamente.'); return; }
+      const geoCols = iso => { const m = COUNTRY_META[iso] || {}; return { 'País': iso ? countryNames[iso] : 'Não identificado', 'ISO país': iso || '', 'Continente': m.cont || '', 'IDH do país': m.idh ?? '', 'Faixa IDH': idhFaixa(m.idh), 'Renda per capita país (US$)': m.rpc ?? '', 'Faixa de renda': rendaFaixa(m.rpc) }; };
+      const rows = benchAll().map(b => {
+        const iso = benchCountry(b), nome = (b.cliente || '').replace(/\s*\(.*\)$/, '');
+        const conta = nome ? CC.contas.find(c => normalizeText(c.nome) === normalizeText(nome)) : null;
+        return Object.assign({ 'Concorrente': b.concorrente, 'Tipo': b.tipo, 'Título': b.titulo, 'Cliente': b.cliente, 'Local': b.local, 'Região': b.regiao }, geoCols(iso), {
+          'Segmento': b.segmento, 'Solução': b.solucao, 'Números': b.numeros, 'Pessoas citadas': (b.pessoas || []).map(p => `${p.nome} (${p.papel})`).join('; '), 'Data': benchDate(b), 'Fonte': b.fonte, 'URL': b.url, 'FATO': b.fato, 'HIPÓTESE (leitura BSA)': b.leitura, 'RECOMENDAÇÃO': b.acao,
+          'E-mail do cliente (Fila)': conta?.email || '', 'Telefone do cliente (Fila)': conta?.telefone || '', 'Site do cliente (Fila)': conta?.website || '',
+          'Busca de e-mail do cliente': nome ? googleSearch(`"${nome}" email contato compras OR logística`) : '', 'Busca de decisores (LinkedIn)': nome ? googleSearch(`site:linkedin.com/in "${nome}" (logística OR supply chain OR diretor OR gerente)`) : '',
+          'No mapa': MAP_LINKS.some(l => l.id === b.id) ? 'Sim (curado)' : GEO.cache[b.id] ? 'Sim (cidade localizada automaticamente)' : 'Não',
+          'Origem do registro': b.custom ? 'Analista' : 'Pesquisa 18/11/2026'
+        });
+      });
+      const news = NEWS.items.map(it => Object.assign({ 'Concorrente': it.comp, 'Título': it.titulo, 'Fonte': it.fonte || '', 'Data': it.data || '', 'Idioma da busca': it.lang || '', 'URL': it.url || '' }, geoCols(newsCountry(it)), { 'Status': 'NÃO VERIFICADO' }));
+      const wb = XLSX.utils.book_new();
+      const add = (r, name) => { const ws = XLSX.utils.json_to_sheet(r.length ? r : [{ 'Sem dados': '' }]); const hs = Object.keys(r[0] || {}); if (hs.length) ws['!autofilter'] = { ref: XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: r.length, c: hs.length - 1 } }) }; XLSX.utils.book_append_sheet(wb, ws, name); };
+      add(rows, 'Benchmarking');
+      add(news, 'Noticias_recentes');
+      XLSX.writeFile(wb, `benchmarking_concorrentes_${todayStr()}.xlsx`);
+      showToast(`${rows.length} movimentos e ${news.length} notícias exportados.`);
+    }
     $('benchFab').addEventListener('click', benchOpen);
     $('benchBack').addEventListener('click', benchClose);
     document.addEventListener('keydown', e => { if (e.key !== 'Escape' || $('ccD').classList.contains('open')) return; if ($('mapScreen').classList.contains('open')) { mapClose(); return; } if ($('benchScreen').classList.contains('open')) benchClose(); });
     ['bnComp', 'bnReg', 'bnTipo'].forEach(id => $(id).addEventListener('change', benchRender));
     $('bnQ').addEventListener('input', benchRender);
-    $('benchExport').addEventListener('click', benchExport);
+    $('benchExport').addEventListener('click', benchExportFull);
+    ['bnPaisIso', 'bnCont', 'bnIdh', 'bnRenda'].forEach(id => $(id).addEventListener('change', () => { benchRender(); benchNewsRender(); }));
+    $('bfPais').innerHTML = '<option value="">Não identificado</option>' + ALL_COUNTRIES.map(iso => `<option value="${iso}">${countryFlags[iso]} ${escapeHtml(countryNames[iso])}</option>`).join('');
+    $('bfPais').addEventListener('change', () => { if ($('bfPais').value) $('bfReg').value = regiaoOf($('bfPais').value); });
+    $('bfLocal').addEventListener('change', () => { const iso = countryFromText($('bfLocal').value); if (iso && !$('bfPais').value) { $('bfPais').value = iso; $('bfReg').value = regiaoOf(iso); } });
     $('benchAddBtn').addEventListener('click', () => { $('benchFormPanel').hidden = false; $('benchFormPanel').scrollIntoView({ behavior: 'smooth' }); $('bfComp').focus(); });
     $('bfCancel').addEventListener('click', () => { $('benchFormPanel').hidden = true; });
     $('bfSave').addEventListener('click', benchAddSave);
@@ -3272,7 +3868,7 @@ matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
 
     // ---------- Notícias recentes do mercado (v3.5) — via servidor PAIM (Google Notícias)
     const NEWS_API = "https://paim-ia-prospect-2-0-cld.onrender.com/api/news";
-    const NEWS_QUERIES = [{"comp": "Mecalux", "q": "\"Mecalux\"", "langs": ["pt", "en", "es"]}, {"comp": "Águia Sistemas", "q": "\"Águia Sistemas\"", "langs": ["pt"]}, {"comp": "SSI Schaefer", "q": "\"SSI Schaefer\"", "langs": ["pt", "en"]}, {"comp": "Dematic", "q": "\"Dematic\"", "langs": ["pt", "en"]}, {"comp": "Jungheinrich", "q": "\"Jungheinrich\" (armazém OR intralogística OR \"centro de distribuição\")", "langs": ["pt"]}, {"comp": "ISMA", "q": "\"ISMA\" (armazenagem OR porta-paletes)", "langs": ["pt"]}, {"comp": "Longa Industrial", "q": "\"Longa Industrial\"", "langs": ["pt"]}, {"comp": "Scheffer", "q": "\"Scheffer Logística\"", "langs": ["pt"]}, {"comp": "AR Racking", "q": "\"AR Racking\"", "langs": ["pt", "es"]}, {"comp": "Portilhiotti", "q": "\"Portilhiotti\"", "langs": ["pt"]}, {"comp": "Phametal", "q": "\"Phametal\"", "langs": ["pt"]}];
+    const NEWS_QUERIES = [{"comp": "Mecalux", "q": "\"Mecalux\"", "langs": ["pt", "en", "es", "fr", "de", "it", "pl"]}, {"comp": "Águia Sistemas", "q": "\"Águia Sistemas\"", "langs": ["pt"]}, {"comp": "SSI Schaefer", "q": "\"SSI Schaefer\"", "langs": ["pt", "en", "es", "fr", "de", "it", "nl", "pl"]}, {"comp": "Dematic", "q": "\"Dematic\"", "langs": ["pt", "en", "es", "fr", "de"]}, {"comp": "Jungheinrich", "q": "\"Jungheinrich\" (armazém OR intralogística OR \"centro de distribuição\")", "langs": ["pt"]}, {"comp": "ISMA", "q": "\"ISMA\" (armazenagem OR porta-paletes)", "langs": ["pt"]}, {"comp": "Longa Industrial", "q": "\"Longa Industrial\"", "langs": ["pt"]}, {"comp": "Scheffer", "q": "\"Scheffer Logística\"", "langs": ["pt"]}, {"comp": "AR Racking", "q": "\"AR Racking\"", "langs": ["pt", "es", "en", "fr"]}, {"comp": "Portilhiotti", "q": "\"Portilhiotti\"", "langs": ["pt"]}, {"comp": "Phametal", "q": "\"Phametal\"", "langs": ["pt"]}, {"comp": "Jungheinrich", "q": "\"Jungheinrich\" (warehouse OR Lager OR Intralogistik OR logistics)", "langs": ["en", "de"]}];
     const NEWS = { items: [], seen: [], at: null, loading: false, error: '' };
     const newsKey = it => normalizeText(it.titulo || '').slice(0, 140);
     const newsRecent = it => it.data && (Date.now() - new Date(it.data + 'T12:00:00').getTime()) / 864e5 <= 30;
@@ -3287,7 +3883,7 @@ matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
         try {
           const r = await fetch(NEWS_API + '?' + qs.map(q => 'q=' + encodeURIComponent(q.q)).join('&') + '&lang=' + l + '&days=30', { cache: 'no-store' });
           const d = await r.json();
-          return (d.items || []).map(it => ({ ...it, comp: (qs.find(q => q.q === it.consulta) || {}).comp || it.consulta }));
+          return (d.items || []).map(it => ({ ...it, lang: l, comp: (qs.find(q => q.q === it.consulta) || {}).comp || it.consulta }));
         } catch (_) { return null; }
       }));
       const ok = res.filter(Boolean), seen = new Set(), list = [];
@@ -3304,17 +3900,17 @@ matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
       if (NEWS.loading) { st.textContent = '· buscando… (o servidor pode levar até 1 minuto para acordar)'; if (!NEWS.items.length) box.innerHTML = '<div class="empty">Buscando notícias recentes…</div>'; return; }
       if (NEWS.error && !NEWS.items.length) { st.textContent = ''; box.innerHTML = `<div class="empty">${escapeHtml(NEWS.error)}</div>`; return; }
       st.textContent = NEWS.at ? `· atualizado às ${NEWS.at.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} · ${NEWS.items.length} notícias` : '';
-      box.innerHTML = NEWS.items.slice(0, 40).map((it, i) => {
+      box.innerHTML = NEWS.items.map((it, i) => [it, i]).filter(([it]) => geoPass('bn', newsCountry(it))).slice(0, 40).map(([it, i]) => {
         const novo = newsRecent(it) && !NEWS.seen.includes(newsKey(it));
         const d = it.data ? it.data.split('-').reverse().join('/') : 'data não informada';
-        return `<div class="nw-item"><div>${novo ? '<span class="nw-new" title="Nova"></span>' : ''}<span class="nw-chip">${escapeHtml(it.comp)}</span><a class="t" href="${escapeHtml(safeUrl(it.url))}" target="_blank" rel="noopener">${escapeHtml(it.titulo)}</a><div class="nw-meta">${escapeHtml(it.fonte || 'fonte')} · ${escapeHtml(d)}<span class="nw-nv">NÃO VERIFICADO</span></div></div><button class="btn xs" type="button" data-nw="${i}">Registrar como movimento</button></div>`;
-      }).join('') || '<div class="empty">Nenhuma notícia dos concorrentes nos últimos 30 dias.</div>';
+        return `<div class="nw-item"><div>${novo ? '<span class="nw-new" title="Nova"></span>' : ''}<span class="nw-chip">${escapeHtml(it.comp)}</span>${countryChip(newsCountry(it))}<a class="t" href="${escapeHtml(safeUrl(it.url))}" target="_blank" rel="noopener">${escapeHtml(it.titulo)}</a><div class="nw-meta">${escapeHtml(it.fonte || 'fonte')} · ${escapeHtml(d)}<span class="nw-nv">NÃO VERIFICADO</span></div></div><button class="btn xs" type="button" data-nw="${i}">Registrar como movimento</button></div>`;
+      }).join('') || `<div class="empty">${NEWS.items.length ? 'Nenhuma notícia nos filtros de país atuais.' : 'Nenhuma notícia dos concorrentes nos últimos 30 dias.'}</div>`;
     }
     function benchNewsToForm(i) {
       const it = NEWS.items[i];
       if (!it) return;
       $('benchFormPanel').hidden = false;
-      $('bfComp').value = it.comp; $('bfFato').value = it.titulo; $('bfFonte').value = it.fonte || ''; $('bfUrl').value = it.url || ''; $('bfData').value = it.data || '';
+      $('bfComp').value = it.comp; $('bfPais').value = newsCountry(it) || ''; if ($('bfPais').value) $('bfReg').value = regiaoOf($('bfPais').value); $('bfFato').value = it.titulo; $('bfFonte').value = it.fonte || ''; $('bfUrl').value = it.url || ''; $('bfData').value = it.data || '';
       $('benchFormPanel').scrollIntoView({ behavior: 'smooth' });
       showToast('Formulário preenchido com a notícia. Leia a matéria, complete cliente, local e solução e salve.', 6000);
     }
@@ -3380,7 +3976,7 @@ matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
       return MAP_LINKS.map(l => {
         const b = all.find(x => x.id === l.id);
         return b ? { ...l, b, f: MAP_FACTORIES[l.origem], sku: ILU_LABEL[benchIluKey(b)] } : null;
-      }).filter(Boolean);
+      }).filter(Boolean).concat(geoEntries());
     }
     function mapArc(a, b) {
       const [la1, lo1] = a, [la2, lo2] = b, mx = (la1 + la2) / 2, my = (lo1 + lo2) / 2, k = .18;
@@ -3391,6 +3987,7 @@ matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
     function mapFillFilters() {
       const E = mapEntries(), cl = E.flatMap(e => e.clientes.map(c => ({ ...c, e })));
       const fill = (id, vals, first) => { const s = $(id), cur = s.value; s.innerHTML = `<option value="">${first}</option>` + [...new Set(vals)].sort().map(v => optionHtml(v)).join(''); s.value = [...s.options].some(o => o.value === cur) ? cur : ''; };
+      fillGeoFilters('mp');
       fill('mpPais', cl.map(c => c.pais), 'Todos');
       fill('mpUf', cl.filter(c => c.pais === 'Brasil' && c.uf).map(c => c.uf), 'Todas');
       fill('mpSku', E.map(e => e.sku), 'Todos os produtos');
@@ -3411,14 +4008,14 @@ matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
       mapEntries().forEach(e => {
         if (fs && e.sku !== fs) return;
         if (fc && e.f.comp !== fc) return;
-        const cls = e.clientes.filter(c => (!fp || c.pais === fp) && (!fu || c.uf === fu));
+        const cls = e.clientes.filter(c => (!fp || c.pais === fp) && (!fu || c.uf === fu) && geoPass('mp', countryFromText(c.pais)));
         if (!cls.length) return;
-        usedF.add(e.origem);
+        if (MAP_FACTORIES[e.origem]) usedF.add(e.origem);
         cls.forEach(c => {
-          L.polyline(mapArc([e.f.lat, e.f.lon], [c.lat, c.lon]), { color: '#3d8bff', weight: 2, opacity: .9, className: 'flow-line' }).addTo(MAPLAYER);
+          if (e.f.lat != null) L.polyline(mapArc([e.f.lat, e.f.lon], [c.lat, c.lon]), { color: '#3d8bff', weight: 2, opacity: .9, className: 'flow-line' }).addTo(MAPLAYER);
           const url = safeUrl(e.b.url);
           L.marker([c.lat, c.lon], { icon: L.divIcon({ className: 'wh-icon', html: WH_SVG, iconSize: [28, 24], iconAnchor: [14, 22] }), title: c.nome })
-            .bindPopup(`<b>${escapeHtml(c.nome)}</b><br>${escapeHtml(c.cidade)}${c.uf ? ' (' + escapeHtml(c.uf) + ')' : ''} · ${escapeHtml(c.pais)}${c.aprox ? ' · local aprox.' : ''}<br>Fornecedor: <b>${escapeHtml(e.f.comp)}</b><br>SKU: ${escapeHtml(e.sku)}<br>${escapeHtml(e.b.numeros || '')}<br>${escapeHtml(benchDate(e.b))}${url ? `<br><a href="${escapeHtml(url)}" target="_blank" rel="noopener">Abrir matéria ↗</a>` : ''}`).addTo(MAPLAYER);
+            .bindPopup(`<b>${escapeHtml(c.nome)}</b><br>${escapeHtml(c.cidade)}${c.uf ? ' (' + escapeHtml(c.uf) + ')' : ''} · ${escapeHtml(c.pais)}${c.aprox ? ' · local aprox.' : ''}${e.geo ? '<br><i>Ponto pela cidade (localizado automaticamente)</i>' : ''}${(() => { const m = COUNTRY_META[countryFromText(c.pais)]; return m ? `<br>IDH ${fmtIdh(m.idh)} · renda ${fmtUsd(m.rpc)}` : ''; })()}<br>Fornecedor: <b>${escapeHtml(e.f.comp)}</b><br>SKU: ${escapeHtml(e.sku)}<br>${escapeHtml(e.b.numeros || '')}<br>${escapeHtml(benchDate(e.b))}${url ? `<br><a href="${escapeHtml(url)}" target="_blank" rel="noopener">Abrir matéria ↗</a>` : ''}`).addTo(MAPLAYER);
           bounds.push([c.lat, c.lon]);
           rows.push({ e, c });
         });
@@ -3433,8 +4030,8 @@ matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
       if (!fp && !fu && !fs && !fc) Object.entries(MAP_FACTORIES).forEach(([k, f]) => { if (!usedF.has(k)) { L.circleMarker([f.lat, f.lon], { radius: 6, color: '#ffffff', weight: 1.5, fillColor: '#2f80ff', fillOpacity: .6 }).bindPopup(`<b>${escapeHtml(f.nome)}</b><br>${escapeHtml(f.tipo)} · ${escapeHtml(f.cidade)} · ${escapeHtml(f.pais)}<br>Nenhum projeto de cliente mapeado ainda.<br><a href="${escapeHtml(f.url)}" target="_blank" rel="noopener">Fonte ↗</a>`).addTo(MAPLAYER); bounds.push([f.lat, f.lon]); } });
       if (bounds.length) MAPOBJ.fitBounds(bounds, { padding: [40, 40], maxZoom: 6 });
       $('mapCount').textContent = `${rows.length} cliente(s) · ${usedF.size} origem(ns) de concorrente`;
-      $('mapRows').innerHTML = rows.length ? rows.map(({ e, c }) => `<tr><td><b>${escapeHtml(e.f.comp)}</b><br><small>${escapeHtml(e.f.nome)} · ${escapeHtml(e.f.cidade)}</small></td><td>${escapeHtml(c.nome)}</td><td>${escapeHtml(c.cidade)}${c.uf ? ' (' + escapeHtml(c.uf) + ')' : ''} · ${escapeHtml(c.pais)}${c.aprox ? ' <small>(aprox.)</small>' : ''}</td><td>${escapeHtml(e.sku)}</td><td>${escapeHtml(benchDate(e.b))}</td><td>${safeUrl(e.b.url) ? `<a href="${escapeHtml(safeUrl(e.b.url))}" target="_blank" rel="noopener" style="color:var(--info)">${escapeHtml(e.b.fonte)} ↗</a>` : escapeHtml(e.b.fonte)}${e.obs ? `<br><small>${escapeHtml(e.obs)}</small>` : ''}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">Nenhuma conexão nos filtros atuais.</td></tr>';
-      const mapped = new Set(MAP_LINKS.map(l => l.id)), fora = benchAll().filter(b => !mapped.has(b.id));
+      $('mapRows').innerHTML = rows.length ? rows.map(({ e, c }) => `<tr><td><b>${escapeHtml(e.f.comp)}</b><br><small>${escapeHtml(e.f.nome)} · ${escapeHtml(e.f.cidade)}</small></td><td>${escapeHtml(c.nome)}</td><td>${escapeHtml(c.cidade)}${c.uf ? ' (' + escapeHtml(c.uf) + ')' : ''} · ${escapeHtml(c.pais)}${c.aprox ? ' <small>(aprox.)</small>' : ''}${e.geo ? ' <small>· registrado por você</small>' : ''}${(() => { const m = COUNTRY_META[countryFromText(c.pais)]; return m ? `<br><small>IDH ${fmtIdh(m.idh)} (${idhFaixa(m.idh)}) · renda ${fmtUsd(m.rpc)}</small>` : ''; })()}</td><td>${escapeHtml(e.sku)}</td><td>${escapeHtml(benchDate(e.b))}</td><td>${safeUrl(e.b.url) ? `<a href="${escapeHtml(safeUrl(e.b.url))}" target="_blank" rel="noopener" style="color:var(--info)">${escapeHtml(e.b.fonte)} ↗</a>` : escapeHtml(e.b.fonte)}${e.obs ? `<br><small>${escapeHtml(e.obs)}</small>` : ''}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">Nenhuma conexão nos filtros atuais.</td></tr>';
+      const mapped = new Set(mapEntries().map(e => e.id)), fora = benchAll().filter(b => !mapped.has(b.id));
       $('mapOut').textContent = `Fora do mapa (${fora.length}): ` + fora.map(b => `${b.concorrente} · ${b.cliente || b.titulo}${b.custom ? ' (registrado por você, sem coordenadas)' : b.cliente ? ' (local do cliente não informado na fonte)' : ' (sem cliente final: feira, estratégia ou investimento)'}`).join('; ') + '.';
       const allE = mapEntries(), nCl = allE.reduce((t, e) => t + e.clientes.length, 0), nBr = allE.reduce((t, e) => t + e.clientes.filter(c => c.pais === 'Brasil').length, 0);
       const st = (l, v, n) => `<div class="stat"><div class="muted small">${escapeHtml(l)}</div><div class="n">${v}</div><div class="muted small">${escapeHtml(n)}</div></div>`;
@@ -3449,7 +4046,7 @@ matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
       $('mapScreen').setAttribute('aria-hidden', 'false');
       $('heatFab').hidden = true;
       mapFillFilters();
-      setTimeout(() => { mapRender(); $('mapBack').focus(); }, 560);
+      setTimeout(() => { mapRender(); $('mapBack').focus(); geocodePending().then(n => { if (n) { mapFillFilters(); mapRender(); } }); }, 560);
     }
     function mapClose() {
       document.body.classList.remove('map-open');
@@ -3460,14 +4057,19 @@ matrixRain('mxL');matrixRain('mxR');holoTilt(document.getElementById('hero'));
     }
     $('heatFab').addEventListener('click', mapOpen);
     $('mapBack').addEventListener('click', mapClose);
-    ['mpPais', 'mpUf', 'mpSku', 'mpComp'].forEach(id => $(id).addEventListener('change', () => { if (id === 'mpPais' && $('mpPais').value !== 'Brasil') $('mpUf').value = ''; mapFillFilters(); mapRender(); }));
+    ['mpPais', 'mpUf', 'mpSku', 'mpComp', 'mpCont', 'mpIdh', 'mpRenda'].forEach(id => $(id).addEventListener('change', () => { if (id === 'mpPais' && $('mpPais').value !== 'Brasil') $('mpUf').value = ''; mapFillFilters(); mapRender(); }));
     holoTilt($('mapHero'));
     holoTilt($('benchHero'));
     initMatrix('matrixBenchL'); initMatrix('matrixBenchR'); benchMatrixOn = true;
-    benchLoad().then(benchNewsLoadSeen).then(() => { benchFab(); benchNewsFetch(); });
+    benchLoad().then(geoLoad).then(benchNewsLoadSeen).then(() => { benchFab(); benchNewsFetch(); });
 
+    buildCountryControls();
+    document.querySelectorAll('#countriesCheckboxes input[type="checkbox"]').forEach(cb => cb.addEventListener('change', () => syncFromCheckboxes(true)));
+    setupThemes();
     populateStatesDropdown();
     syncFromCheckboxes(false);
+    renderCountryPanel([]);
+    refreshIncome();
     updatePeriodBadge();
     load();
   </script>
